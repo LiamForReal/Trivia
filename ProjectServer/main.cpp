@@ -43,10 +43,9 @@ void run_server()
 
 void run_json_tests()
 {
-	JsonResponsePacketSerializer ser;
 	ErrorResponse er = {"ERORR",};
 
-	std::vector<unsigned char> vec = ser.serializeResponse(er);
+	std::vector<unsigned char> vec = JsonResponsePacketSerializer::serializeResponse(er);
 	
 	// test print
 	for (int i = 0; i < vec.size(); i++)
