@@ -3,6 +3,7 @@
 
 using json = nlohmann::json;
 
+#define INC 1
 #define INIT_VEC_LEN 5
 #define BYTES_TO_COPY 4
 
@@ -19,11 +20,11 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	};
 
 	std::string erJsonStr = erJson.dump();
-	// std::cout << erJsonStr << std::endl;
+	//std::cout << erJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
 	len = (unsigned int)(erJsonStr.size()); // possible lose of data for 64 bits.
-	std::memcpy(vec.data(), &len, BYTES_TO_COPY);
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
 	vec.insert(vec.end(), erJsonStr.begin(), erJsonStr.end());
@@ -47,7 +48,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	// Insert Message Length Into Vector
 	len = (unsigned int)(lrJsonStr.size()); // possible lose of data for 64 bits.
-	std::memcpy(vec.data(), &len, BYTES_TO_COPY);
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
 	vec.insert(vec.end(), lrJsonStr.begin(), lrJsonStr.end());
@@ -71,7 +72,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	// Insert Message Length Into Vector
 	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
-	std::memcpy(vec.data(), &len, BYTES_TO_COPY);
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
 	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());

@@ -2,6 +2,7 @@
 #include "MagshMessageServer.h"
 #include "WSAInitializer.h"
 #include "JsonResponsePacketSerializer.h"
+#include "JsonRequestPacketDeserializer.h"
 #include <iostream>
 #include <fstream>
 
@@ -52,6 +53,9 @@ void run_json_tests()
 	{
 		std::cout << vec[i];
 	}
+	std::cout << std::endl;
 	
+	JsonRequestPacketDeserializer::deserializeLoginRequest(vec);
+
 	vec.clear();
 }
