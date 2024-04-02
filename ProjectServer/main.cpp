@@ -1,6 +1,7 @@
 #pragma comment (lib, "ws2_32.lib")
 #include "MagshMessageServer.h"
 #include "WSAInitializer.h"
+#include "JsonResponsePacketSerializer.h"
 #include <iostream>
 #include <fstream>
 
@@ -13,7 +14,8 @@ void run_json_tests();
 
 int main()
 {
-	run_server();
+	// run_server();
+	run_json_tests();
 }
 
 void run_server()
@@ -41,5 +43,10 @@ void run_server()
 
 void run_json_tests()
 {
+	JsonResponsePacketSerializer ser;
+	ErrorResponse er = {"ERORR",};
 
+	std::vector<unsigned char> vec = ser.serializeResponse(er);
+
+	vec.clear();
 }

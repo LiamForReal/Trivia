@@ -1,4 +1,5 @@
 #include "JsonResponsePacketSerializer.h"
+#include <iostream> // for debug
 
 using json = nlohmann::json;
 
@@ -11,13 +12,25 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	// Add Response Code
 	vec.push_back((unsigned char)(ERROR_RC));
 
+	unsigned int len = 0, i = 0;
+
 	json erJson = {
 		{"message", errorResponse.message},
 	};
 
-	//size_t len = length of json;
-	//std::memcpy(vec.data(), &len, BYTES_TO_COPY);
+	std::string erJsonStr = erJson.dump();
 
+	std::cout << erJsonStr << std::endl;
+
+	// Insert Message Length Into Vector
+	len = (unsigned int)(erJsonStr.size()); // possible lose of data for 64 bits.
+	std::memcpy(vec.data(), &len, BYTES_TO_COPY);
+
+	// Insert Message Into Vector
+	for (i = 0; i < len; i++)
+	{
+		vec.push_back((unsigned char)(erJsonStr[i]));
+	}
 
 	return vec;
 }
