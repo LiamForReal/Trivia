@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="JsonResponsePacketSerializer.cpp" />
     <ClCompile Include="MagshMessageServer.cpp" />
     <ClCompile Include="MagshChat.cpp" />
     <ClCompile Include="main.cpp" />
@@ -133,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="Helper.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="JsonResponsePacketSerializer.h" />
     <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="MagshChat.h" />
     <ClInclude Include="RecvMessage.h" />
