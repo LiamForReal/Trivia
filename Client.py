@@ -1,11 +1,12 @@
 import socket as s
 
 SERVER_IP = "127.0.0.1" #loop back
-SERVER_PORT = 8878 #server port
-AMOUNT_OF_BYTES = 100
+SERVER_PORT = 8888 #server port
+AMOUNT_OF_BYTES = 5
 
 
 def client_side():
+    recved = True
     with s.socket(s.AF_INET, s.SOCK_STREAM) as sock:
         server_address = (SERVER_IP, SERVER_PORT)
         sock.connect(server_address)
@@ -14,8 +15,13 @@ def client_side():
             msg = input("Enter data: ")
             try:
                 sock.sendall(msg.encode())  # send the message to the server
-                server_msg = sock.recv(AMOUNT_OF_BYTES)
-            except Exception:
+                if recved:
+                    server_msg = sock.recv(AMOUNT_OF_BYTES)
+                    print(server_msg.decode())
+                    recved = False
+                if msg == "EXIT":
+                    break
+            except BaseException:
                 print("server crash try to conect again later\n")
                 break
 

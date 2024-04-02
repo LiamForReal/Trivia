@@ -4,11 +4,10 @@
 #include <deque>
 #include <queue>
 #include <mutex>
-#include <map>
 #include <condition_variable>
 #include <WinSock2.h>
 #include "RecvMessage.h"
-#include "LoginRequestHandler.h"
+
 
 // Q: why do we need this class ?
 // A: this is the main class which holds all the resources,
@@ -25,10 +24,16 @@ private:
 	void bindAndListen();
 	void acceptClient();
 	void clientHandler(const SOCKET client_socket);
-	void handleReceivedMessages(const char* msg, const SOCKET client_socket);
-	//std::string build_receive_message(const SOCKET client_socket, const int msg_code);
-	std::map<SOCKET, LoginRequestHandler> clients;
+	void safeDeleteUser(const SOCKET id);
 
+	void handleReceivedMessages();
+	std::string getCurrentUser();
+	std::string getNextUser();
+	std::string get_user_name(const SOCKET id);
+	void addReceivedMessage(RecvMessage*);
+	static RecvMessage* build_receive_message(const SOCKET client_socket, const int msg_code);
+	std::string getAllUsernames();
+		
 	SOCKET _socket;
 	MagshChat _doc;
 

@@ -7,7 +7,6 @@
 
 enum MessageType : byte
 {
-
 	MT_CLIENT_LOG_IN = 200,
 	MT_CLIENT_UPDATE = 204,
 	MT_CLIENT_FINISH = 207,
@@ -19,6 +18,8 @@ enum MessageType : byte
 class Helper
 {
 public:
+
+
 	static int getMessageTypeCode(const SOCKET sc);
 	static int getIntPartFromSocket(const SOCKET sc, const int bytesNum);
 	static std::string getStringPartFromSocket(SOCKET sc, const int bytesNum);
