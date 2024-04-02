@@ -9,6 +9,8 @@
 
 void run_server();
 
+void run_json_tests();
+
 int main()
 {
 	run_server();
@@ -35,4 +37,9 @@ void run_server()
 	{
 		std::cout << "Unknown exception in main !" << std::endl;
 	}
+}
+
+void run_json_tests()
+{
+
 }
