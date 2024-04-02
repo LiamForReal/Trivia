@@ -7,7 +7,14 @@
 // In a lot of places in the code we pass to function constant reference (const Bla&)
 // to an object and not the object itself, 
 
+void run_server();
+
 int main()
+{
+	run_server();
+}
+
+void run_server()
 {
 	// Q: why is this try necessarily ?
 	// A: we want to know what happened that made the server crush
