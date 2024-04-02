@@ -3,6 +3,13 @@
 #include <vector>
 #include "json.hpp"
 
+typedef enum ResponseCode
+{
+	ERROR_RC = 99,
+	LOGIN_RC = 1,
+	SIGNUP_RC = 2,
+} ResponseCode;
+
 typedef struct ErrorResponse
 {
 	std::string message;
@@ -21,6 +28,6 @@ typedef struct SignupResponse
 class JsonResponsePacketSerializer
 {
 	public:
-		static std::vector<unsigned char> serializeResponse();
+		static std::vector<unsigned char> serializeResponse(const ErrorResponse& errorResponse);
 };
 
