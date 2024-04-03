@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="IRequestHandler.cpp" />
     <ClCompile Include="MagshMessageServer.cpp" />
     <ClCompile Include="MagshChat.cpp" />
     <ClCompile Include="main.cpp" />
@@ -132,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="IRequestHandler.h" />
     <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="MagshChat.h" />
     <ClInclude Include="RecvMessage.h" />
