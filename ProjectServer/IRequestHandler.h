@@ -5,7 +5,7 @@
 typedef struct RequestInfo
 {
 	unsigned int id;
-	// TODO: std::ctime recievalTime;
+	std::time_t recievalTime;
 	std::vector<unsigned char> buffer;
 } RequestInfo;
 

@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="IRequestHandler.cpp" />
+    <ClCompile Include="LoginRequestHandler.cpp" />
     <ClCompile Include="MagshMessageServer.cpp" />
     <ClCompile Include="MagshChat.cpp" />
     <ClCompile Include="main.cpp" />
@@ -134,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IRequestHandler.h" />
+    <ClInclude Include="LoginRequestHandler.h" />
     <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="MagshChat.h" />
     <ClInclude Include="RecvMessage.h" />
