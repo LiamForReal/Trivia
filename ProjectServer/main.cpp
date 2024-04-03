@@ -54,8 +54,14 @@ void run_json_tests()
 		std::cout << vec[i];
 	}
 	std::cout << std::endl;
-	
-	JsonRequestPacketDeserializer::deserializeLoginRequest(vec);
+	try
+	{
+		JsonRequestPacketDeserializer::deserializeLoginRequest(vec);
+	}
+	catch (...)
+	{
+		std::cout << "json error..." << std::endl;
+	}
 
 	vec.clear();
 }

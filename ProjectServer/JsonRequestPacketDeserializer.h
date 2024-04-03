@@ -1,7 +1,9 @@
 #pragma once
+#include "json.hpp"
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <exception>
 
 typedef struct LoginRequest
 {
