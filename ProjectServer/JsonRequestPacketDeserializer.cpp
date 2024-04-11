@@ -11,12 +11,11 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const std::v
 	LoginRequest lr;
 	std::string jsonDataStr = "";
 
-	unsigned int len = 0, i = 1;
+	unsigned int len = 0, i = 0;
 
-	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);//100 320090239i29 name: gorge
-	// std::cout << len << std::endl;
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
 
-	for (i = 1; i <= len; i++)
+	for (i = 0; i < len; i++)
 	{
 		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
 	}
@@ -41,12 +40,12 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const std:
 	SignupRequest sr;
 	std::string jsonDataStr = "";
 
-	unsigned int len = 0, i = 1;
+	unsigned int len = 0, i = 0;
 
 	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
 	// std::cout << len << std::endl;
 
-	for (i = 1; i <= len; i++)
+	for (i = 0; i < len; i++)
 	{
 		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
 	}

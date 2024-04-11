@@ -14,10 +14,10 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	lresponse.status = LOGIN_STATUS;
 	std::vector<unsigned char> buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
 
-	std::cout << "DEBUG: Logins client... Username: " << lr.username << "Password: " << lr.password << std::endl;
+	std::cout << "DEBUG: Logins client... Username: " << lr.username << ", Password: " << lr.password << std::endl;
 
 	RequestResult rr = RequestResult();
-	rr.buffer = buffer;
+	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
 	rr.newHandler = nullptr; // should be other handler when added (?)
 	return rr;
 }

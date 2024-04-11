@@ -11,7 +11,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_LEN);
 	// Add Response Code
-	vec.push_back((unsigned char)(ERROR_RC));
+	vec[0] = ((unsigned char)(ERROR_RC));
 
 	unsigned int len = 0;
 
@@ -26,6 +26,8 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	len = (unsigned int)(erJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
+	vec.resize(INIT_VEC_LEN + len);
+
 	// Insert Message Into Vector
 	vec.insert(vec.end(), erJsonStr.begin(), erJsonStr.end());
 
@@ -36,7 +38,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_LEN);
 	// Add Response Code
-	vec.push_back((unsigned char)(LOGIN_RC));
+	vec[0] = ((unsigned char)(LOGIN_RC));
 
 	unsigned int len = 0;
 
@@ -60,7 +62,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_LEN);
 	// Add Response Code
-	vec.push_back((unsigned char)(SIGNUP_RC));
+	vec[0] = ((unsigned char)(SIGNUP_RC));
 
 	unsigned int len = 0;
 

@@ -4,6 +4,9 @@
 #include <iomanip>
 #include <sstream>
 
+#define STATUS_CODE_BYTES_LENGTH 1
+#define MESSAGE_LENGTH_BYTES_LENGTH 4
+
 using std::string;
 
 // recieves the type code of the message from socket (3 bytes)
@@ -48,11 +51,21 @@ string Helper::getStringPartFromSocket(const SOCKET sc, const int bytesNum)
 
 void Helper::sendVector(const SOCKET sc, const std::vector<unsigned char>& vec)
 {
-	if (send(sc, (char*)(&vec), vec.size(), 0) == INVALID_SOCKET)
+	const char* dataPtr = reinterpret_cast<const char*>(vec.data());
+	int dataSize = static_cast<int>(vec.size());
+
+	int bytesSent = send(sc, dataPtr, dataSize, 0);
+
+	if (bytesSent == SOCKET_ERROR)
 	{
-		throw std::exception("Error while sending message to client");
+		throw std::runtime_error("Error while sending message to client");
+	}
+	else if (bytesSent != dataSize)
+	{
+		throw std::runtime_error("Failed to send entire message to client");
 	}
 }
+
 
 // return string after padding zeros if necessary
 string Helper::getPaddedNumber(const int num, const int digits)
@@ -63,34 +76,26 @@ string Helper::getPaddedNumber(const int num, const int digits)
 
 }
 
-unsigned int Helper::getUnsignedIntPartFromSocket(const SOCKET sc, const int bytesNum)
+unsigned int Helper::getStatusCodeFromSocket(const SOCKET sc)
 {
-	if (bytesNum <= 0)
-	{
-		return 0;
-	}
-
 	unsigned int value = 0;
+	unsigned char* data = getUnsignedCharPartFromSocket(sc, STATUS_CODE_BYTES_LENGTH, 0);
 
-	unsigned char* data = getUnsignedCharPartFromSocket(sc, bytesNum, 0);
-
-	for (int i = 0; i < bytesNum; i++)
-	{
-		value = (value << 8) | static_cast<unsigned char>(data[i]);
-	}
+	value = (value << 8) | static_cast<unsigned char>(data[0]);
 
 	delete[] data;
 
 	return value;
 }
 
-unsigned int Helper::getLengthPartFromSocket(const SOCKET sc, const int bytesNum)
+unsigned int Helper::getLengthPartFromSocket(const SOCKET sc)
 {
+	int i = 0;
 	unsigned int value = 0;
-	unsigned char* data = Helper::getUnsignedCharPartFromSocket(sc, bytesNum, 0); // Assuming getPartFromSocket returns the byte data as a string
+	unsigned char* data = Helper::getUnsignedCharPartFromSocket(sc, MESSAGE_LENGTH_BYTES_LENGTH, 0); // Assuming getPartFromSocket returns the byte data as a string
 
 
-	for (int i = 0; i < bytesNum; i++)
+	for (i = 0; i < MESSAGE_LENGTH_BYTES_LENGTH; i++)
 	{
 		value |= (static_cast<unsigned int>(data[i]) << (i * 8));
 	}
