@@ -4,13 +4,12 @@
 #include <string>
 #include <numeric>
 
+#define AMOUNT_OF_BYTES 5
 // using static const instead of macros 
-static const unsigned short PORT = 8826;
+static const unsigned short PORT = 8888;
 static const unsigned int IFACE = 0;
 
 using std::string;
-using std::mutex;
-using std::unique_lock;
 using std::vector;
 
 
@@ -20,7 +19,7 @@ MagshMessageServer::MagshMessageServer()
 	// for the resolution of the function socket
 	_socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (_socket == INVALID_SOCKET)
-		throw std::exception( __FUNCTION__ " - socket");
+		throw std::exception(__FUNCTION__ " - socket");
 }
 
 MagshMessageServer::~MagshMessageServer()
@@ -39,17 +38,15 @@ MagshMessageServer::~MagshMessageServer()
 void MagshMessageServer::serve()
 {
 	bindAndListen();
-
-	// create new thread for handling message
-	std::thread tr(&MagshMessageServer::handleReceivedMessages, this);
-	tr.detach();
-
+	std::string input_string;
+	std::thread tr(&MagshMessageServer::checkifInput, this);
 	while (true)
 	{
 		// the main thread is only accepting clients 
 		// and add then to the list of handlers
 		TRACE("accepting client...");
 		acceptClient();
+
 	}
 }
 
@@ -70,6 +67,22 @@ void MagshMessageServer::bindAndListen()
 	if (::listen(_socket, SOMAXCONN) == SOCKET_ERROR)
 		throw std::exception(__FUNCTION__ " - listen");
 	TRACE("listening...");
+
+}
+
+void MagshMessageServer::checkifInput()
+{
+	string input_string;
+	while (true)
+	{
+		std::getline(std::cin, input_string);
+		if (input_string == "EXIT")
+		{
+			closeAllSockets();
+			exit(1);
+		}
+	}
+
 }
 
 void MagshMessageServer::acceptClient()
@@ -79,6 +92,8 @@ void MagshMessageServer::acceptClient()
 		throw std::exception(__FUNCTION__);
 
 	TRACE("Client accepted !");
+	LoginRequestHandler* lrh = new LoginRequestHandler();
+	_loginHandlers[client_socket] = *lrh;
 	// create new thread for client	and detach from it
 	std::thread tr(&MagshMessageServer::clientHandler, this, client_socket);
 	tr.detach();
@@ -89,201 +104,28 @@ void MagshMessageServer::acceptClient()
 
 void MagshMessageServer::clientHandler(const SOCKET client_socket)
 {
-	RecvMessage* currRcvMsg = nullptr;
-	try
-	{		
-		// get the first message code
- 		int msgCode = Helper::getMessageTypeCode(client_socket);
+	//char* msg = new char[AMOUNT_OF_BYTES];
+	//int msgLen = 1;
+	//std::string clientMsg = "tmp";
+	//while (clientMsg.substr(0, clientMsg.size() - 1) != "EXIT" && clientMsg != "=====")
+	//{
+	//	Helper::sendData(client_socket, "Hello");
+	//	clientMsg = Helper::getStringPartFromSocket(client_socket, AMOUNT_OF_BYTES);
+	//	if (clientMsg.substr(0, clientMsg.size() - 1) != "EXIT" && clientMsg[0] != char(-51))
+	//	{
+	//		std::cout << "client enter: " << clientMsg << std::endl;
+	//	}
+	//}
+	//
+	//closesocket(client_socket);
 
-		while (msgCode != 0 && (msgCode == MT_CLIENT_LOG_IN || msgCode == MT_CLIENT_UPDATE || msgCode == MT_CLIENT_FINISH))
-		{
-			currRcvMsg = build_receive_message(client_socket, msgCode);
-			addReceivedMessage(currRcvMsg);
+	this->_communicator.handleNewClient(client_socket);
+}
 
-			msgCode = Helper::getMessageTypeCode(client_socket);			
-		}
-
-		currRcvMsg = build_receive_message(client_socket, MT_CLIENT_EXIT);
-		addReceivedMessage(currRcvMsg);
-
-	}
-	catch (const std::exception& e)
+void MagshMessageServer::closeAllSockets()
+{
+	for (auto it = _loginHandlers.begin(); it != _loginHandlers.end(); it++)
 	{
-		std::cout << "Exception was catch in function clientHandler. socket=" << client_socket << ", what=" << e.what() << std::endl;
-		currRcvMsg = build_receive_message(client_socket, MT_CLIENT_EXIT);
-		addReceivedMessage(currRcvMsg);
+		closesocket(it->first);
 	}
-	closesocket(client_socket);
-}
-
-void MagshMessageServer::addReceivedMessage(RecvMessage* msg)
-{
-	unique_lock<mutex> lck(_mtxReceivedMessages);
-
-	_messageHandler.push(msg);
-	lck.unlock();
-	_msgQueueCondition.notify_all();
-	
-}
-
-RecvMessage* MagshMessageServer::build_receive_message(const SOCKET client_socket, const int msg_code)
-{
-	RecvMessage* msg = nullptr;
-	vector<string> values;
-	if (msg_code == MT_CLIENT_LOG_IN)
-	{
-		int userSize = Helper::getIntPartFromSocket(client_socket, 2);
-		string userName = Helper::getStringPartFromSocket(client_socket, userSize);
-		values.push_back(userName);
-	}
-	else if (msg_code == MT_CLIENT_UPDATE)
-	{
-		// Get second end point user name size, and get username
-		const int second_user_size = Helper::getIntPartFromSocket(client_socket, 2);
-		const string user_name = Helper::getStringPartFromSocket(client_socket, second_user_size);
-		values.push_back(user_name);
-		
-		// Get message size and get message
-		const int file_size = Helper::getIntPartFromSocket(client_socket, 5);
-		const string file_content = Helper::getStringPartFromSocket(client_socket, file_size);
-		values.push_back(file_content);
-	}
-
-	msg = new RecvMessage(client_socket, msg_code, values);
-	return msg;
-
-}
-
-
-// remove the user from queue
-void MagshMessageServer::safeDeleteUser(const SOCKET id)
-{
-	try
-	{
-		for (unsigned int i = 0; i < _clients.size(); i++)
-		{
-			if (_clients[i].first == id)
-			{
-				TRACE("REMOVED %d, %s from clients list", id, _clients[i].second.c_str());
-				_clients.erase(_clients.begin() + i);
-				
-			}
-		}
-	}
-	catch (...) {}
-	
-}
-
-void MagshMessageServer::handleReceivedMessages()
-{
-	int msgCode = 0;
-	SOCKET clientSock = 0;
-	string userName;
-	while (true)
-	{
-		try
-		{
-			unique_lock<mutex> lck(_mtxReceivedMessages);
-
-			// Wait for clients to enter the queue.
-			if (_messageHandler.empty())
-				_msgQueueCondition.wait(lck);
-
-			// in case the queue is empty.
-			if (_messageHandler.empty())
-				continue;
-
-			RecvMessage* currMessage = _messageHandler.front();
-			_messageHandler.pop();
-			lck.unlock();
-
-			// Extract the data from the tuple.
-			clientSock = currMessage->getSock();
-			msgCode = currMessage->getMessageCode();
-
-			if (msgCode == MT_CLIENT_LOG_IN)
-			{
-				userName = currMessage->getValues()[0];
-				_clients.emplace_back(clientSock, userName);
-
-				TRACE("ADDED new client %d, %s to clients list", clientSock, userName.c_str());
-
-				// After login the data in empty.
-				Helper::send_update_message_to_client(clientSock, "", "", getAllUsernames());
-			}
-
-			else if (msgCode == MT_CLIENT_UPDATE)
-			{
-				//TRACE("Recieved update message from current client");
-				string current_username = get_user_name(currMessage->getSock());
-				string second_username = currMessage->getValues()[0];
-				string new_message = currMessage->getValues()[1];
-				if (!new_message.empty()) {
-					_doc.write(current_username, second_username, new_message);
-				}
-				string conversation;
-				if (!second_username.empty()) {
-					conversation = _doc.read(current_username, second_username);
-				}
-				auto all_user_names = getAllUsernames();
-				//std::cout << "All users: " << all_user_names << std::endl;
-				Helper::send_update_message_to_client(clientSock, conversation, second_username, all_user_names);
-			}
-			else if (msgCode == MT_CLIENT_EXIT)
-			{
-				TRACE("Recieved exit message from client");
-				safeDeleteUser(clientSock);
-			}
-
-			delete currMessage;
-		}
-		catch (...)
-		{
-
-		}
-	}
-}
-
-
-std::string MagshMessageServer::getAllUsernames()
-{
-	const std::string delimiter = "&";
-	return std::accumulate(std::begin(_clients), std::end(_clients), std::string(),
-		[delimiter](const string& lhs, const std::pair<SOCKET, string>& rhs)
-		{
-			if (lhs.empty()) return rhs.second;
-			else
-				return lhs + delimiter + rhs.second; });
-}
-
-
-// get current user name (the writer)
-std::string MagshMessageServer::getCurrentUser()
-{
-
-	if (_clients.size() < 1)
-		return "";
-
-	return _clients[0].second;
-}
-
-// get next user in queue
-std::string MagshMessageServer::getNextUser()
-{
-	if (_clients.size() < 2)
-		return "";
-
-	return _clients[1].second;
-}
-
-std::string MagshMessageServer::get_user_name(const SOCKET id)
-{
-	for (const std::pair<SOCKET, string>& elem : _clients)
-	{
-		if (elem.first == id)
-		{
-			return elem.second;
-		}		
-	}
-	return {};
 }

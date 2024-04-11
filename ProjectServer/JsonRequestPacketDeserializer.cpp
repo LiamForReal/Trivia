@@ -13,7 +13,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const std::v
 
 	unsigned int len = 0, i = 1;
 
-	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);//100 320090239i29 name: gorge
 	// std::cout << len << std::endl;
 
 	for (i = 1; i <= len; i++)

@@ -1,18 +1,10 @@
 import socket as s
 import json
 
-SERVER_IP = "127.0.0.1" #loop back
-SERVER_PORT = 8888 #server port
+SERVER_IP = "127.0.0.1"  # loop back
+SERVER_PORT = 8888  # server port
 AMOUNT_OF_BYTES = 5
-CODS = {"Login": 100, "Sing up": 200}
-
-
-def json_is_amount_of_bytes(json_msg, amount_of_bytes):
-    if len(json_msg) < amount_of_bytes:
-        json_msg = json_msg.ljust(amount_of_bytes)
-    elif len(json_msg) > amount_of_bytes:
-        json_msg = json_msg[:amount_of_bytes]
-    return json_msg
+CODES = {"Login": 100, "Signup": 200}
 
 
 def client_side():
@@ -20,40 +12,53 @@ def client_side():
         server_address = (SERVER_IP, SERVER_PORT)
         sock.connect(server_address)
         try:
-            option = int(input("choose one of the following options\n 1 - Login\n 2 - Sing up"))
+            option = int(input("Choose one of the following options:\n1 - Login\n2 - Sign Up\n"))
             if option == 1 or option == 2:
                 username = input("Enter your username: ")
                 password = input("Enter your password: ")
                 if option == 1:
                     login_msg = {
-                        "code": chr(CODS["Login"]),
                         "username": username,
                         "password": password
                     }
-                    msg_to_send = json.dumps(login_msg).encode()
+                    to_send = json.dumps(login_msg)
+
+                    length = len(to_send)
+
+                    # Send status code
+                    sock.sendall(CODES["Login"].to_bytes(1, byteorder='big'))
+                    # Send message length in little-endian format
+                    sock.sendall(length.to_bytes(4, byteorder='little', signed=False))
+                    # Send message data
+                    sock.sendall(to_send.encode())
+
                 else:
                     email = input("Enter your email: ")
                     signup_msg = {
-                        "code": chr(CODS["Sing up"]),
                         "username": username,
                         "password": password,
                         "email": email
                     }
-                    msg_to_send = json.dumps(signup_msg).encode()
+                    to_send = json.dumps(signup_msg)
 
-                msg_to_send = json_is_amount_of_bytes(msg_to_send, AMOUNT_OF_BYTES)
-                if len(msg_to_send) == AMOUNT_OF_BYTES:
-                    sock.send(msg_to_send)
-                else:
-                    print("ERROR IN - json_is_amount_of_bytes")
+                    # Send status code
+                    sock.sendall(CODES["Signup"].to_bytes(1, byteorder='big'))
+                    # Send message length in little-endian format
+                    sock.sendall(len(to_send).to_bytes(4, byteorder='little', signed=False))
+                    # Send message data
+                    sock.sendall(to_send.encode())
+
+                server_msg = sock.recv(1024)
+                print("Server response:", server_msg.decode())
+
+            elif option == 3:
+                return
             else:
-                print("you must choose 1 or 2!")
-                client_side()
-            server_msg = sock.recv(AMOUNT_OF_BYTES)
-            print(server_msg.decode())
+                print("You must choose 1 or 2!")
 
-        except BaseException:
-            print("server crash try to conect again later\n")
+        except Exception as e:
+            print("Error:", e)
+            print("Server crashed. Try to connect again later.")
 
 
 def main():

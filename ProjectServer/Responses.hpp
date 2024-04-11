@@ -8,6 +8,13 @@ typedef enum ResponseCode
 	ERROR_RC = 500,
 } ResponseCode;
 
+typedef enum Status
+{
+	LOGIN_STATUS = 101,
+	SIGNUP_STATUS = 201,
+	ERROR_STATUS = 501,
+} Status;
+
 typedef struct ErrorResponse
 {
 	std::string message;

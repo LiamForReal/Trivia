@@ -46,6 +46,14 @@ string Helper::getStringPartFromSocket(const SOCKET sc, const int bytesNum)
 	return getPartFromSocket(sc, bytesNum, 0);
 }
 
+void Helper::sendVector(const SOCKET sc, const std::vector<unsigned char>& vec)
+{
+	if (send(sc, (char*)(&vec), vec.size(), 0) == INVALID_SOCKET)
+	{
+		throw std::exception("Error while sending message to client");
+	}
+}
+
 // return string after padding zeros if necessary
 string Helper::getPaddedNumber(const int num, const int digits)
 {
@@ -53,6 +61,43 @@ string Helper::getPaddedNumber(const int num, const int digits)
 	ostr << std::setw(digits) << std::setfill('0') << num;
 	return ostr.str();
 
+}
+
+unsigned int Helper::getUnsignedIntPartFromSocket(const SOCKET sc, const int bytesNum)
+{
+	if (bytesNum <= 0)
+	{
+		return 0;
+	}
+
+	unsigned int value = 0;
+
+	unsigned char* data = getUnsignedCharPartFromSocket(sc, bytesNum, 0);
+
+	for (int i = 0; i < bytesNum; i++)
+	{
+		value = (value << 8) | static_cast<unsigned char>(data[i]);
+	}
+
+	delete[] data;
+
+	return value;
+}
+
+unsigned int Helper::getLengthPartFromSocket(const SOCKET sc, const int bytesNum)
+{
+	unsigned int value = 0;
+	unsigned char* data = Helper::getUnsignedCharPartFromSocket(sc, bytesNum, 0); // Assuming getPartFromSocket returns the byte data as a string
+
+
+	for (int i = 0; i < bytesNum; i++)
+	{
+		value |= (static_cast<unsigned int>(data[i]) << (i * 8));
+	}
+
+	delete[] data;
+
+	return value;
 }
 
 // recieve data from socket according byteSize
@@ -93,4 +138,30 @@ std::string Helper::getPartFromSocket(const SOCKET sc, const int bytesNum, const
 	std::string received(data);
 	delete[] data;
 	return received;
+}
+
+unsigned char* Helper::getUnsignedCharPartFromSocket(const SOCKET sc, const int bytesNum, const int flags)
+{
+	if (bytesNum == 0)
+	{
+		return nullptr;
+	}
+
+	unsigned char* data = new unsigned char[bytesNum];
+	int res = recv(sc, reinterpret_cast<char*>(data), bytesNum, flags);
+
+	if (res == SOCKET_ERROR)
+	{
+		std::string s = "Error while receiving from socket: ";
+		s += std::to_string(sc);
+		throw std::runtime_error(s);
+	}
+	else if (res != bytesNum)
+	{
+		// Handle incomplete data reception if needed
+	}
+
+	//data[bytesNum] = '\0';
+
+	return data;
 }

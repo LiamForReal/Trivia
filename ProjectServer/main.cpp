@@ -15,8 +15,8 @@ void run_json_tests();
 
 int main()
 {
-	// run_server();
-	run_json_tests();
+	run_server();
+	//run_json_tests();
 }
 
 void run_server()
