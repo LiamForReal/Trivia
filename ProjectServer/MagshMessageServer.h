@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MagshChat.h"
+#include "FileWriter.h"
 #include <deque>
 #include <queue>
 #include <mutex>

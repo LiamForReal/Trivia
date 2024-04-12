@@ -30,10 +30,7 @@
     <ClCompile Include="MagshMessageServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MagshChat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IRequestHandler.cpp">
+    <ClCompile Include="FileWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LoginRequestHandler.cpp">
@@ -62,7 +59,7 @@
     <ClInclude Include="MagshMessageServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MagshChat.h">
+    <ClInclude Include="FileWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IRequestHandler.h">
@@ -87,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Communicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,15 +1,13 @@
 #include "JsonResponsePacketSerializer.h"
 #include <iostream> // for debug
 
-using json = nlohmann::json;
+#include "defines.hpp"
 
-#define INC 1
-#define INIT_VEC_LEN 5
-#define BYTES_TO_COPY 4
+using json = nlohmann::json;
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& errorResponse)
 {
-	std::vector<unsigned char> vec(INIT_VEC_LEN);
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
 	vec[0] = ((unsigned char)(ERROR_RC));
 
@@ -26,7 +24,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	len = (unsigned int)(erJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
-	vec.resize(INIT_VEC_LEN + len);
+	vec.resize(INIT_VEC_SIZE + len);
 
 	// Insert Message Into Vector
 	vec.insert(vec.end(), erJsonStr.begin(), erJsonStr.end());
@@ -36,7 +34,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const LoginResponse& loginResponse)
 {
-	std::vector<unsigned char> vec(INIT_VEC_LEN);
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
 	vec[0] = ((unsigned char)(LOGIN_RC));
 
@@ -60,7 +58,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const SignupResponse& signupResponse)
 {
-	std::vector<unsigned char> vec(INIT_VEC_LEN);
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
 	vec[0] = ((unsigned char)(SIGNUP_RC));
 

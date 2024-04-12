@@ -100,25 +100,8 @@ void MagshMessageServer::acceptClient()
 
 }
 
-
-
 void MagshMessageServer::clientHandler(const SOCKET client_socket)
 {
-	//char* msg = new char[AMOUNT_OF_BYTES];
-	//int msgLen = 1;
-	//std::string clientMsg = "tmp";
-	//while (clientMsg.substr(0, clientMsg.size() - 1) != "EXIT" && clientMsg != "=====")
-	//{
-	//	Helper::sendData(client_socket, "Hello");
-	//	clientMsg = Helper::getStringPartFromSocket(client_socket, AMOUNT_OF_BYTES);
-	//	if (clientMsg.substr(0, clientMsg.size() - 1) != "EXIT" && clientMsg[0] != char(-51))
-	//	{
-	//		std::cout << "client enter: " << clientMsg << std::endl;
-	//	}
-	//}
-	//
-	//closesocket(client_socket);
-
 	this->_communicator.handleNewClient(client_socket);
 }
 

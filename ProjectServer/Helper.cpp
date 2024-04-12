@@ -4,8 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
-#define STATUS_CODE_BYTES_LENGTH 1
-#define MESSAGE_LENGTH_BYTES_LENGTH 4
+#include "defines.hpp"
 
 using std::string;
 

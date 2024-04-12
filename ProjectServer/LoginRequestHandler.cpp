@@ -3,21 +3,34 @@
 
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
-	return requestInfo.id == LOGIN_RC;
+	return (LOGIN_RC == requestInfo.id) || (SIGNUP_RC == requestInfo.id);
 }
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
-	LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
+	std::vector<unsigned char> buffer;
 
-	LoginResponse lresponse;
-	lresponse.status = LOGIN_STATUS;
-	std::vector<unsigned char> buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
+	if (LOGIN_RC == requestInfo.id)
+	{
+		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
+		std::cout << "DEBUG: Logins client... Username: " << lr.username << ", Password: " << lr.password << std::endl;
+		LoginResponse lresponse;
+		lresponse.status = LOGIN_STATUS;
 
-	std::cout << "DEBUG: Logins client... Username: " << lr.username << ", Password: " << lr.password << std::endl;
+		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
+	}
+	else if (SIGNUP_RC == requestInfo.id)
+	{
+		SignupRequest sr = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
+		std::cout << "DEBUG: Sign Ups client... Username: " << sr.username << ", Password: " << sr.password << ", Email: " << sr.email << std::endl;
+		SignupResponse sresponse;
+		sresponse.status = SIGNUP_STATUS;
+
+		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
+	}
 
 	RequestResult rr = RequestResult();
 	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
-	rr.newHandler = nullptr; // should be other handler when added (?)
+	rr.newHandler = nullptr; // should be the next handler that the user should pass
 	return rr;
 }

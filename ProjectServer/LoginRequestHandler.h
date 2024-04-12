@@ -7,7 +7,7 @@
 class LoginRequestHandler : virtual public IRequestHandler
 {
 	public:
-		static bool isRequestRelevant(const RequestInfo& requestInfo);
-		static RequestResult handleRequest(const RequestInfo& requestInfo);
+		bool isRequestRelevant(const RequestInfo& requestInfo) override;
+		RequestResult handleRequest(const RequestInfo& requestInfo) override;
 };
 

@@ -1,10 +1,9 @@
 #include "JsonRequestPacketDeserializer.h"
 #include <iostream> // for debug
 
-using json = nlohmann::json;
+#include "defines.hpp"
 
-#define INC 1
-#define BYTES_TO_COPY 4
+using json = nlohmann::json;
 
 LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const std::vector<unsigned char>& buffer)
 {
