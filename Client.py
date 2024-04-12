@@ -6,24 +6,20 @@ AMOUNT_OF_BYTES = 5
 
 
 def client_side():
-    recved = True
     with s.socket(s.AF_INET, s.SOCK_STREAM) as sock:
         server_address = (SERVER_IP, SERVER_PORT)
         sock.connect(server_address)
-        #server_msg = sock.recv(AMOUNT_OF_BYTES) #exception uneeded it's only get the welcome screen in the start
-        while True:
+        try:
+            server_msg = sock.recv(AMOUNT_OF_BYTES)
+            print(server_msg.decode())
             msg = input("Enter data: ")
-            try:
+            if msg == "Hello":
                 sock.sendall(msg.encode())  # send the message to the server
-                if recved:
-                    server_msg = sock.recv(AMOUNT_OF_BYTES)
-                    print(server_msg.decode())
-                    recved = False
-                if msg == "EXIT":
-                    break
-            except BaseException:
-                print("server crash try to conect again later\n")
-                break
+                print("Hello")
+            elif msg != "EXIT":
+                print("you must enter Hello to talk with server next time")
+        except BaseException:
+            print("server crash try to conect again later\n")
 
 
 def main():
