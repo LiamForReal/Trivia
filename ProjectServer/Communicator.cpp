@@ -9,8 +9,6 @@
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-   
-
     std::string clientMsg = "";
     unsigned int statusCode = 0;
     unsigned int clientMsgLength = 0;

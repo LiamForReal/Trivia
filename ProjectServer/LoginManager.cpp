@@ -29,7 +29,6 @@ void LoginManager::logout(const string name)
 
 unsigned int LoginManager::login(const string name, const string pass)
 {
-	std::cout << "len: " << _loggedUsers.size();
 	auto it = _loggedUsers.begin();
 	for (it = _loggedUsers.begin(); it != _loggedUsers.end(); ++it)
 	{
@@ -40,7 +39,7 @@ unsigned int LoginManager::login(const string name, const string pass)
 	if (_dataBace->isUserExist(name, pass) && it == _loggedUsers.end())
 	{
 		this->_loggedUsers.push_back(LoggedUser(name));
-		std::cout << "logged successfully len: " << _loggedUsers.size();
+		std::cout << "logged successfully!\n";
 		return LOGIN_STATUS;
 	}
 	std::cout << "user not in the system or already loggeed!\n";
@@ -55,6 +54,7 @@ unsigned int LoginManager::singup(const string name, const string pass, const st
 		User user = User(pass, name, mail);
 		this->_loggedUsers.push_back(LoggedUser(name));
 		_dataBace->addNewUser(user);
+		std::cout << "signup successfully!\n";
 		return SIGNUP_STATUS;
 	}
 	std::cout << "user name is already in the system\n";

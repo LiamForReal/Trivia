@@ -27,7 +27,7 @@
     <ClCompile Include="WSAInitializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MagshMessageServer.cpp">
+    <ClCompile Include="SocketTools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileWriter.cpp">
@@ -80,7 +80,7 @@
     <ClInclude Include="WSAInitializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MagshMessageServer.h">
+    <ClInclude Include="SocketTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileWriter.h">

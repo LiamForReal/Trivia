@@ -1,4 +1,4 @@
-#include "MagshMessageServer.h"
+#include "SocketTools.h"
 #include <exception>
 #include <iostream>
 #include <string>
@@ -13,7 +13,7 @@ using std::string;
 using std::vector;
 
 
-MagshMessageServer::MagshMessageServer()
+SocketTools::SocketTools()
 {
 	// notice that we step out to the global namespace
 	// for the resolution of the function socket
@@ -22,7 +22,7 @@ MagshMessageServer::MagshMessageServer()
 		throw std::exception(__FUNCTION__ " - socket");
 }
 
-MagshMessageServer::~MagshMessageServer()
+SocketTools::~SocketTools()
 {
 	TRACE(__FUNCTION__ " closing accepting socket");
 	// why is this try necessarily ?
@@ -35,11 +35,11 @@ MagshMessageServer::~MagshMessageServer()
 	catch (...) {}
 }
 
-void MagshMessageServer::serve()
+void SocketTools::serve()
 {
 	bindAndListen();
 	std::string input_string;
-	std::thread tr(&MagshMessageServer::checkifInput, this);
+	std::thread tr(&SocketTools::checkifInput, this);
 	while (true)
 	{
 		// the main thread is only accepting clients 
@@ -53,7 +53,7 @@ void MagshMessageServer::serve()
 
 // listen to connecting requests from clients
 // accept them, and create thread for each client
-void MagshMessageServer::bindAndListen()
+void SocketTools::bindAndListen()
 {
 	struct sockaddr_in sa = { 0 };
 	sa.sin_port = htons(PORT);
@@ -70,7 +70,7 @@ void MagshMessageServer::bindAndListen()
 
 }
 
-void MagshMessageServer::checkifInput()
+void SocketTools::checkifInput()
 {
 	string input_string;
 	while (true)
@@ -85,7 +85,7 @@ void MagshMessageServer::checkifInput()
 
 }
 
-void MagshMessageServer::acceptClient()
+void SocketTools::acceptClient()
 {
 	SOCKET client_socket = accept(_socket, NULL, NULL);
 	if (client_socket == INVALID_SOCKET)
@@ -95,20 +95,21 @@ void MagshMessageServer::acceptClient()
 	LoginRequestHandler* lrh = new LoginRequestHandler();
 	_loginHandlers[client_socket] = *lrh;
 	// create new thread for client	and detach from it
-	std::thread tr(&MagshMessageServer::clientHandler, this, client_socket);
+	std::thread tr(&SocketTools::clientHandler, this, client_socket);
 	tr.detach();
 
 }
 
-void MagshMessageServer::clientHandler(const SOCKET client_socket)
+void SocketTools::clientHandler(const SOCKET client_socket)
 {
 	this->_communicator.handleNewClient(client_socket);
 }
 
-void MagshMessageServer::closeAllSockets()
+void SocketTools::closeAllSockets()
 {
 	for (auto it = _loginHandlers.begin(); it != _loginHandlers.end(); it++)
 	{
 		closesocket(it->first);
 	}
 }
+

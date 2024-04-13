@@ -1,6 +1,6 @@
 #include "LoginRequestHandler.h"
 #include <iostream>
-
+#include "RequestHandlerFactory.h";
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
 	return (LOGIN_RC == requestInfo.id) || (SIGNUP_RC == requestInfo.id);
@@ -10,11 +10,11 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	std::vector<unsigned char> buffer;
 	unsigned int status = 0;
-	LoginManager lm = LoginManager();
+	RequestHandlerFactory rhf = RequestHandlerFactory();
 	if (LOGIN_RC == requestInfo.id)
 	{
 		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
-		status = lm.login(lr.username, lr.password);
+		status = rhf.getLoginMeneger().login(lr.username, lr.password);
 		LoginResponse lresponse;
 		lresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
@@ -22,7 +22,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	else if (SIGNUP_RC == requestInfo.id)
 	{
 		SignupRequest sr = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
-		status = lm.singup(sr.username, sr.password, sr.email);
+		status = rhf.getLoginMeneger().singup(sr.username, sr.password, sr.email);
 		SignupResponse sresponse;
 		sresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);

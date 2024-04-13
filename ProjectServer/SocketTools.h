@@ -15,11 +15,11 @@
 // Q: why do we need this class ?
 // A: this is the main class which holds all the resources,
 // accept new clients and handle them.
-class MagshMessageServer
+class SocketTools
 {
 public:
-	MagshMessageServer();
-	~MagshMessageServer();
+	SocketTools();
+	~SocketTools();
 	void serve();
 
 
@@ -33,5 +33,6 @@ private:
 	std::map<SOCKET, LoginRequestHandler> _loginHandlers;
 	Communicator _communicator;
 	SOCKET _socket;
+
 };
 
