@@ -1,7 +1,7 @@
 #pragma once
 #include "IDatabase.h"
 
-class SqliteDataBase : virtual public IDatabase
+class SqliteDataBase : public IDatabase
 {
 public:
 	SqliteDataBase() = default;
@@ -18,7 +18,7 @@ public:
 	bool isBigLetter(int ch);
 	bool isNumber(int ch);
 	bool isSmallLetter(int ch);
-	std::list<User> getUsers();
+	std::vector<User> getUsers();
 	bool sendSQLMsg(const char* sql_command);
 private:
 	sqlite3* db;

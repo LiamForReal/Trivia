@@ -9,23 +9,22 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	std::vector<unsigned char> buffer;
-
+	unsigned int status = 0;
+	LoginManager lm = LoginManager();
 	if (LOGIN_RC == requestInfo.id)
 	{
 		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
-		std::cout << "DEBUG: Logins client... Username: " << lr.username << ", Password: " << lr.password << std::endl;
+		status = lm.login(lr.username, lr.password);
 		LoginResponse lresponse;
-		lresponse.status = LOGIN_STATUS;
-
+		lresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
 	}
 	else if (SIGNUP_RC == requestInfo.id)
 	{
 		SignupRequest sr = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
-		std::cout << "DEBUG: Sign Ups client... Username: " << sr.username << ", Password: " << sr.password << ", Email: " << sr.email << std::endl;
+		status = lm.singup(sr.username, sr.password, sr.email);
 		SignupResponse sresponse;
-		sresponse.status = SIGNUP_STATUS;
-
+		sresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
 	}
 

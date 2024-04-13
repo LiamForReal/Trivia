@@ -8,6 +8,8 @@ CODES = {
     "Signup": 200
 }
 BUFFER_SIZE = 1024
+BYTES_ORDER = 'little'
+
 
 def client_side():
     option = input("Choose one of the following options:\n1 - Login\n2 - Sign Up\n")
@@ -28,20 +30,20 @@ def client_side():
                 if option == 1:
                     login_msg = {"username": username, "password": password}
                     to_send = json.dumps(login_msg).encode()
-                    length = len(to_send).to_bytes(4, byteorder='little', signed=False)
+                    length = len(to_send).to_bytes(4, byteorder=BYTES_ORDER, signed=False)
 
-                    sock.sendall(CODES["Login"].to_bytes(1, byteorder='big') + length + to_send)
+                    sock.sendall(CODES["Login"].to_bytes(1, byteorder=BYTES_ORDER) + length + to_send)
 
                 else:
                     email = input("Enter your email: ")
                     signup_msg = {"username": username, "password": password, "email": email}
                     to_send = json.dumps(signup_msg).encode()
-                    length = len(to_send).to_bytes(4, byteorder='little', signed=False)
+                    length = len(to_send).to_bytes(4, byteorder=BYTES_ORDER, signed=False)
 
-                    sock.sendall(CODES["Signup"].to_bytes(1, byteorder='big') + length + to_send)
+                    sock.sendall(CODES["Signup"].to_bytes(1, byteorder=BYTES_ORDER) + length + to_send)
                     
-                status_code = int.from_bytes(sock.recv(1))
-                length = int.from_bytes(sock.recv(4), byteorder='little', signed=False)
+                status_code = int.from_bytes(sock.recv(1), byteorder=BYTES_ORDER)
+                length = int.from_bytes(sock.recv(4), byteorder=BYTES_ORDER, signed=False)
                 json_data = json.loads(sock.recv(length).decode())
                 print(json_data)
         else:
@@ -50,6 +52,7 @@ def client_side():
     except (ValueError, socket.error) as e:
         print("Error:", e)
         print("Failed to connect to the server.")
+
 
 if __name__ == "__main__":
     client_side()

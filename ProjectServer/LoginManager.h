@@ -1,17 +1,20 @@
 #pragma once
 #include "SqliteDataBase.h"
 #include "LoggedUser.h"
+#include "Responses.hpp"
 
 class LoginManager
 {
 public:
 
+	LoginManager();
+	~LoginManager();
 	void logout(const string name);
-	void login(const string name, const string pass);
-	void singup(const string name, const string pass, const string mail);
+	unsigned int login(const string name, const string pass);
+	unsigned int singup(const string name, const string pass, const string mail);
 
 private:
 	IDatabase* _dataBace;
-	vector<LoggedUser> _loggedUsers;
+	static vector<LoggedUser> _loggedUsers;
 };
 

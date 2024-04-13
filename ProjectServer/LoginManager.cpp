@@ -1,5 +1,19 @@
 #include "LoginManager.h"
 
+std::vector<LoggedUser> LoginManager::_loggedUsers;
+
+LoginManager::LoginManager()
+{
+	_dataBace = new SqliteDataBase();
+	if (!this->_dataBace->open())
+		throw std::runtime_error("Failed to open database!");
+}
+
+LoginManager::~LoginManager()
+{
+	this->_dataBace->close();
+}
+
 void LoginManager::logout(const string name)
 {
 	for (int i = 0; i < _loggedUsers.size(); ++i)
@@ -13,21 +27,36 @@ void LoginManager::logout(const string name)
 	}
 }
 
-void LoginManager::login(const string name, const string pass)
+unsigned int LoginManager::login(const string name, const string pass)
 {
-	auto it = std::find(_loggedUsers.begin(), _loggedUsers.end(), LoggedUser(name));
-	if (_dataBace->isUserExist(name, pass) && it != _loggedUsers.end())
+	std::cout << "len: " << _loggedUsers.size();
+	auto it = _loggedUsers.begin();
+	for (it = _loggedUsers.begin(); it != _loggedUsers.end(); ++it)
+	{
+		if (it->getUserName() == name)
+			break;
+		//std::cout << "it: " << it->getUserName() << " == name: " << name;
+	}
+	if (_dataBace->isUserExist(name, pass) && it == _loggedUsers.end())
+	{
 		this->_loggedUsers.push_back(LoggedUser(name));
-	else std::cout << "user not in the system or alrready loggeed!\n";
+		std::cout << "logged successfully len: " << _loggedUsers.size();
+		return LOGIN_STATUS;
+	}
+	std::cout << "user not in the system or already loggeed!\n";
+	return LOGIN_ERROR;
 }
 
-void LoginManager::singup(const string name, const string pass, const string mail)
+unsigned int LoginManager::singup(const string name, const string pass, const string mail)
 {
 	
 	if (!_dataBace->isUserExist(name))
 	{
 		User user = User(pass, name, mail);
+		this->_loggedUsers.push_back(LoggedUser(name));
 		_dataBace->addNewUser(user);
+		return SIGNUP_STATUS;
 	}
-	else std::cout << "user name is already in the system\n";
+	std::cout << "user name is already in the system\n";
+	return SIGNUP_ERROR;
 }

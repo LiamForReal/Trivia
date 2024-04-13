@@ -7,14 +7,16 @@ bool SqliteDataBase::sendSQLMsg(const char* sql_command)
 	int res = sqlite3_exec(db, sqlStatementPerson, nullptr, nullptr, errMessagePerson);
 	if (res != SQLITE_OK)
 	{
+		std::cout << "false";
 		return false;
 	}
+	std::cout << "true";
 	return true;
 }
 
 int callbackUser(void* data, int argc, char** argv, char** azColName)
 {
-	std::list<User>* users = (std::list<User>*)data;
+	std::vector<User>* users = (std::vector<User>*)data;
 	User* user = new User("", "", "");
 	for (int i = 0; i < argc; i++)
 	{
@@ -29,9 +31,9 @@ int callbackUser(void* data, int argc, char** argv, char** azColName)
 	return 0;
 }
 
-std::list<User> SqliteDataBase::getUsers()
+std::vector<User> SqliteDataBase::getUsers()
 {
-	std::list<User> users;
+	std::vector<User> users;
 	const char* sqlStatement = "SELECT * FROM USERS";
 	char* errMessage = nullptr;
 	int res = sqlite3_exec(db, sqlStatement, callbackUser, &users, &errMessage);
@@ -92,7 +94,7 @@ void SqliteDataBase::close()
 
 bool SqliteDataBase::isUserExist(const string name)
 {
-	std::list<User> users = getUsers();
+	std::vector<User> users = getUsers();
 	for (auto it = users.begin(); it != users.end(); ++it)
 	{
 		if (name == it->getName()) 
@@ -103,7 +105,7 @@ bool SqliteDataBase::isUserExist(const string name)
 
 bool SqliteDataBase::isUserExist(const string name, const string pass)
 {
-	std::list<User> users = getUsers();
+	std::vector<User> users = getUsers();
 	for (auto it = users.begin(); it != users.end(); ++it)
 	{
 		if (name == it->getName() && pass == it->getPass())
@@ -133,16 +135,8 @@ bool SqliteDataBase::isPasswordMatch(const string password)
 
 void SqliteDataBase::addNewUser(User& user)
 {
-	std::list<User> listUsers = getUsers();
+	std::vector<User> listUsers = getUsers();
 	string password = "";
-
-	do 
-	{
-		std::cout << "your password dont strong enoght\nEnter your password: ";
-		std::cin >> password;
-		user.setPass(password);
-	} while ((!isPasswordMatch(user.getPass())));
-
 	std::string msg = "INSERT INTO USERS (USERNAME, PASSWORD,  EMAIL) VALUES ('" + user.getName() + "', '" + user.getPass() + "', '" + user.getMail() + "');";
 	const char* sqlStatement = msg.c_str();
 	if (sendSQLMsg(sqlStatement))

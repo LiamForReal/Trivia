@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 using std::string;
-#include <list>
 #include<vector>
 using std::vector;
+#include "Requests.hpp"
+#include "Responses.hpp"

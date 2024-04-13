@@ -3,6 +3,7 @@
 #include "Responses.hpp"
 #include "JsonResponsePacketSerializer.h"
 #include "JsonRequestPacketDeserializer.h"
+#include "LoginManager.h"
 
 class LoginRequestHandler : virtual public IRequestHandler
 {
