@@ -40,9 +40,7 @@ std::vector<User> SqliteDataBase::getUsers()
 	if (res == SQLITE_OK)
 		return users;
 	std::cout << "Error getting db information - " << __func__ << std::endl;
-	
 	throw std::runtime_error("SQL Error getting users from DB!");
-
 	return users;
 }
 

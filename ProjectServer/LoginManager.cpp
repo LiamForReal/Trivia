@@ -29,14 +29,17 @@ void LoginManager::logout(const string name)
 
 unsigned int LoginManager::login(const string name, const string pass)
 {
-	auto it = _loggedUsers.begin();
-	for (it = _loggedUsers.begin(); it != _loggedUsers.end(); ++it)
+	int i = _loggedUsers.size() - 1;
+	if (!_loggedUsers.empty())
 	{
-		if (it->getUserName() == name)
-			break;
-		//std::cout << "it: " << it->getUserName() << " == name: " << name;
+		for (i = 0; i < _loggedUsers.size(); ++i)
+		{
+			if (_loggedUsers[i].getUserName() == name)
+				break;
+		}
 	}
-	if (_dataBace->isUserExist(name, pass) && it == _loggedUsers.end())
+	
+	if (_dataBace->isUserExist(name, pass) && i == _loggedUsers.size() - 1)
 	{
 		this->_loggedUsers.push_back(LoggedUser(name));
 		std::cout << "logged successfully!\n";
@@ -49,13 +52,18 @@ unsigned int LoginManager::login(const string name, const string pass)
 unsigned int LoginManager::singup(const string name, const string pass, const string mail)
 {
 	
-	if (!_dataBace->isUserExist(name))
+	if (!_dataBace->isUserExist(name) && _dataBace->isPasswordMatch(pass))
 	{
 		User user = User(pass, name, mail);
 		this->_loggedUsers.push_back(LoggedUser(name));
 		_dataBace->addNewUser(user);
 		std::cout << "signup successfully!\n";
 		return SIGNUP_STATUS;
+	}
+	else if (!_dataBace->isPasswordMatch(pass))
+	{
+		std::cout << "your password is to week\n";
+		return PASSWORD_WEAK;
 	}
 	std::cout << "user name is already in the system\n";
 	return SIGNUP_ERROR;

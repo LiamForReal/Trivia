@@ -18,6 +18,7 @@ typedef enum Errors
 {
 	LOGIN_ERROR = 105,
 	SIGNUP_ERROR = 205,
+	PASSWORD_WEAK = 210,
 } Errors;
 
 typedef struct ErrorResponse
