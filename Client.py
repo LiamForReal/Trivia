@@ -14,7 +14,7 @@ BYTES_ORDER = 'little'
 def client_side():
     option = input("Choose one of the following options:\n1 - Login\n2 - Sign Up\n")
     if not option.isnumeric():
-        print ("Invalid option!")
+        print("Invalid option!")
         return
     
     option = int(option)
