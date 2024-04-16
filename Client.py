@@ -38,7 +38,7 @@ def client_side():
                     email = input("Enter your email: ")
                     signup_msg = {"username": username, "password": password, "email": email}
                     to_send = json.dumps(signup_msg).encode()
-                    length = len(to_send).to_bytes(4, byteorder=BYTES_ORDER, signed=False)
+                    length = len(to_send).to_bytes(4, byteorder=BYTES_ORDER, signed=False) 
 
                     sock.sendall(CODES["Signup"].to_bytes(1, byteorder=BYTES_ORDER) + length + to_send)
                     
