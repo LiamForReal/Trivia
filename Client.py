@@ -38,7 +38,7 @@ def client_side():
                     to_send = json.dumps(signup_msg).encode()
                     length = len(to_send).to_bytes(4, byteorder='little', signed=False)
 
-                    sock.sendall(CODES["Signup"].to_bytes(1, byteorder='big') + length + to_send)
+                    sock.sendall(CODES["Signup"].to_bytes(1, byteorder='big') + length + to_send) 
                     
                 status_code = int.from_bytes(sock.recv(1))
                 length = int.from_bytes(sock.recv(4), byteorder='little', signed=False)
