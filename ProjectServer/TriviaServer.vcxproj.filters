@@ -30,7 +30,7 @@
     <ClInclude Include="WSAInitializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MagshChat.h">
+    <ClInclude Include="FileWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LoginRequestHandler.h">
@@ -56,7 +56,7 @@
     <ClCompile Include="WSAInitializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MagshChat.cpp">
+    <ClCompile Include="FileWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LoginRequestHandler.cpp">

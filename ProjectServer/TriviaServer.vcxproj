@@ -132,7 +132,7 @@
     <ClInclude Include="IRequestHandler.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="LoginRequestHandler.h" />
-    <ClInclude Include="MagshChat.h" />
+    <ClInclude Include="FileWriter.h" />
     <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="RecvMessage.h" />
     <ClInclude Include="WSAInitializer.h" />
@@ -140,7 +140,7 @@
   <ItemGroup>
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="LoginRequestHandler.cpp" />
-    <ClCompile Include="MagshChat.cpp" />
+    <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="MagshMessageServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RecvMessage.cpp" />

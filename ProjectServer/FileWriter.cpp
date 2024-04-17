@@ -1,4 +1,4 @@
-#include "MagshChat.h"
+#include "FileWriter.h"
 #include <fstream>
 
 FileWriter::FileWriter()
