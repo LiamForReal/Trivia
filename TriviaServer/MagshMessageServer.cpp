@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <numeric>
+
 #define AMOUNT_OF_BYTES 5
 // using static const instead of macros 
 static const unsigned short PORT = 8888;
@@ -45,7 +46,7 @@ void MagshMessageServer::serve()
 		// and add then to the list of handlers
 		TRACE("accepting client...");
 		acceptClient();
-	
+
 	}
 }
 
@@ -81,7 +82,7 @@ void MagshMessageServer::checkifInput()
 			exit(1);
 		}
 	}
-	
+
 }
 
 void MagshMessageServer::acceptClient()
@@ -99,20 +100,9 @@ void MagshMessageServer::acceptClient()
 
 }
 
-
-
 void MagshMessageServer::clientHandler(const SOCKET client_socket)
 {
-	char* msg = new char[AMOUNT_OF_BYTES];
-	int msgLen = 1;
-	std::string clientMsg = "tmp";
-	Helper::sendData(client_socket, "Hello");
-	clientMsg = Helper::getStringPartFromSocket(client_socket, AMOUNT_OF_BYTES);
-	if (clientMsg.substr(0, clientMsg.size() - 1) != "EXIT" && clientMsg[0] != char(-51))
-	{ 
-		std::cout << "client enter: " << clientMsg << std::endl;
-	} 
-	closesocket(client_socket);
+	this->_communicator.handleNewClient(client_socket);
 }
 
 void MagshMessageServer::closeAllSockets()
