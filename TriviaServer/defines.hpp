@@ -1,0 +1,10 @@
+#pragma once
+
+#define MAX_AMOUNT_OF_BYTES 8000
+#define INIT_VEC_SIZE 5
+#define BYTES_TO_COPY 4
+#define INC 1
+#define DEC 1
+
+#define STATUS_CODE_BYTES_LENGTH 1
+#define MESSAGE_LENGTH_BYTES_LENGTH 4

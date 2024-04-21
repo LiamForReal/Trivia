@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "defines.hpp"
+
 using std::string;
 
 // recieves the type code of the message from socket (3 bytes)
@@ -46,6 +48,24 @@ string Helper::getStringPartFromSocket(const SOCKET sc, const int bytesNum)
 	return getPartFromSocket(sc, bytesNum, 0);
 }
 
+void Helper::sendVector(const SOCKET sc, const std::vector<unsigned char>& vec)
+{
+	const char* dataPtr = reinterpret_cast<const char*>(vec.data());
+	int dataSize = static_cast<int>(vec.size());
+
+	int bytesSent = send(sc, dataPtr, dataSize, 0);
+
+	if (bytesSent == SOCKET_ERROR)
+	{
+		throw std::runtime_error("Error while sending message to client");
+	}
+	else if (bytesSent != dataSize)
+	{
+		throw std::runtime_error("Failed to send entire message to client");
+	}
+}
+
+
 // return string after padding zeros if necessary
 string Helper::getPaddedNumber(const int num, const int digits)
 {
@@ -53,6 +73,35 @@ string Helper::getPaddedNumber(const int num, const int digits)
 	ostr << std::setw(digits) << std::setfill('0') << num;
 	return ostr.str();
 
+}
+
+unsigned int Helper::getStatusCodeFromSocket(const SOCKET sc)
+{
+	unsigned int value = 0;
+	unsigned char* data = getUnsignedCharPartFromSocket(sc, STATUS_CODE_BYTES_LENGTH, 0);
+
+	value = (value << 8) | static_cast<unsigned char>(data[0]);
+
+	delete[] data;
+
+	return value;
+}
+
+unsigned int Helper::getLengthPartFromSocket(const SOCKET sc)
+{
+	int i = 0;
+	unsigned int value = 0;
+	unsigned char* data = Helper::getUnsignedCharPartFromSocket(sc, MESSAGE_LENGTH_BYTES_LENGTH, 0); // Assuming getPartFromSocket returns the byte data as a string
+
+
+	for (i = 0; i < MESSAGE_LENGTH_BYTES_LENGTH; i++)
+	{
+		value |= (static_cast<unsigned int>(data[i]) << (i * 8));
+	}
+
+	delete[] data;
+
+	return value;
 }
 
 // recieve data from socket according byteSize
@@ -93,4 +142,30 @@ std::string Helper::getPartFromSocket(const SOCKET sc, const int bytesNum, const
 	std::string received(data);
 	delete[] data;
 	return received;
+}
+
+unsigned char* Helper::getUnsignedCharPartFromSocket(const SOCKET sc, const int bytesNum, const int flags)
+{
+	if (bytesNum == 0)
+	{
+		return nullptr;
+	}
+
+	unsigned char* data = new unsigned char[bytesNum];
+	int res = recv(sc, reinterpret_cast<char*>(data), bytesNum, flags);
+
+	if (res == SOCKET_ERROR)
+	{
+		std::string s = "Error while receiving from socket: ";
+		s += std::to_string(sc);
+		throw std::runtime_error(s);
+	}
+	else if (res != bytesNum)
+	{
+		// Handle incomplete data reception if needed
+	}
+
+	//data[bytesNum] = '\0';
+
+	return data;
 }

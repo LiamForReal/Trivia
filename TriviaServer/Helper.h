@@ -7,7 +7,6 @@
 
 enum MessageType : byte
 {
-
 	MT_CLIENT_LOG_IN = 200,
 	MT_CLIENT_UPDATE = 204,
 	MT_CLIENT_FINISH = 207,
@@ -19,12 +18,18 @@ enum MessageType : byte
 class Helper
 {
 public:
+
+
 	static int getMessageTypeCode(const SOCKET sc);
 	static int getIntPartFromSocket(const SOCKET sc, const int bytesNum);
 	static std::string getStringPartFromSocket(SOCKET sc, const int bytesNum);
+	static void sendVector(const SOCKET sc, const std::vector<unsigned char>& vec);
 	static void sendData(const SOCKET sc, const std::string message);
 	static void send_update_message_to_client(const SOCKET sc, const std::string& file_content, const std::string& second_username, const std::string& all_users);
 	static std::string getPaddedNumber(const int num, const int digits);
+	static unsigned int getStatusCodeFromSocket(const SOCKET sc);
+	static unsigned int getLengthPartFromSocket(const SOCKET sc);
+	static unsigned char* getUnsignedCharPartFromSocket(const SOCKET sc, const int bytesNum, const int flags);
 
 private:
 	static std::string getPartFromSocket(const SOCKET sc, const int bytesNum);
