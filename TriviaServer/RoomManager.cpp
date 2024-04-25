@@ -32,3 +32,8 @@ std::vector<RoomData> RoomManager::getRooms()
 
 	return vec;
 }
+
+Room& RoomManager::getRoom(const unsigned int& id)
+{
+	return std::ref(this->m_rooms[id]);
+}
