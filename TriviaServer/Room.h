@@ -1,5 +1,6 @@
 #pragma once
 #include "includes.hpp"
+#include "LoggedUser.h"
 
 typedef struct RoomData
 {
@@ -13,6 +14,12 @@ typedef struct RoomData
 
 class Room
 {
+	public:
+		void addUser(const LoggedUser& user);
+		void removeUser(const LoggedUser& user);
+		std::vector<std::string> getAllUsers();
 
+	private:
+		RoomData m_metadata;
+		std::vector<LoggedUser> m_users;
 };
-
