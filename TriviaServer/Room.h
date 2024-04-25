@@ -15,9 +15,13 @@ typedef struct RoomData
 class Room
 {
 	public:
+		Room(const RoomData& metadata);
+		~Room();
 		void addUser(const LoggedUser& user);
 		void removeUser(const LoggedUser& user);
 		std::vector<std::string> getAllUsers();
+
+		RoomData getMetadata() const;
 
 	private:
 		RoomData m_metadata;

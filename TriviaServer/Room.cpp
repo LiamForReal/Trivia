@@ -1,5 +1,15 @@
 #include "Room.h"
 
+Room::Room(const RoomData& metadata)
+{
+	this->m_metadata = metadata;
+}
+
+Room::~Room()
+{
+	this->m_users.clear();
+}
+
 void Room::addUser(const LoggedUser& user)
 {
 	this->m_users.insert(this->m_users.end(), user);
@@ -24,4 +34,9 @@ std::vector<std::string> Room::getAllUsers()
 	}
 
 	return vec;
+}
+
+RoomData Room::getMetadata() const
+{
+	return this->m_metadata;
 }
