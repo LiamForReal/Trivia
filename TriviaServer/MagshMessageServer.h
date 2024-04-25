@@ -9,6 +9,8 @@
 #include "RecvMessage.h"
 #include <map>
 #include "LoginRequestHandler.h"
+#include "Communicator.h"
+
 
 // Q: why do we need this class ?
 // A: this is the main class which holds all the resources,
@@ -27,7 +29,9 @@ private:
 	void clientHandler(const SOCKET client_socket);
 	void closeAllSockets();
 	void checkifInput();
+
 	std::map<SOCKET, LoginRequestHandler> _loginHandlers;
+	Communicator _communicator;
 	SOCKET _socket;
 };
 
