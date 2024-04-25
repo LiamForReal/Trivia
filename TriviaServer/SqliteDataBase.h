@@ -14,11 +14,12 @@ public:
 	bool isUserExist(const string name, const string pass) override;
 	bool isPasswordMatch(const string password) override;
 	void addNewUser(User& user) override;
-
+	void addNewQuestion(Question question) override;
 	bool isBigLetter(int ch);
 	bool isNumber(int ch);
 	bool isSmallLetter(int ch);
-	std::vector<User> getUsers();
+	std::vector<User> getUsers() override;
+	std::vector<Question> getQuestions() override;
 	bool sendSQLMsg(const char* sql_command);
 private:
 	sqlite3* db;

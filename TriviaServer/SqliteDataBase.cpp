@@ -31,6 +31,40 @@ int callbackUser(void* data, int argc, char** argv, char** azColName)
 	return 0;
 }
 
+int callbackQuestion(void* data, int argc, char** argv, char** azColName)
+{
+	std::vector<Question>* questions = (std::vector<Question>*)data;
+	Question* question = new Question("", "", "", "", "");
+	for (int i = 0; i < argc; i++)
+	{
+		if (string(azColName[i]) == "QUESTION")
+			question->setQ(argv[i]);
+		else if (string(azColName[i]) == "CORRECT_ANS")
+			question->setCA(argv[i]);
+		else if (string(azColName[i]) == "ANS2")
+			question->setWA1(argv[i]);
+		else if (string(azColName[i]) == "ANS3")
+			question->setWA2(argv[i]);
+		else if (string(azColName[i]) == "ANS4")
+			question->setWA3(argv[i]);
+	}
+	questions->push_back(*question);
+	return 0;
+}
+
+std::vector<Question> SqliteDataBase::getQuestions()
+{
+	std::vector<Question> questions;
+	const char* sqlStatement = "SELECT * FROM QUESTIONS";
+	char* errMessage = nullptr;
+	int res = sqlite3_exec(db, sqlStatement, callbackQuestion, &questions, &errMessage);
+	if (res == SQLITE_OK)
+		return questions;
+	std::cout << "Error getting db information - " << __func__ << std::endl;
+	throw std::runtime_error("SQL Error getting users from DB!");
+	return questions;
+}
+
 std::vector<User> SqliteDataBase::getUsers()
 {
 	std::vector<User> users;
@@ -61,16 +95,22 @@ bool SqliteDataBase::isSmallLetter(int ch)
 
 bool SqliteDataBase::open()
 {
+	bool flag1 = true, flag2 = true;
 	string dbFileName = "triviaDB.sqlite";
 	int file_exist = _access(dbFileName.c_str(), 0);
 	int res = sqlite3_open(dbFileName.c_str(), &db);
 	if (file_exist != 0)
 	{
-		if (!sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);"))
+		flag1 = sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);");
+		flag2 = sendSQLMsg("CREATE TABLE IF NOT EXISTS QUESTIONS(QUESTION_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION TEXT NOT NULL, CORRECT_ANS TEXT NOT NULL, ANS2 TEXT NOT NULL, ANS3 TEXT NOT NULL, ANS4 TEXT NOT NULL);");
+
+		if(!flag1 || !flag2)
 		{
 			std::cerr << "Error creating db!";
 			return false;
 		}
+
+		addNewQuestion(Question("What the name of your family doctor?", "boris", "aric", "gavriel", "ofek"));
 	}
 	else
 	{
@@ -133,11 +173,16 @@ bool SqliteDataBase::isPasswordMatch(const string password)
 
 void SqliteDataBase::addNewUser(User& user)
 {
-	std::vector<User> listUsers = getUsers();
-	string password = "";
 	std::string msg = "INSERT INTO USERS (USERNAME, PASSWORD,  EMAIL) VALUES ('" + user.getName() + "', '" + user.getPass() + "', '" + user.getMail() + "');";
 	const char* sqlStatement = msg.c_str();
 	if (sendSQLMsg(sqlStatement))
 		std::cout << "user added successfully!\n";
 	else std::cerr << "failed adding user!\n";
+}
+
+void SqliteDataBase::addNewQuestion(Question question)
+{
+	std::string msg = "INSERT INTO QUESTIONS (QUESTION, CORRECT_ANS,  ANS2, ANS3, ANS4) VALUES ('" + question.getQ() + "', '" + question.getCA() + "', '" + question.getWA1() + "', '" + question.getWA2() + "', '" + question.getWA3() + "');";
+	const char* sqlStatement = msg.c_str();
+	sendSQLMsg(sqlStatement);
 }
