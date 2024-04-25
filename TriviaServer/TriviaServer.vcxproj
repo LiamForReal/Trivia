@@ -134,6 +134,7 @@
     <ClCompile Include="MagshMessageServer.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />
+    <ClCompile Include="Question.cpp" />
     <ClCompile Include="SocketTools.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="main.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="RequestHandlerFactory.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="SqliteDataBase.cpp" />
+    <ClCompile Include="StatisticsManager.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
@@ -161,6 +163,7 @@
     <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RoomManager.h" />
+    <ClInclude Include="Question.h" />
     <ClInclude Include="SocketTools.h" />
     <ClInclude Include="FileWriter.h" />
     <ClInclude Include="MenuRequestHandler.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Responses.hpp" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="SqliteDataBase.h" />
+    <ClInclude Include="StatisticsManager.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
