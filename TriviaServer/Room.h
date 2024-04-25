@@ -15,6 +15,7 @@ typedef struct RoomData
 class Room
 {
 	public:
+		Room();
 		Room(const RoomData& metadata);
 		~Room();
 		void addUser(const LoggedUser& user);
