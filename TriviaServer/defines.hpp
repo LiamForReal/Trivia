@@ -5,6 +5,5 @@
 #define BYTES_TO_COPY 4
 #define INC 1
 #define DEC 1
-
 #define STATUS_CODE_BYTES_LENGTH 1
 #define MESSAGE_LENGTH_BYTES_LENGTH 4

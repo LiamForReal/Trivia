@@ -12,8 +12,14 @@ typedef enum Status
 {
 	LOGIN_STATUS = 101,
 	SIGNUP_STATUS = 201,
-	ERROR_STATUS = 501,
 } Status;
+
+typedef enum Errors
+{
+	LOGIN_ERROR = 105,
+	SIGNUP_ERROR = 205,
+	PASSWORD_WEAK = 210,
+} Errors;
 
 typedef struct ErrorResponse
 {

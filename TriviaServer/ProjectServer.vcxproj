@@ -131,7 +131,6 @@
     <ClCompile Include="LoggedUser.cpp" />
     <ClCompile Include="LoginManager.cpp" />
     <ClCompile Include="LoginRequestHandler.cpp" />
-    <ClCompile Include="MagshMessageServer.cpp" />
     <ClCompile Include="SocketTools.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="main.cpp" />
@@ -156,7 +155,6 @@
     <ClInclude Include="LoggedUser.h" />
     <ClInclude Include="LoginManager.h" />
     <ClInclude Include="LoginRequestHandler.h" />
-    <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="SocketTools.h" />
     <ClInclude Include="FileWriter.h" />
     <ClInclude Include="MenuRequestHandler.h" />

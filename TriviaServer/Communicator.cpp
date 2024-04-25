@@ -5,19 +5,17 @@
 #include "JsonRequestPacketDeserializer.h"
 #include <iostream>
 #include <vector>
-
 #include "defines.hpp"
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-    LoginRequestHandler lrh;
-
     std::string clientMsg = "";
     unsigned int statusCode = 0;
     unsigned int clientMsgLength = 0;
     size_t i = 0;
     int j = 0;
 
+    LoginRequestHandler lrh;
     RequestInfo ri = RequestInfo();
     RequestResult rr;
     ri.id = 0;
@@ -45,11 +43,9 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
     std::cout << "DEBUG: The message is: " << clientMsg << std::endl;
 
-    // std::cout << "DEBUG: DATA => " << ri.buffer.data() << std::endl;
 
     ri.id = statusCode;
     ri.recievalTime = time(nullptr);
-
     try
     {
         if (lrh.isRequestRelevant(ri))
@@ -60,9 +56,12 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     }
     catch (const std::exception& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
     }
-
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
     ri.buffer.clear();
 
     closesocket(clientSocket);

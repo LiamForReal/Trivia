@@ -1,6 +1,6 @@
 # Trivia_Liam_Gavriel_2024
 
-
+Trivia project of Liam and Gavriel for Magshimim
 
 ## Getting started
 

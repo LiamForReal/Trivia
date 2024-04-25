@@ -1,5 +1,5 @@
 #pragma comment (lib, "ws2_32.lib")
-#include "MagshMessageServer.h"
+#include "SocketTools.h"
 #include "WSAInitializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "JsonRequestPacketDeserializer.h"
@@ -29,7 +29,7 @@ void run_server()
 		TRACE("Starting...");
 		// NOTICE at the end of this block the WSA will be closed 
 		WSAInitializer wsa_init;
-		MagshMessageServer md_server;
+		SocketTools md_server;
 		md_server.serve();
 	}
 	catch (const std::exception& e)
