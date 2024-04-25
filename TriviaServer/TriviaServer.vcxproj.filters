@@ -76,7 +76,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RoomManager.cpp">
-    <ClCompile Include="Question.cpp">
+		<Filter>Source Files</Filter>
+    </ClCompile>
+		<ClCompile Include="Question.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StatisticsManager.cpp">
@@ -160,7 +162,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RoomManager.h">
-    <ClInclude Include="Question.h">
+		<Filter>Header Files</Filter>
+    </ClInclude>
+	<ClInclude Include="Question.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StatisticsManager.h">
