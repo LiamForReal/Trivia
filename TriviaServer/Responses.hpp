@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <vector>
+#include "RoomData.hpp"
 
 typedef enum ResponseCode
 {
@@ -35,3 +37,35 @@ typedef struct SignupResponse
 {
 	unsigned int status;
 } SignupResponse;
+
+typedef struct LogoutResponse
+{
+	unsigned int status;
+} LogoutResponse;
+
+typedef struct GetRoomsResponse
+{
+	unsigned int status;
+	std::vector<RoomData> rooms;
+} GetRoomsResponse;
+
+typedef struct GetPlayersInRoomResponse
+{
+	std::vector<std::string> players;
+} GetPlayersInRoomResponse;
+
+typedef struct JoinRoomResponse
+{
+	unsigned int status;
+} JoinRoomResponse;
+
+typedef struct CreateRoomResponse
+{
+	unsigned int status;
+} CreateRoomResponse;
+
+typedef struct GetHighScoreResponse
+{
+	unsigned int status;
+	std::vector<std::string> statistics;
+} GetHighScoreResponse;

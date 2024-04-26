@@ -10,3 +10,4 @@ using std::string;
 using std::vector;
 #include "Requests.hpp"
 #include "Responses.hpp"
+#include "RoomData.hpp"
