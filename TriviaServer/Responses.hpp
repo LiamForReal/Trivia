@@ -7,7 +7,13 @@ typedef enum ResponseCode
 {
 	LOGIN_RC = 100,
 	SIGNUP_RC = 200,
-	ERROR_RC = 500,
+	LOGOUT_RC = 300,
+	GET_ROOMS_RC = 400,
+	GET_PLAYERS_IN_ROOM_RC = 500,
+	JOIN_ROOM_RC = 600,
+	CREATE_ROOM_RC = 700,
+	GET_HIGH_SCORE_RC = 800,
+	ERROR_RC = 9999,
 } ResponseCode;
 
 typedef enum Status

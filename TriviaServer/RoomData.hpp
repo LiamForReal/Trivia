@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "json.hpp"
 
 typedef struct RoomData
 {
@@ -9,4 +10,6 @@ typedef struct RoomData
 	unsigned int numOfQuestionsInGame;
 	unsigned int timePerQuestion;
 	unsigned int isActive;
+
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, id, name, maxPlayers, numOfQuestionsInGame, timePerQuestion, isActive);
 } RoomData;

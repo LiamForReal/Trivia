@@ -84,7 +84,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(SIGNUP_RC));
+	vec[0] = ((unsigned char)(LOGOUT_RC));
 
 	unsigned int len = 0;
 
@@ -103,5 +103,43 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	return vec;
 }
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const GetRoomsResponse& getRoomsResponse)
+{
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
+	// Add Response Code
+	vec[0] = ((unsigned char)(GET_ROOMS_RC));
+
+	unsigned int len = 0;
+
+	std::vector<json> roomsDataVec;
+	json temp;
+
+	for (auto it = getRoomsResponse.rooms.begin(); it != getRoomsResponse.rooms.end(); it++)
+	{
+		const_cast<RoomData&>((*it)).to_json(temp, (*it));
+		roomsDataVec.push_back(temp);
+	}
+
+	json srJson = {
+		{"status", getRoomsResponse.status},
+		{"rooms", json(roomsDataVec)},
+	};
+
+	std::string srJsonStr = srJson.dump();
+
+	std::cout << "[Json Structs and Vecs] DEBUG: " << srJsonStr << std::endl;
+
+	// Insert Message Length Into Vector
+	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
+
+	// Insert Message Into Vector
+	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+
+	return vec;
+}
+
+
 
 
