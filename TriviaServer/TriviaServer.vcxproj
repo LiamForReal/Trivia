@@ -145,6 +145,7 @@
     <ClCompile Include="SqliteDataBase.cpp" />
     <ClCompile Include="StatisticsManager.cpp" />
     <ClCompile Include="User.cpp" />
+    <ClCompile Include="QuestionStatistics.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="SqliteDataBase.h" />
     <ClInclude Include="StatisticsManager.h" />
     <ClInclude Include="User.h" />
+    <ClInclude Include="QuestionStatistics.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
