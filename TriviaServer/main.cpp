@@ -90,7 +90,7 @@ void run_json_test_v2()
 	};
 
 	RoomData rd2 = {
-	1,
+	3,
 	"Users's Room",
 	5,
 	80,
