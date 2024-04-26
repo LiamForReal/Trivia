@@ -126,6 +126,9 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 		{"rooms", json(roomsDataVec)},
 	};
 
+	roomsDataVec.clear();
+	temp.clear();
+
 	std::string srJsonStr = srJson.dump();
 
 	std::cout << "[Json Structs and Vecs] DEBUG: " << srJsonStr << std::endl;
