@@ -57,6 +57,7 @@ typedef struct GetRoomsResponse
 
 typedef struct GetPlayersInRoomResponse
 {
+	unsigned int status;
 	std::vector<std::string> players;
 } GetPlayersInRoomResponse;
 

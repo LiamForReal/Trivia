@@ -152,6 +152,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	unsigned int len = 0;
 
 	json srJson = {
+		{"status", getPlayerInRoomResponse.status},
 		{"players", json(getPlayerInRoomResponse.players)},
 	};
 
