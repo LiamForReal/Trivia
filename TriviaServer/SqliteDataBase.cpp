@@ -26,6 +26,8 @@ int callbackUser(void* data, int argc, char** argv, char** azColName)
 			user->setPass(argv[i]);
 		else if (string(azColName[i]) == "EMAIL")
 			user->setMail(argv[i]);
+		else if (string(azColName[i]) == "ID")
+			user->setId(std::stoi(argv[i]));
 	}
 	users->push_back(*user);
 	return 0;
@@ -47,6 +49,8 @@ int callbackQuestion(void* data, int argc, char** argv, char** azColName)
 			question->setWA2(argv[i]);
 		else if (string(azColName[i]) == "ANS4")
 			question->setWA3(argv[i]);
+		else if (string(azColName[i]) == "ID")
+			question->setId(std::stoi(argv[i]));
 	}
 	questions->push_back(*question);
 	return 0;
