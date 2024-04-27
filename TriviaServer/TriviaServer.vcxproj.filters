@@ -76,12 +76,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RoomManager.cpp">
-		<Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
-		<ClCompile Include="Question.cpp">
+    <ClCompile Include="Question.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StatisticsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionStatistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserStatistics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,12 +168,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RoomManager.h">
-		<Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="Question.h">
+    <ClInclude Include="Question.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StatisticsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionStatistics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserStatistics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

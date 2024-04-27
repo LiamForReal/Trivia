@@ -5,6 +5,7 @@ class Question
 {
 public:
 	Question(string q, string ca, string wa1, string wa2, string wa3);
+	Question(string q, string ca, string wa1, string wa2, string wa3, int id);
 	~Question();
 
 	string getQ() const;
@@ -12,7 +13,9 @@ public:
 	string getWA1() const;
 	string getWA2() const;
 	string getWA3() const;
+	int getId() const;
 
+	void setId(const int newId);
 	void setQ(const string& newQ);
 	void setCA(const string& newCA);
 	void setWA1(const string& newWA1);
@@ -25,5 +28,6 @@ private:
 	string _wrong1;
 	string _wrong2;
 	string _wrong3;
+	int _id;
 };
 
