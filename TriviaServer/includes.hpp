@@ -12,5 +12,7 @@ using std::vector;
 using std::list;
 #include<set>
 using std::set;
+#include<map>
+using std::map;
 #include "Requests.hpp"
 #include "Responses.hpp"
