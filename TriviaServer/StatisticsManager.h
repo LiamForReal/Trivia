@@ -5,8 +5,8 @@
 class StatisticsManager
 {
 public:
-	std::vector<string> getHighScore() const;
-	std::vector<string> getUserStatistics(string username) const;
+	vector<string> getHighScore() const;
+	vector<string> getUserStatistics(string username) const;
 private:
 	IDatabase* _db;
 };
