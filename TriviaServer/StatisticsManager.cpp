@@ -3,14 +3,14 @@
 vector<string> StatisticsManager::getHighScore() const
 {
 	vector<string> fiveBestScores;
-	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime + numOfGames / 100)
+	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime - numOfGames / 100)
 	map<string, double> userScores;
 	double divCorrectAnsInTotal = 0.0, addAvrageToNumOfGames = 0.0, score = 0.0;
 	string name = "";
 	for (auto itU = users.begin(); itU != users.end(); ++itU)
 	{
 		divCorrectAnsInTotal = _db->getNumOfCorrectAnswers(itU->getName()) / _db->getNumOfTotalAnswers(itU->getName());
-		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) + (_db->getNumOfPlayerGames(itU->getName()) / 100);
+		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) - (_db->getNumOfPlayerGames(itU->getName()) / 100);
 		userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
 	}
 	
