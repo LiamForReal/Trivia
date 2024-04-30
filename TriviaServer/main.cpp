@@ -17,9 +17,9 @@ void run_json_test_v2();
 
 int main()
 {
-	//run_server();
+	run_server();
 	//run_json_tests();
-	run_json_test_v2();
+	//run_json_test_v2();
 }
 
 void run_server()
