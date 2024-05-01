@@ -34,7 +34,7 @@ vector<string> StatisticsManager::getHighScore() const
 	}
 	return fiveBestScores;
 }
-vector<string> StatisticsManager::getUserStatistics(string username) const
+string StatisticsManager::getUserStatistics(string username) const
 {
 	std::vector<string> userStatistics; //user statistics: number of games | number of correct answers | number of wrong answers | avrage time for answer
 	double correctAnswers = 0.0;

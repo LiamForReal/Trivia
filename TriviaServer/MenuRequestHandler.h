@@ -8,6 +8,15 @@
 class MenuRequestHandler
 {
 public:
+	bool isRequestRelevant(RequestInfo);
+	RequestResult handleRequest(RequestInfo);
+	RequestResult signout(RequestInfo);
+	RequestResult getRooms(RequestInfo);
+	RequestResult getPlayersInRoom(RequestInfo);
+	RequestResult getPersonalStats(RequestInfo);
+	RequestResult getHighScore(RequestInfo);
+	RequestResult joinRoom(RequestInfo);
+	RequestResult createRoom(RequestInfo);
 
 private:
 	LoggedUser _user;
