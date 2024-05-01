@@ -89,3 +89,9 @@ typedef struct GetHighScoreResponse
 	unsigned int status;
 	std::vector<std::string> statistics;
 } GetHighScoreResponse;
+
+typedef struct GetPersonalStatsResponse
+{
+	unsigned int status;
+	std::vector<std::string> statistics;
+} GetPersonalStatsResponse;
