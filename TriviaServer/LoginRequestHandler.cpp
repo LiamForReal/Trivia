@@ -10,7 +10,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	std::vector<unsigned char> buffer;
 	unsigned int status = 0;
-	RequestHandlerFactory rhf = RequestHandlerFactory();
+	RequestHandlerFactory rhf = RequestHandlerFactory(); /* can be affisient try to make it static */
 	if (LOGIN_RC == requestInfo.id)
 	{
 		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);

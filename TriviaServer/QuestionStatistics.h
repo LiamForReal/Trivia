@@ -29,4 +29,3 @@ private:
 	bool _isCorrect;
 	time_t _answerTime;
 };
-
