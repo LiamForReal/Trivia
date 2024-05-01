@@ -64,3 +64,93 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const std:
 
 	return sr;
 }
+
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(const std::vector<unsigned char>& buffer)
+{
+	GetPlayersInRoomRequest gpirr;
+	std::string jsonDataStr = "";
+
+	unsigned int len = 0, i = 0;
+
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	// std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try
+	{
+		gpirr.roomId = jsonData["roomId"];
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed");
+	}
+
+	return gpirr;
+}
+
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const std::vector<unsigned char>& buffer)
+{
+	JoinRoomRequest jrr;
+	std::string jsonDataStr = "";
+
+	unsigned int len = 0, i = 0;
+
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	// std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try
+	{
+		jrr.roomId = jsonData["roomId"];
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed");
+	}
+
+	return jrr;
+}
+
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer)
+{
+	CreateRoomRequest crr;
+	std::string jsonDataStr = "";
+
+	unsigned int len = 0, i = 0;
+
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	// std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try
+	{
+		crr.roomName = jsonData["roomName"];
+		crr.maxUsers = jsonData["maxUsers"];
+		crr.questionsCount = jsonData["questionsCount"];
+		crr.answerTimeout = jsonData["answerTimeout"];
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed");
+	}
+
+	return crr;
+}
