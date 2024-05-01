@@ -176,6 +176,9 @@
     <ClInclude Include="StatisticsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RoomData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="QuestionStatistics.h">
       <Filter>Header Files</Filter>
     </ClInclude>

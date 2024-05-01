@@ -16,3 +16,4 @@ using std::set;
 using std::map;
 #include "Requests.hpp"
 #include "Responses.hpp"
+#include "RoomData.hpp"
