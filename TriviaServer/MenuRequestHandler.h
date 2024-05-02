@@ -3,25 +3,26 @@
 #include "LoggedUser.h"
 #include "RoomManager.h"
 #include "StatisticsManager.h"
-#include "RequestHandlerFactory.h"
+#include "IRequestHandler.h"
 
-class MenuRequestHandler
+class MenuRequestHandler : public IRequestHandler
 {
 public:
-	bool isRequestRelevant(RequestInfo);
-	RequestResult handleRequest(RequestInfo);
-	RequestResult signout(RequestInfo);
-	RequestResult getRooms(RequestInfo);
-	RequestResult getPlayersInRoom(RequestInfo);
-	RequestResult getPersonalStats(RequestInfo);
-	RequestResult getHighScore(RequestInfo);
-	RequestResult joinRoom(RequestInfo);
-	RequestResult createRoom(RequestInfo);
+	bool isRequestRelevant(const RequestInfo& ri) override;
+	RoomManager getRoomManager() const;
+	StatisticsManager getStatisticsManager() const;
+	RequestResult handleRequest(const RequestInfo& ri) override;
+	RequestResult signout(RequestInfo& ri);
+	RequestResult getRooms(RequestInfo& ri);
+	RequestResult getPlayersInRoom(RequestInfo& ri);
+	RequestResult getPersonalStats(RequestInfo& ri);
+	RequestResult getHighScore(RequestInfo& ri);
+	RequestResult joinRoom(RequestInfo& ri);
+	RequestResult createRoom(RequestInfo& ri);
 
 private:
 	LoggedUser _user;
 	RoomManager& _roomManager;
 	StatisticsManager& _statisticsManager;
-	RequestHandlerFactory& _requestHandleFuctory;
 };
 

@@ -1,35 +1,45 @@
 #include "MenuRequestHandler.h"
 
-bool MenuRequestHandler::isRequestRelevant(RequestInfo)
+RoomManager MenuRequestHandler::getRoomManager() const
 {
-	return false;
+	return _roomManager;
 }
 
-RequestResult MenuRequestHandler::handleRequest(RequestInfo)
+StatisticsManager MenuRequestHandler::getStatisticsManager() const
 {
-	RequestResult rr = RequestResult();
-	return rr;
+	return _statisticsManager;
 }
 
-RequestResult MenuRequestHandler::signout(RequestInfo)
+bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
-	RequestResult rr = RequestResult();
-	return rr;
+	return ri.id >= 300 && ri.id <= 800;
 }
 
-RequestResult MenuRequestHandler::getRooms(RequestInfo)
+RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
 {
 	RequestResult rr = RequestResult();
 	return rr;
 }
 
-RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo)
+RequestResult MenuRequestHandler::signout(RequestInfo& ri)
 {
 	RequestResult rr = RequestResult();
 	return rr;
 }
 
-RequestResult MenuRequestHandler::getPersonalStats(RequestInfo)
+RequestResult MenuRequestHandler::getRooms(RequestInfo& ri)
+{
+	RequestResult rr = RequestResult();
+	return rr;
+}
+
+RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo& ri)
+{
+	RequestResult rr = RequestResult();
+	return rr;
+}
+
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri)
 {
 	StatisticsManager sm = StatisticsManager();
 	RequestResult rr = RequestResult();
@@ -43,7 +53,7 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo)
 	return rr;
 }
 
-RequestResult MenuRequestHandler::getHighScore(RequestInfo)
+RequestResult MenuRequestHandler::getHighScore(RequestInfo& ri)
 {
 	StatisticsManager sm = StatisticsManager();
 	RequestResult rr = RequestResult();
@@ -67,13 +77,13 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo)
 	return rr;
 }
 
-RequestResult MenuRequestHandler::joinRoom(RequestInfo)
+RequestResult MenuRequestHandler::joinRoom(RequestInfo& ri)
 {
 	RequestResult rr = RequestResult();
 	return rr;
 }
 
-RequestResult MenuRequestHandler::createRoom(RequestInfo)
+RequestResult MenuRequestHandler::createRoom(RequestInfo& ri)
 {
 	RequestResult rr = RequestResult();
 	return rr;

@@ -1,5 +1,10 @@
 #include "LoggedUser.h"
 
+LoggedUser::LoggedUser()
+{
+	username = "";
+}
+
 LoggedUser::LoggedUser(string name)
 {
 	username = name;

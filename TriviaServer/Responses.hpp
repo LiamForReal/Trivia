@@ -13,6 +13,7 @@ typedef enum ResponseCode
 	JOIN_ROOM_RC = 600,
 	CREATE_ROOM_RC = 700,
 	GET_HIGH_SCORE_RC = 800,
+	ERROR_RC = 9999,
 } ResponseCode;
 
 typedef enum Status
