@@ -77,7 +77,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //done
 	unsigned int status = 0;
 	GetPlayersInRoomRequest gpr = JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(ri.buffer);
 	Room room = _roomManager.getRoom(gpr.roomId);
-	if (_roomManager.isLegalRoom(gpr.roomId)/* && _roomManager.getRoomState(jrr.roomId) != */)
+	if (_roomManager.isLegalRoom(gpr.roomId))
 		status = GET_PLAYERS_IN_ROOM_STATUS;
 	else status = GET_PLAYERS_IN_ROOM_ERROR;
 	GetPlayersInRoomResponse gpre;
@@ -131,7 +131,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri) //done
 	unsigned int status = 0;
 	JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
 	Room room = _roomManager.getRoom(jrr.roomId);
-	if (_roomManager.isLegalRoom(jrr.roomId)/* && _roomManager.getRoomState(jrr.roomId) != */ )
+	if (_roomManager.isLegalRoom(jrr.roomId) && _roomManager.getRoomState(jrr.roomId) == 0)
 		status = JOIN_ROOM_STATUS;
 	else status = JOIN_ROOM_ERROR;
 	JoinRoomResponse jrre;
