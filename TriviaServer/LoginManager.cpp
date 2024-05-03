@@ -14,17 +14,17 @@ LoginManager::~LoginManager()
 	this->_dataBace->close();
 }
 
-void LoginManager::logout(const string name)
+unsigned int LoginManager::logout(const string name)
 {
 	for (int i = 0; i < _loggedUsers.size(); ++i)
 	{
 		if (_loggedUsers[i].getUserName() == name)
 		{
 			_loggedUsers.erase(_loggedUsers.begin() + i);
-			return;
+			return LOGOUT_STATUS;
 		}
-			
 	}
+	return LOGOUT_ERROR;
 }
 
 unsigned int LoginManager::login(const string name, const string pass)

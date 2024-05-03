@@ -37,3 +37,8 @@ Room& RoomManager::getRoom(const unsigned int& id)
 {
 	return std::ref(this->m_rooms[id]);
 }
+
+bool RoomManager::isLegalRoom(const unsigned int& id)
+{
+	return bool(getRooms().size());
+}

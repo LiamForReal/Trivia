@@ -16,10 +16,10 @@ LoginManager& RequestHandlerFactory::getLoginMeneger()
 {
 	return loginMeneger;
 }
-/*
-* MenuRequestHandler RequestHandlerFactory::createMenuRequestHandler()
-{
-	MenuRequestHandler mrh = MenuRequestHandler();
-	return ;
-}
-*/
+
+
+//MenuRequestHandler RequestHandlerFactory::createMenuRequestHandler()
+//{
+//	MenuRequestHandler mrh = MenuRequestHandler();
+//	return ;
+//}
