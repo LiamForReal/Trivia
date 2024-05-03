@@ -39,7 +39,7 @@ typedef enum Errors
 	JOIN_ROOM_ERROR = 605,
 	CREATE_ROOM_ERROR = 705,
 	GET_HIGH_SCORE_ERROR = 805,
-
+	THERE_IS_NO_SCORES = 810,
 } Errors;
 
 typedef struct ErrorResponse

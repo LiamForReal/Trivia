@@ -42,33 +42,39 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri) //done
 	return rr;
 }
 
-RequestResult MenuRequestHandler::signout(RequestInfo ri) //why
+RequestResult MenuRequestHandler::signout(RequestInfo ri) //done
 {
-	//std::vector<unsigned char> buffer;
-	//unsigned int status = 0;
-	//status = _requestHandlerFactory.getLoginMeneger().logout(_user.getUserName());
-	//RequestResult rr = RequestResult();
-	//rr.status = status;
-	//buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
-	//std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
-	//rr.newHandler = nullptr; // should be the next handler that the user should pass
-	//return rr;
+	std::vector<unsigned char> buffer;
+	_requestHandlerFactory.getLoginMeneger().logout(_user.getUserName());
+	RequestResult rr = RequestResult();
+	rr.newHandler = nullptr; // should be the next handler that the user should pass
+	return rr;
 }
 
-RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //why
+RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //done
 {
-	//std::vector<unsigned char> buffer;
-	//unsigned int status = 0;
-	//if (_roomManager.getRooms().size() > 0)
-	//	status = GET_ROOMS_STATUS;
-	//else status = GET_ROOMS_ERROR;
-	//SignupResponse sresponse;
-	//sresponse.status = status;
-	//buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
-	//RequestResult rr = RequestResult();
-	//std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
-	//rr.newHandler = nullptr; // should be the next handler that the user should pass
-	//return rr;
+	std::vector<unsigned char> buffer;
+	RequestResult rr = RequestResult();
+	rr.newHandler = nullptr; // should be the next handler that the user should pass
+	if (_roomManager.getRooms().size() <= 0)
+	{
+		std::copy(rr.buffer.begin(), rr.buffer.end(), std::to_string(GET_ROOMS_ERROR));
+		return rr;
+	}
+	vector<RoomData> rd = _roomManager.getRooms();
+	string tmp = "{";
+	for (int i = 0; i < rd.size(); i++)
+	{
+		
+		tmp += "[" + std::to_string(rd[i].id) + "," + rd[i].name + "," + std::to_string(rd[i].maxPlayers)
+			+ "," + std::to_string(rd[i].numOfQuestionsInGame) + "," + std::to_string(rd[i].timePerQuestion) + "],";
+	}
+	tmp = tmp.substr(0, tmp.size() - 1);
+	unsigned char* tmp2 = new unsigned char[tmp.size() + 1];
+	tmp2[tmp.size()] = '\0';
+	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+	delete[] tmp2;
+	return rr;
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //done
@@ -89,39 +95,45 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //done
 	rr.newHandler = nullptr;
 }
 
-//RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) un needed for now
-//{
-//	RequestResult rr = RequestResult();
-//	string playerStats = _statisticsManager.getUserStatistics(_user.getUserName());
-//    unsigned char* tmp = new unsigned char[playerStats.length() + 1];
-//    std::copy(playerStats.begin(), playerStats.end(), tmp);
-//    tmp[playerStats.length()] = '\0';
-//	for (int i = 0; i < playerStats.length() + 1; i++)
-//		rr.buffer[i] = tmp[i];
-//	rr.newHandler = nullptr;
-//	return rr;
-//}
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) //done
+{
+	RequestResult rr = RequestResult();
+	string playerStats = _statisticsManager.getUserStatistics(_user.getUserName());
+    unsigned char* tmp = new unsigned char[playerStats.size() + 1];
+    std::copy(playerStats.begin(), playerStats.end(), tmp);
+    tmp[playerStats.size()] = '\0';
+	std::copy(rr.buffer.begin(), rr.buffer.end(), tmp);
+	rr.newHandler = nullptr;
+	return rr;
+}
 
-RequestResult MenuRequestHandler::getHighScore(RequestInfo ri) //why
+RequestResult MenuRequestHandler::getHighScore(RequestInfo ri) //done
 {
 	RequestResult rr = RequestResult();
 	vector<string> HighScores = _statisticsManager.getHighScore();
 	int i = 0, size = 0;
-
+	rr.newHandler = nullptr;
+	if (HighScores.size() == 0)
+	{
+		std::copy(rr.buffer.begin(), rr.buffer.end(), std::to_string(GET_HIGH_SCORE_ERROR));
+		return rr;
+	}
+		
 	for (i = 0; i < HighScores.size(); i++)
-		size += HighScores[i].length();
+		size += HighScores[i].size();
 
-	unsigned char* tmp = new unsigned char[size + 1];
+	string tmp = "";
 
 	for (i = 0; i < HighScores.size(); i++)
 	{
 		std::copy(HighScores[i].begin(), HighScores[i].end(), tmp);
 		tmp += '|';
 	}
-	tmp[HighScores.size()] = '\0';
-	for (i = 0; i < size + 1; i++)
-		rr.buffer[i] = tmp[i];
-	rr.newHandler = nullptr;
+
+	unsigned char* tmp2 = new unsigned char[tmp.size() + 1];
+	tmp2[tmp.size()] = '\0';
+	std::copy(rr.buffer.begin(), rr.buffer.end(), tmp2);
+	delete[] tmp2;
 	return rr;
 }
 
