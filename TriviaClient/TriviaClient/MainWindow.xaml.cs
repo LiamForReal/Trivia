@@ -20,6 +20,9 @@ namespace TriviaClient
     {
         public LogInScreen logInScreen;
         public SignUpScreen signUpScreen;
+        public StatsMenu statsMenu;
+
+
         public bool isUserLogged;
         public string username;
         public TcpClient client;
@@ -80,6 +83,12 @@ namespace TriviaClient
             this.isUserLogged = false;
             this.username = "";
             this.HelloLabel.Content = "";
+        }
+
+        private void StatsMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.statsMenu = new StatsMenu();
+            this.statsMenu.Show();
         }
     }
 }

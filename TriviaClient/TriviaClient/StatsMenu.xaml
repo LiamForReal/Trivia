@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="[Trivia] Statistics Menu" Height="450" Width="800">
+        Title="[Trivia] Statistics Menu" Height="450" Width="400">
     <Window.Background>
         <ImageBrush ImageSource="../Resources/stats_menu.png"/>
     </Window.Background>
@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Orientation="Vertical">
-                <Label Content="Personal Stats" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-10,10,0" />
+                <Label Content="Stats Menu" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
             </StackPanel>
 
         </Grid>

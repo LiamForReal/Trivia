@@ -41,6 +41,7 @@
                 <Label Name="HelloLabel" Content="" Foreground="Aqua" HorizontalAlignment="Center" FontSize="28" FontWeight="ExtraBold" Margin="10" />
                 <Button Name="LoginButton" Content="Log In" Width="100" Margin="0,30,0,10" Click="LoginButton_Click"/>
                 <Button Name="SignUpButton" Content="Sign Up" Width="100" Margin="0,10,0,10" Click="SignUpButton_Click"/>
+                <Button Name="StatsMenuButton" Content="Stats Menu" Width="100" Margin="0,10,0,10" Click="StatsMenuButton_Click"/>
                 <Button Name="LogOutButton" Content="Log Out" Width="100" Margin="0,10,0,10" Click="LogOutButton_Click" />
             </StackPanel>
 
