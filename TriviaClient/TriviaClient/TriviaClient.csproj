@@ -17,6 +17,7 @@
     <None Remove="Resources\show_password.png" />
     <None Remove="Resources\sign_up_background.jpg" />
     <None Remove="Resources\stats.png" />
+    <None Remove="Resources\stats_menu.png" />
     <None Remove="show_password.png" />
     <None Remove="sign_up_background.jpg" />
   </ItemGroup>
@@ -38,6 +39,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\stats.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\stats_menu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
