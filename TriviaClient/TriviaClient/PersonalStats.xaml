@@ -52,7 +52,10 @@
                 <Label Content="Number Of Right Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
                 <Label Content="Number Of Wrong Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
                 <Label Content="Average Time For Answer - 0.0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+            </StackPanel>
 
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">
+                <Button Name="QuitButton" Content="Quit" Width="100" Height="20" Click="QuitButton_Click"/>
             </StackPanel>
 
         </Grid>

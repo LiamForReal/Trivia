@@ -23,5 +23,10 @@ namespace TriviaClient
         {
             InitializeComponent();
         }
+
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
