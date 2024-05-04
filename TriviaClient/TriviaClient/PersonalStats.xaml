@@ -33,6 +33,28 @@
                 <Label Content="Personal Stats" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
             </StackPanel>
 
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,70,5,5" Orientation="Vertical">
+                <Rectangle Grid.RowSpan="4"
+                   Grid.ColumnSpan="2"
+                   Width="300"
+                   Height="200"
+                   Panel.ZIndex="-1"
+                   Fill="Orange"
+                   Opacity=".5"
+                   RadiusX="8"
+                   RadiusY="8"
+                   Stroke="OrangeRed"
+                   StrokeThickness="2" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Orientation="Vertical">
+                <Label Content="Number Of Games - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label Content="Number Of Right Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label Content="Number Of Wrong Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label Content="Average Time For Answer - 0.0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+
+            </StackPanel>
+
         </Grid>
     </GroupBox>
 </Window>

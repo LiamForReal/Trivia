@@ -36,5 +36,10 @@ namespace TriviaClient
             this.personalStats = new PersonalStats();
             this.personalStats.Show();
         }
+
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

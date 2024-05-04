@@ -33,6 +33,7 @@
                 <Label Content="Stats Menu" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
                 <Button Name="PersonalStatsButton" Content="Personal Stats" Width="100" Margin="0,30,0,10" Click="PersonalStatsButton_Click"/>
                 <Button Name="BestScoresButton" Content="Best Scores" Width="100" Margin="0,10,0,10" Click="BestScoresButton_Click"/>
+                <Button Name="QuitButton" Content="Quit" Width="100" Margin="0,50,0,10" Click="QuitButton_Click"/>
             </StackPanel>
             
            
