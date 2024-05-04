@@ -19,9 +19,22 @@ namespace TriviaClient
     /// </summary>
     public partial class StatsMenu : Window
     {
+        public PersonalStats personalStats;
+
         public StatsMenu()
         {
             InitializeComponent();
+        }
+
+        private void BestScoresButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PersonalStatsButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.personalStats = new PersonalStats();
+            this.personalStats.Show();
         }
     }
 }
