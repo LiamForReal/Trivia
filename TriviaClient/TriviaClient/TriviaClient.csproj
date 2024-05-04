@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="hide_password.png" />
+    <None Remove="login_background.jpg" />
+    <None Remove="Resources\background.jpg" />
+    <None Remove="Resources\hide_password.png" />
+    <None Remove="Resources\login_background.jpg" />
+    <None Remove="Resources\show_password.png" />
+    <None Remove="Resources\sign_up_background.jpg" />
+    <None Remove="Resources\stats.png" />
+    <None Remove="show_password.png" />
+    <None Remove="sign_up_background.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\hide_password.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\login_background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\show_password.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\sign_up_background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\stats.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,85 @@
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Net.Sockets;
+using System.Net;
+
+namespace TriviaClient
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public LogInScreen logInScreen;
+        public SignUpScreen signUpScreen;
+        public bool isUserLogged;
+        public string username;
+        public TcpClient client;
+        public NetworkStream clientStream;
+
+        public MainWindow()
+        {
+/*            try
+            {
+                this.client = new TcpClient();
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888);
+                client.Connect(serverEndPoint);
+                this.clientStream = this.client.GetStream();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not connect to trivia server", "[Trivia] Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
+            }*/
+
+
+            InitializeComponent();
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.logInScreen = new LogInScreen();
+            this.logInScreen.mainWindow = this;
+            this.logInScreen.Show();
+        }
+
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.logInScreen != null)
+            {
+                this.logInScreen.Close();
+            }
+            this.Close();
+            
+            // fix this
+            this.client.Close();
+        }
+
+        private void SignUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.signUpScreen = new SignUpScreen();
+            this.signUpScreen.Show();
+        }
+
+        private void LogOutButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!this.isUserLogged)
+            {
+                MessageBox.Show("There Is No User Logged!", "[Trivia] Message", MessageBoxButton.OK, icon: MessageBoxImage.Exclamation);
+                return;
+            }
+
+            this.isUserLogged = false;
+            this.username = "";
+            this.HelloLabel.Content = "";
+        }
+    }
+}
