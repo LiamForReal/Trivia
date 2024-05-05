@@ -50,9 +50,6 @@
     <Resource Include="Resources\sign_up_background.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\stats.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\stats_menu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

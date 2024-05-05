@@ -31,5 +31,10 @@ namespace TriviaClient
             this.Close();
             this.mainWindow.Show();
         }
+
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -36,7 +36,7 @@
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,70,5,5" Orientation="Vertical">
                 <Rectangle Grid.RowSpan="4"
                    Grid.ColumnSpan="2"
-                   Width="300"
+                   Width="580"
                    Height="200"
                    Panel.ZIndex="-1"
                    Fill="Orange"
@@ -47,13 +47,34 @@
                    StrokeThickness="2" />
             </StackPanel>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Orientation="Vertical">
-               
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Horizontal">
+                <Label Content="Room Name: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
+                <TextBox x:Name="RoomNameTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="79"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,70,5,5" Orientation="Horizontal">
+                <Label Content="Number Of Players: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
+                <TextBox x:Name="NumberOfPlayersTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="26"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,130,5,5" Orientation="Horizontal">
+                <Label Content="Number Of Questions: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
+                <TextBox x:Name="NumberOfQuestionsTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,190,5,5" Orientation="Horizontal">
+                <Label Content="Time For Question: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
+                <TextBox x:Name="TimeForQuestionTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="32"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">
+                <Button Name="SubmitButton" Content="Submit" Width="100" Height="20" Click="SubmitButton_Click" Margin="5"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="20" Orientation="Vertical">
                 <Button Name="QuitButton" Content="Quit" Width="100" Height="20" Click="QuitButton_Click"/>
             </StackPanel>
+            
 
         </Grid>
     </GroupBox>
