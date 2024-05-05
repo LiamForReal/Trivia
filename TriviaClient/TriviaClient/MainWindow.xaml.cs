@@ -60,6 +60,23 @@ namespace TriviaClient
             {
                 this.logInScreen.Close();
             }
+            if (this.signUpScreen != null)
+            {
+                this.signUpScreen.Close();
+            }
+            if (this.statsMenu != null)
+            {
+                if (this.statsMenu.personalStats != null)
+                {
+                    this.statsMenu.personalStats.Close();
+                }
+                if (this.statsMenu.bestScores != null)
+                {
+                    this.statsMenu.bestScores.Close();
+                }
+                this.statsMenu.Close();
+            }
+
             this.Close();
             
             // fix this
