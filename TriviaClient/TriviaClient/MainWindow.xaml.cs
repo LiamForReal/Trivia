@@ -63,7 +63,10 @@ namespace TriviaClient
             this.Close();
             
             // fix this
-            this.client.Close();
+            if (this.client != null)
+            {
+                this.client.Close();
+            }
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
