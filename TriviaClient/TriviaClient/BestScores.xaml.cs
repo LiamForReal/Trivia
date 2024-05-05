@@ -15,28 +15,13 @@ using System.Windows.Shapes;
 namespace TriviaClient
 {
     /// <summary>
-    /// Interaction logic for StatsMenu.xaml
+    /// Interaction logic for BestScores.xaml
     /// </summary>
-    public partial class StatsMenu : Window
+    public partial class BestScores : Window
     {
-        public PersonalStats personalStats;
-        public BestScores bestScores;
-
-        public StatsMenu()
+        public BestScores()
         {
             InitializeComponent();
-        }
-
-        private void BestScoresButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.bestScores = new BestScores();
-            this.bestScores.Show();
-        }
-
-        private void PersonalStatsButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.personalStats = new PersonalStats();
-            this.personalStats.Show();
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
