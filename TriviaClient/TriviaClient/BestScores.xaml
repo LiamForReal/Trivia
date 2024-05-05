@@ -48,9 +48,9 @@
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Orientation="Vertical">
-                <Label Name="FirstPlaceLabel" Content="1. Gavriel - 0 Games Won" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
-                <Label Name="SecondPlaceLabel" Content="2. Liam - 0 Games Won" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
-                <Label Name="ThirdPlaceLabel" Content="3. Jubzik - 0 Games Won" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label Name="FirstPlaceLabel" Content="1. Gavriel - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label Name="SecondPlaceLabel" Content="2. Liam - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label Name="ThirdPlaceLabel" Content="3. Jubzik - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">
