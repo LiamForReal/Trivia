@@ -21,7 +21,7 @@ namespace TriviaClient
         public LogInScreen logInScreen;
         public SignUpScreen signUpScreen;
         public StatsMenu statsMenu;
-
+        public CreateRoom createRoom;
 
         public bool isUserLogged;
         public string username;
@@ -43,7 +43,6 @@ namespace TriviaClient
                 this.Close();
             }*/
 
-
             InitializeComponent();
         }
 
@@ -52,6 +51,7 @@ namespace TriviaClient
             this.logInScreen = new LogInScreen();
             this.logInScreen.mainWindow = this;
             this.logInScreen.Show();
+            // this.Hide();
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -109,6 +109,19 @@ namespace TriviaClient
         {
             this.statsMenu = new StatsMenu();
             this.statsMenu.Show();
+        }
+
+        private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            this.createRoom = new CreateRoom();
+            this.createRoom.mainWindow = this;
+            this.createRoom.Show();
         }
     }
 }

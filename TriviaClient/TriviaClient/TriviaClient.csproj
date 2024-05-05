@@ -13,6 +13,7 @@
     <None Remove="login_background.jpg" />
     <None Remove="Resources\background.jpg" />
     <None Remove="Resources\best_scores_background.jpg" />
+    <None Remove="Resources\create_room_background.jpg" />
     <None Remove="Resources\hide_password.png" />
     <None Remove="Resources\login_background.jpg" />
     <None Remove="Resources\personal_stats_background.jpg" />
@@ -29,6 +30,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\best_scores_background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\create_room_background.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\hide_password.png">
