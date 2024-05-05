@@ -7,10 +7,8 @@ bool SqliteDataBase::sendSQLMsg(const char* sql_command)
 	int res = sqlite3_exec(db, sqlStatementPerson, nullptr, nullptr, errMessagePerson);
 	if (res != SQLITE_OK)
 	{
-		std::cout << "false";
 		return false;
 	}
-	std::cout << "true";
 	return true;
 }
 

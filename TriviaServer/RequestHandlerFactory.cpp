@@ -1,12 +1,14 @@
 #include "RequestHandlerFactory.h"
 
-RequestHandlerFactory::RequestHandlerFactory()
+RoomManager RequestHandlerFactory::getRoomManager() const
 {
-	this->dataBace = new SqliteDataBase();
-	this->loginMeneger = LoginManager();
+	return this->_roomManager;
 }
 
-RequestHandlerFactory::~RequestHandlerFactory() {}
+StatisticsManager RequestHandlerFactory::getStatisticsManager() const
+{
+	return this->_statisticsManager;
+}
 
 LoginRequestHandler RequestHandlerFactory::creatLoginRequestHandler()
 {
@@ -18,8 +20,8 @@ LoginManager& RequestHandlerFactory::getLoginMeneger()
 }
 
 
-//MenuRequestHandler RequestHandlerFactory::createMenuRequestHandler()
-//{
-//	MenuRequestHandler mrh = MenuRequestHandler();
-//	return ;
-//}
+MenuRequestHandler RequestHandlerFactory::createMenuRequestHandler()
+{
+	MenuRequestHandler mrh =  MenuRequestHandler();
+	return mrh;
+}

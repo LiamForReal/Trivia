@@ -6,13 +6,12 @@
 #include "IRequestHandler.h"
 #include "RequestHandlerFactory.h"
 
+class RequestHandlerFactory;
+
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler() = default;
 	bool isRequestRelevant(const RequestInfo& ri) override;
-	RoomManager getRoomManager() const;
-	StatisticsManager getStatisticsManager() const;
 	RequestResult handleRequest(const RequestInfo& ri) override;
 	RequestResult signout(RequestInfo ri);
 	RequestResult getRooms(RequestInfo ri);
@@ -24,8 +23,8 @@ public:
 
 private:
 	LoggedUser _user;
-	RoomManager& _roomManager;
-	StatisticsManager& _statisticsManager;
-	RequestHandlerFactory& _requestHandlerFactory;
+	RoomManager _roomManager;
+	StatisticsManager _statisticsManager;
+	RequestHandlerFactory _requestHandlerFactory;
 };
 
