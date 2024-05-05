@@ -1,13 +1,54 @@
 #include "Communicator.h"
 #include "Helper.h"
 #include "LoginRequestHandler.h"
-#include "JsonResponsePacketSerializer.h"
-#include "JsonRequestPacketDeserializer.h"
 #include <iostream>
 #include <vector>
 #include "defines.hpp"
+#include "MenuRequestHandler.h"
 
 void Communicator::handleNewClient(SOCKET clientSocket)
+{
+    unsigned int statusCode = 0;
+    LoginRequestHandler lrh;
+    MenuRequestHandler mrh = MenuRequestHandler();
+    RequestInfo ri = RequestInfo();
+    RequestResult rr;
+
+    
+
+    try
+    {
+        buildRI(ri, clientSocket); //login ri
+        if (lrh.isRequestRelevant(ri))
+        {
+            rr = lrh.handleRequest(ri);
+            Helper::sendVector(clientSocket, rr.buffer);
+        }
+        ri.id = 0;
+        while (ri.id != 300)
+        {
+            buildRI(ri, clientSocket); //the rest 
+            if (mrh.isRequestRelevant(ri))
+            {
+                rr = mrh.handleRequest(ri);
+                Helper::sendVector(clientSocket, rr.buffer);
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+    ri.buffer.clear();
+
+    closesocket(clientSocket);
+}
+
+void Communicator::buildRI(RequestInfo& ri, SOCKET clientSocket)
 {
     std::string clientMsg = "";
     unsigned int statusCode = 0;
@@ -15,9 +56,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     size_t i = 0;
     int j = 0;
 
-    LoginRequestHandler lrh;
-    RequestInfo ri = RequestInfo();
-    RequestResult rr;
     ri.id = 0;
 
     statusCode = (unsigned int)Helper::getStatusCodeFromSocket(clientSocket);
@@ -43,26 +81,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
     std::cout << "DEBUG: The message is: " << clientMsg << std::endl;
 
-
     ri.id = statusCode;
     ri.recievalTime = time(nullptr);
-    try
-    {
-        if (lrh.isRequestRelevant(ri))
-        {
-            rr = lrh.handleRequest(ri);
-            Helper::sendVector(clientSocket, rr.buffer);
-        }
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (const std::runtime_error& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    ri.buffer.clear();
-
-    closesocket(clientSocket);
 }

@@ -23,7 +23,6 @@ void LoginManager::logout(const string name)
 			_loggedUsers.erase(_loggedUsers.begin() + i);
 			return;
 		}
-			
 	}
 }
 

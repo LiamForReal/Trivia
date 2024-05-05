@@ -13,10 +13,13 @@ void run_server();
 
 void run_json_tests();
 
+void run_json_test_v2();
+
 int main()
 {
 	run_server();
 	//run_json_tests();
+	//run_json_test_v2();
 }
 
 void run_server()
@@ -57,6 +60,56 @@ void run_json_tests()
 	try
 	{
 		JsonRequestPacketDeserializer::deserializeLoginRequest(vec);
+	}
+	catch (...)
+	{
+		std::cout << "json error..." << std::endl;
+	}
+
+	vec.clear();
+}
+
+void run_json_test_v2()
+{
+	RoomData rd = {
+		1,
+		"Gavriel's Room",
+		5,
+		10,
+		30,
+		1
+	};
+
+	RoomData rd1 = {
+	2,
+	"Liam's Room",
+	7,
+	10,
+	20,
+	1
+	};
+
+	RoomData rd2 = {
+	3,
+	"Users's Room",
+	5,
+	80,
+	60,
+	0
+	};
+
+	std::vector<RoomData> vec;
+	vec.push_back(rd);
+	vec.push_back(rd1);
+	vec.push_back(rd2);
+
+	GetRoomsResponse grr = {
+		500, vec
+	};
+
+	try
+	{
+		JsonResponsePacketSerializer::serializeResponse(grr);
 	}
 	catch (...)
 	{
