@@ -37,7 +37,7 @@
                 <Rectangle Grid.RowSpan="4"
                    Grid.ColumnSpan="2"
                    Width="580"
-                   Height="200"
+                   Height="240"
                    Panel.ZIndex="-1"
                    Fill="Orange"
                    Opacity=".5"
