@@ -31,9 +31,10 @@ namespace TriviaClient
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+            this.mainWindow.Show();
         }
 
-        private void LoginInButton_Click(object sender, RoutedEventArgs e)
+        private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.mainWindow.isUserLogged)
             {
@@ -49,6 +50,13 @@ namespace TriviaClient
             this.mainWindow.isUserLogged = true;
             this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
             this.Close();
+            this.mainWindow.Show();
+
+            var button = (Button)(this.mainWindow.FindName("LogInButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)

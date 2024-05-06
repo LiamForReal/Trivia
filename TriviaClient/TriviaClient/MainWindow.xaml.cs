@@ -49,10 +49,10 @@ namespace TriviaClient
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.logInScreen = new LogInScreen();
             this.logInScreen.mainWindow = this;
             this.logInScreen.Show();
-            // this.Hide();
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -89,7 +89,9 @@ namespace TriviaClient
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.signUpScreen = new SignUpScreen();
+            this.signUpScreen.mainWindow = this;
             this.signUpScreen.Show();
         }
 
@@ -104,17 +106,27 @@ namespace TriviaClient
             this.isUserLogged = false;
             this.username = "";
             this.HelloLabel.Content = "";
+
+            var button = (Button)(this.FindName("LogInButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Visible;
+            }
         }
 
         private void StatsMenuButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.statsMenu = new StatsMenu();
+            this.statsMenu.mainWindow = this;
             this.statsMenu.Show();
         }
 
         private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.joinRoom = new JoinRoom();
+            this.joinRoom.mainWindow = this;
             this.joinRoom.Show();
         }
 

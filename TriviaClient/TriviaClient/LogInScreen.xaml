@@ -49,7 +49,7 @@
 
             <StackPanel Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal" Margin="10, 10, 10, 10">
                 <Button Name="CancelButton" Content="Cancel" Height="20" Width="60" HorizontalAlignment="Left" Margin="20" Click="CancelButton_Click"/>
-                <Button Name="LoginInButton" Content="Log In" Height="20" Width="60" HorizontalAlignment="Right" Margin="20" Click="LoginInButton_Click"/>
+                <Button x:Name="LogInButton" Content="Log In" Height="20" Width="60" HorizontalAlignment="Right" Margin="20" Click="LogInButton_Click"/>
             </StackPanel>
 
         </Grid>
