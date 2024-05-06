@@ -1,15 +1,4 @@
 #include "MenuRequestHandler.h"
-
-MenuRequestHandler::MenuRequestHandler()
-{
-	this->_requestHandlerFactory = RequestHandlerFactory();
-	this->_roomManager = RoomManager();
-	this->_statisticsManager = StatisticsManager();
-	this->_user = LoggedUser();
-}
-
-MenuRequestHandler::~MenuRequestHandler() {}
-
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
 	return ri.id >= 300 && ri.id <= 800;
@@ -45,7 +34,7 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
 RequestResult MenuRequestHandler::signout(RequestInfo ri)
 {
 	std::vector<unsigned char> buffer;
-	_requestHandlerFactory.getLoginMeneger().logout(_user.getUserName());
+	_loginManager.logout(_user.getUserName());
 	RequestResult rr = RequestResult();
 	rr.newHandler = nullptr; // should be the next handler that the user should pass
 	return rr;
