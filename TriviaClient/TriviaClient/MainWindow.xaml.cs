@@ -41,7 +41,7 @@ namespace TriviaClient
             catch (Exception ex)
             {
                 MessageBox.Show("Could not connect to trivia server", "[Trivia] Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                //this.Close();
             }
 
             InitializeComponent();
