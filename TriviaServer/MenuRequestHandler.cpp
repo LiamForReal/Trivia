@@ -1,5 +1,15 @@
 #include "MenuRequestHandler.h"
 
+MenuRequestHandler::MenuRequestHandler()
+{
+	this->_requestHandlerFactory = RequestHandlerFactory();
+	this->_roomManager = RoomManager();
+	this->_statisticsManager = StatisticsManager();
+	this->_user = LoggedUser();
+}
+
+MenuRequestHandler::~MenuRequestHandler() {}
+
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
 	return ri.id >= 300 && ri.id <= 800;

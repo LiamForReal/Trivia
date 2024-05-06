@@ -11,6 +11,8 @@ class RequestHandlerFactory;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
+	MenuRequestHandler();
+	~MenuRequestHandler();
 	bool isRequestRelevant(const RequestInfo& ri) override;
 	RequestResult handleRequest(const RequestInfo& ri) override;
 	RequestResult signout(RequestInfo ri);
