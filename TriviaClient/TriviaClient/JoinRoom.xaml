@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,25,5,5" Orientation="Vertical">
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,0,5,5" Orientation="Vertical">
                 <Label Content="Join Room" Foreground="Aqua" HorizontalAlignment="Center" FontSize="32" FontWeight="ExtraBold" Margin="10,-5,10,0" />
             </StackPanel>
 
@@ -50,7 +50,7 @@
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Vertical">
                 <Label Content="Rooms List: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,75,5,10" FontSize="24"/>
                 <ListBox Name="RoomsListBox" Width="200" Height="200">
-                    <ListBoxItem Content="Jubzik's Room"></ListBoxItem>
+                    <!--ListBoxItem Content="Jubzik's Room"></ListBoxItem-->
                 </ListBox>
                 <Label Name="NoRoomsAvailable" Content="No Rooms Available" Foreground="White" FontWeight="ExtraBold" FontSize="18" HorizontalAlignment="Center"/>
             </StackPanel>
