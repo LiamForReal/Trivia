@@ -23,5 +23,20 @@ namespace TriviaClient
         {
             InitializeComponent();
         }
+
+        private void JoinButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
