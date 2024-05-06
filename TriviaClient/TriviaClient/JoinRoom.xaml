@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="JoinRoom" Height="600" Width="800">
+        Title="[Trivia] Join Room" Height="600" Width="800">
     <Window.Background>
         <ImageBrush ImageSource="/Resources/join_room_background.png"/>
     </Window.Background>
