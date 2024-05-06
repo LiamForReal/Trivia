@@ -13,7 +13,7 @@
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
-                Trivia
+                Statistics Menu
             </Span>
         </GroupBox.Header>
 
