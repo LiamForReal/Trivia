@@ -4,6 +4,7 @@
 #include "StatisticsManager.h"
 #include "RoomManager.h"
 
+class MenuRequestHandler;
 
 class RequestHandlerFactory
 {
