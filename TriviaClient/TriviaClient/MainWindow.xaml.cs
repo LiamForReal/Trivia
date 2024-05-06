@@ -31,7 +31,7 @@ namespace TriviaClient
 
         public MainWindow()
         {
-/*            try
+            try
             {
                 this.client = new TcpClient();
                 IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888);
@@ -42,7 +42,7 @@ namespace TriviaClient
             {
                 MessageBox.Show("Could not connect to trivia server", "[Trivia] Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 this.Close();
-            }*/
+            }
 
             InitializeComponent();
         }

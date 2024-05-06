@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="[Trivia] Best Scores" Height="450" Width="500">
     <Window.Background>
-        <ImageBrush ImageSource="../Resources/best_scores_background.jpg"></ImageBrush>
+        <ImageBrush ImageSource="/Resources/best_scores_background.jpg"></ImageBrush>
     </Window.Background>
 
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">

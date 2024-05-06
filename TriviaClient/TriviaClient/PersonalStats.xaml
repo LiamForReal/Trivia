@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="[Trivia] Personal Statistics" Height="450" Width="500">
     <Window.Background>
-        <ImageBrush ImageSource="../Resources/personal_stats_background.jpg"/>
+        <ImageBrush ImageSource="/Resources/personal_stats_background.jpg"/>
     </Window.Background>
 
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">

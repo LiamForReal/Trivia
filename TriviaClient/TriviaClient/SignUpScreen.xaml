@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="[Trivia] Sign Up" Height="450" Width="400">
     <Window.Background>
-        <ImageBrush ImageSource="../Resources/sign_up_background.jpg"/>
+        <ImageBrush ImageSource="/Resources/sign_up_background.jpg"/>
     </Window.Background>
 
 
