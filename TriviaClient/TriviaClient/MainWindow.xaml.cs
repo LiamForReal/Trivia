@@ -22,6 +22,7 @@ namespace TriviaClient
         public SignUpScreen signUpScreen;
         public StatsMenu statsMenu;
         public CreateRoom createRoom;
+        public JoinRoom joinRoom;
 
         public bool isUserLogged;
         public string username;
@@ -113,7 +114,8 @@ namespace TriviaClient
 
         private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.joinRoom = new JoinRoom();
+            this.joinRoom.Show();
         }
 
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
