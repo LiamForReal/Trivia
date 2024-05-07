@@ -59,7 +59,7 @@
                         Style="{DynamicResource RoundedButtonStyle}"
                         Opacity="0.8"
                 />
-                <Button Name="JoinRoomButton" Content="Join Room" Width="100" Margin="5" Click="JoinRoomButton_Click"                        
+                <Button Name="JoinRoomButton" Content="Join Room" Width="100" Margin="5" Click="JoinRoomButton_Click"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
