@@ -1,6 +1,8 @@
 #pragma once
 #include "LoginRequestHandler.h"
 #include "MenuRequestHandler.h"
+#include "StatisticsManager.h"
+#include "RoomManager.h"
 
 class MenuRequestHandler;
 
