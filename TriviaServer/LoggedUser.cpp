@@ -10,6 +10,11 @@ LoggedUser::LoggedUser(string name)
 	username = name;
 }
 
+void LoggedUser::setUserName(const string newUserName)
+{
+	this->username = newUserName;
+}
+
 string LoggedUser::getUserName() const
 {
 	return username;

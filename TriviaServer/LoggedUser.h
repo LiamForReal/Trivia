@@ -7,6 +7,7 @@ public:
 	LoggedUser();
 	LoggedUser(string name);
 	string getUserName() const;
+	void setUserName(const string newUserName);
 	bool operator==(const LoggedUser& other) const;
 
 

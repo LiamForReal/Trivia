@@ -1,23 +1,25 @@
+class LoginRequestHandler;
+class MenuRequestHandler;
 #pragma once
 #include "LoginRequestHandler.h"
 #include "MenuRequestHandler.h"
 #include "StatisticsManager.h"
 #include "RoomManager.h"
 
-class MenuRequestHandler;
-
 class RequestHandlerFactory
 {
 public:
-	LoginRequestHandler creatLoginRequestHandler();
+	RequestHandlerFactory();
+	~RequestHandlerFactory();
+	LoginRequestHandler* creatLoginRequestHandler();
 	LoginManager& getLoginMeneger();
-	MenuRequestHandler createMenuRequestHandler();
-	RoomManager getRoomManager() const;
-	StatisticsManager getStatisticsManager() const;
+	MenuRequestHandler* createMenuRequestHandler(LoggedUser loggedUser);
+	RoomManager& getRoomManager() const;
+	StatisticsManager& getStatisticsManager() const;
 private:
 	IDatabase* dataBace;
-	LoginManager loginMeneger;
-	RoomManager _roomManager;
-	StatisticsManager _statisticsManager;
+	LoginManager* loginMeneger;
+	RoomManager* _roomManager;
+	StatisticsManager* _statisticsManager;
 };
 

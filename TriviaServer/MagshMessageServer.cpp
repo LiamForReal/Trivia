@@ -92,8 +92,6 @@ void MagshMessageServer::acceptClient()
 		throw std::exception(__FUNCTION__);
 
 	TRACE("Client accepted !");
-	LoginRequestHandler* lrh = new LoginRequestHandler();
-	_loginHandlers[client_socket] = *lrh;
 	// create new thread for client	and detach from it
 	std::thread tr(&MagshMessageServer::clientHandler, this, client_socket);
 	tr.detach();

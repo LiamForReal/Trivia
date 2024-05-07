@@ -1,11 +1,8 @@
 #include "MenuRequestHandler.h"
 
-RequestHandlerFactory MenuRequestHandler::_RHF;
-
-MenuRequestHandler::MenuRequestHandler()
+MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf)
 {
-	this->_user = LoggedUser();
-	this->_RHF = RequestHandlerFactory();
+	this->_user = user;
 }
 
 MenuRequestHandler::~MenuRequestHandler() {}
@@ -47,7 +44,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
 	std::vector<unsigned char> buffer;
 	_RHF.getLoginMeneger().logout(_user.getUserName());
 	RequestResult rr = RequestResult();
-	rr.newHandler = nullptr; // should be the next handler that the user should pass
+	rr.newHandler = new MenuRequestHandler(_RHF, _user); // should be the next handler that the user should pass
 	return rr;
 }
 
@@ -55,7 +52,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri)
 {
 	std::vector<unsigned char> buffer;
 	RequestResult rr = RequestResult();
-	rr.newHandler = nullptr; // should be the next handler that the user should pass
+	rr.newHandler = new MenuRequestHandler(_RHF, _user); // should be the next handler that the user should pass
 	if (_RHF.getRoomManager().getRooms().size() <= 0)
 	{
 		//error
@@ -98,7 +95,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri)
 	{
 		rr.buffer[i] = buffer[i];
 	}
-	rr.newHandler = nullptr;
+	rr.newHandler = new MenuRequestHandler(_RHF, _user);
 	return rr;
 }
 
@@ -110,7 +107,7 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri)
 	std::copy(playerStats.begin(), playerStats.end(), tmp);
 	tmp[playerStats.size()] = '\0';
 	std::copy(rr.buffer.begin(), rr.buffer.end(), tmp);
-	rr.newHandler = nullptr;
+	rr.newHandler = new MenuRequestHandler(_RHF, _user);
 	return rr;
 }
 
@@ -119,7 +116,7 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo ri)
 	RequestResult rr = RequestResult();
 	vector<string> HighScores = _RHF.getStatisticsManager().getHighScore();
 	int i = 0, size = 0, j = 0;
-	rr.newHandler = nullptr;
+	rr.newHandler = new MenuRequestHandler(_RHF, _user);
 	string code = std::to_string(GET_HIGH_SCORE_ERROR);
 	if (HighScores.size() == 0)
 	{
@@ -165,7 +162,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)
 	{
 		rr.buffer[i] = buffer[i];
 	}
-	rr.newHandler = nullptr;
+	rr.newHandler = new MenuRequestHandler(_RHF, _user);
 	return rr;
 }
 
@@ -197,6 +194,6 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 	{
 		rr.buffer[i] = buffer[i];
 	}
-	rr.newHandler = nullptr;
+	rr.newHandler = new MenuRequestHandler(_RHF, _user);
 	return rr;
 }
