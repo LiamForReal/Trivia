@@ -51,7 +51,16 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="5" Orientation="Vertical">
-                <Button Name="LeaveRoomButton" Content="Leave Room" Width="100" Height="20" Click="LeaveRoomButton_Click" Margin="5"/>
+                <Button Name="LeaveRoomButton" Content="Leave Room" Width="100" Click="LeaveRoomButton_Click" Margin="5"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="15"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
             </StackPanel>
 
         </Grid>
