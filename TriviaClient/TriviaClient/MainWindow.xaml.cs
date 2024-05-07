@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
+using System.Windows.Interop;
 
 namespace TriviaClient
 {

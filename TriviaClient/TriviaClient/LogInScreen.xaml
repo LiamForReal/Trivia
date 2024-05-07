@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="[Trivia] Log In" Height="450" Width="400">
+        Title="[Trivia] Log In" Height="450" Width="400" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="../Resources/login_background.jpg"/>
     </Window.Background>

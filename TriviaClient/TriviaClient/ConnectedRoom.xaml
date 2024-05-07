@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="[Trivia] Connected Room" Height="600" Width="800">
+        Title="[Trivia] Connected Room" Height="600" Width="800" WindowStartupLocation="CenterScreen">
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
