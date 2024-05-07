@@ -22,4 +22,5 @@ public:
 private:
 	LoggedUser _user;
 	RequestHandlerFactory& _RHF;
+	RequestResult rr;
 };
