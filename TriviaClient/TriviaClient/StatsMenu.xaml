@@ -31,22 +31,22 @@
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Orientation="Vertical">
                 <Label Content="Stats Menu" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
-                <Button Name="PersonalStatsButton" Content="Personal Stats" Width="100" Margin="0,30,0,10" Click="PersonalStatsButton_Click"
+                <Button Name="PersonalStatsButton" Content="Personal Stats" Width="140" Margin="0,30,0,10" Click="PersonalStatsButton_Click"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
                         FontFamily="Arial"
-                        FontSize="13"
+                        FontSize="18"
                         FontWeight="DemiBold"
                         Style="{DynamicResource RoundedButtonStyle}"
                         Opacity="0.8"
                 />
-                <Button Name="BestScoresButton" Content="Best Scores" Width="100" Margin="0,10,0,10" Click="BestScoresButton_Click"
+                <Button Name="BestScoresButton" Content="Best Scores" Width="140" Margin="0,10,0,10" Click="BestScoresButton_Click"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
                         FontFamily="Arial"
-                        FontSize="13"
+                        FontSize="18"
                         FontWeight="DemiBold"
                         Style="{DynamicResource RoundedButtonStyle}"
                         Opacity="0.8"
