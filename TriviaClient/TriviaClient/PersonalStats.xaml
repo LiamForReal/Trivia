@@ -55,7 +55,16 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">
-                <Button Name="QuitButton" Content="Quit" Width="100" Height="20" Click="QuitButton_Click"/>
+                <Button Name="QuitButton" Content="Quit" Width="100" Click="QuitButton_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
             </StackPanel>
 
         </Grid>
