@@ -1,0 +1,2 @@
+1.+5 from omer on part 1 on the casting method
+2.check password bonus

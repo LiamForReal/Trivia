@@ -46,15 +46,18 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
         LoggedUser loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
         std::cout << "user logged: " << loggedUser.getUserName();
-      /*  buildRI(ri, clientSocket);
         while (rr.newHandler->isRequestRelevant(ri))
         {
-            mtx.lock();
-            rr = _handlers[clientSocket]->handleRequest(ri);
-            mtx.unlock();
-            Helper::sendVector(clientSocket, rr.buffer);
-            _handlers[clientSocket] = rr.newHandler;
-        }*/
+            if (Helper::socketHasData(clientSocket))
+            {
+                buildRI(ri, clientSocket);
+                mtx.lock();
+                rr = _handlers[clientSocket]->handleRequest(ri);
+                mtx.unlock();
+                Helper::sendVector(clientSocket, rr.buffer);
+                _handlers[clientSocket] = rr.newHandler;
+            }
+        }
     }
     catch (const std::exception& e)
     {
