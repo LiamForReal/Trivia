@@ -57,6 +57,12 @@ namespace TriviaClient
             {
                 button.Visibility = Visibility.Collapsed;
             }
+
+            button = (Button)(this.mainWindow.FindName("SignUpButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)

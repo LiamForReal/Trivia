@@ -54,6 +54,15 @@ namespace TriviaClient
             this.logInScreen = new LogInScreen();
             this.logInScreen.mainWindow = this;
             this.logInScreen.Show();
+
+            if (this.isUserLogged)
+            {
+                var button = (Button)(this.FindName("SignUpButton"));
+                if (button != null)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -109,6 +118,12 @@ namespace TriviaClient
             this.HelloLabel.Content = "";
 
             var button = (Button)(this.FindName("LogInButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Visible;
+            }
+
+            button = (Button)(this.FindName("SignUpButton"));
             if (button != null)
             {
                 button.Visibility = Visibility.Visible;
