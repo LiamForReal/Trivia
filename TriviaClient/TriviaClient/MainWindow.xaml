@@ -60,6 +60,7 @@
                         Opacity="0.8"
                 />
                 <Button Name="JoinRoomButton" Content="Join Room" Width="140" Margin="5" Click="JoinRoomButton_Click"
+                        IsEnabled="False"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
@@ -71,6 +72,7 @@
                 />
                 <Button Name="CreateRoomButton" Content="Create Room" Width="140" Margin="5" Click="CreateRoomButton_Click"                        
                         Height="40"
+                        IsEnabled="False"
                         Background="RoyalBlue"
                         Foreground="White"
                         FontFamily="Arial"
@@ -79,7 +81,8 @@
                         Style="{DynamicResource RoundedButtonStyle}"
                         Opacity="0.8"
                 />
-                <Button Name="StatsMenuButton" Content="Stats Menu" Width="140" Margin="5" Click="StatsMenuButton_Click"                        
+                <Button Name="StatsMenuButton" Content="Stats Menu" Width="140" Margin="5" Click="StatsMenuButton_Click"      
+                        IsEnabled="False"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
