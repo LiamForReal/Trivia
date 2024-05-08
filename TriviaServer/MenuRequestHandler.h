@@ -1,14 +1,13 @@
+class RequestHandlerFactory;
 #pragma once
-#include "includes.hpp"
 #include "LoggedUser.h"
 #include "RequestHandlerFactory.h"
 
-class RequestHandlerFactory;
 
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler();
+	MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user);
 	~MenuRequestHandler();
 	bool isRequestRelevant(const RequestInfo& ri) override;
 	RequestResult handleRequest(const RequestInfo& ri) override;
@@ -21,6 +20,7 @@ public:
 	RequestResult createRoom(RequestInfo ri);
 
 private:
-	LoggedUser _user;
-	static RequestHandlerFactory _RHF;
+	LoggedUser& _user;
+	RequestHandlerFactory& _RHF;
+	RequestResult rr;
 };

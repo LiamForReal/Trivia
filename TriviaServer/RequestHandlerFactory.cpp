@@ -1,27 +1,36 @@
 #include "RequestHandlerFactory.h"
 
-RoomManager RequestHandlerFactory::getRoomManager() const
+RequestHandlerFactory::RequestHandlerFactory() 
 {
-	return this->_roomManager;
+	this->dataBace = new SqliteDataBase();
+	this->loginMeneger = new LoginManager();
+	this->_roomManager = new RoomManager();
+	this->_statisticsManager = new StatisticsManager();
+}
+RequestHandlerFactory::~RequestHandlerFactory() {}
+
+RoomManager& RequestHandlerFactory::getRoomManager() const
+{
+	return *this->_roomManager;
 }
 
-StatisticsManager RequestHandlerFactory::getStatisticsManager() const
+StatisticsManager& RequestHandlerFactory::getStatisticsManager() const
 {
-	return this->_statisticsManager;
+	return *this->_statisticsManager;
 }
 
-LoginRequestHandler RequestHandlerFactory::creatLoginRequestHandler()
+LoginRequestHandler* RequestHandlerFactory::creatLoginRequestHandler()
 {
-	return LoginRequestHandler();
+	return new LoginRequestHandler(*this);
 }
 LoginManager& RequestHandlerFactory::getLoginMeneger()
 {
-	return loginMeneger;
+	return *loginMeneger;
 }
 
 
-MenuRequestHandler RequestHandlerFactory::createMenuRequestHandler()
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser loggedUser)
 {
-	MenuRequestHandler mrh =  MenuRequestHandler();
+	MenuRequestHandler* mrh = new MenuRequestHandler(*this, loggedUser);
 	return mrh;
 }

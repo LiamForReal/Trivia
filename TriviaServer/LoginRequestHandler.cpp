@@ -1,6 +1,10 @@
 #include "LoginRequestHandler.h"
 #include <iostream>
-#include "RequestHandlerFactory.h";
+
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& newRhf) : rhf(newRhf) {}
+
+LoginRequestHandler::~LoginRequestHandler() {}
+
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
 	return (LOGIN_RC == requestInfo.id) || (SIGNUP_RC == requestInfo.id);
@@ -10,7 +14,9 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	std::vector<unsigned char> buffer;
 	unsigned int status = 0;
-	RequestHandlerFactory rhf = RequestHandlerFactory(); /* can be affisient try to make it static */
+	RequestResult rr = RequestResult();
+	string username = "";
+
 	if (LOGIN_RC == requestInfo.id)
 	{
 		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
@@ -18,6 +24,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		LoginResponse lresponse;
 		lresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
+		username = lr.username;
 	}
 	else if (SIGNUP_RC == requestInfo.id)
 	{
@@ -26,10 +33,9 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		SignupResponse sresponse;
 		sresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
+		username = sr.username;
 	}
-
-	RequestResult rr = RequestResult();
 	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
-	rr.newHandler = nullptr; // should be the next handler that the user should pass
+	rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(username));
 	return rr;
 }

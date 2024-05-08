@@ -27,10 +27,8 @@ private:
 	void bindAndListen();
 	void acceptClient();
 	void clientHandler(const SOCKET client_socket);
-	void closeAllSockets();
 	void checkifInput();
 
-	std::map<SOCKET, LoginRequestHandler> _loginHandlers;
 	Communicator _communicator;
 	SOCKET _socket;
 

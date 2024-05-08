@@ -5,35 +5,54 @@
 #include <vector>
 #include "defines.hpp"
 #include "MenuRequestHandler.h"
+#include <mutex>
+
+std::mutex mtx;
+
+Communicator::Communicator()
+{
+    this->rhf = RequestHandlerFactory();
+}
+
+Communicator::~Communicator() {}
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
     unsigned int statusCode = 0;
-    LoginRequestHandler lrh;
-    MenuRequestHandler mrh = MenuRequestHandler();
     RequestInfo ri = RequestInfo();
-    RequestResult rr;
-
+    RequestResult rr = RequestResult();
+    LoggedUser loggedUser = LoggedUser();
+    mtx.lock();
+    _handlers[clientSocket] = new LoginRequestHandler(rhf);
+    mtx.unlock();
+    rr.newHandler = _handlers[clientSocket];
     
 
     try
     {
-        buildRI(ri, clientSocket); //login ri
-        if (lrh.isRequestRelevant(ri))
+        buildRI(ri, clientSocket);
+        while (rr.newHandler->isRequestRelevant(ri))
         {
-            rr = lrh.handleRequest(ri);
+            mtx.lock();
+            rr = _handlers[clientSocket]->handleRequest(ri);
+            mtx.unlock();
             Helper::sendVector(clientSocket, rr.buffer);
+            _handlers[clientSocket] = rr.newHandler;
+            buildRI(ri, clientSocket);
         }
-        ri.id = 0;
-        while (ri.id != 300)
-        {
-            buildRI(ri, clientSocket); //the rest 
-            if (mrh.isRequestRelevant(ri))
-            {
-                rr = mrh.handleRequest(ri);
-                Helper::sendVector(clientSocket, rr.buffer);
-            }
-        }
+         /*   delete rr.newHandler;
+            loggedUser.setUserName(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
+            rr.newHandler = new MenuRequestHandler(rhf, loggedUser);
+            buildRI(ri, clientSocket);*/
+        ///* buildRI(ri, clientSocket);
+        // if (rr.newHandler->isRequestRelevant(ri))
+        // {
+        //     mtx.lock();
+        //     rr = _handlers[clientSocket]->handleRequest(ri);
+        //     mtx.unlock();
+        //     Helper::sendVector(clientSocket, rr.buffer);
+        // }
+        // _handlers[clientSocket] = rr.newHandler;*/
     }
     catch (const std::exception& e)
     {
