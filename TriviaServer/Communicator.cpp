@@ -18,10 +18,9 @@ Communicator::~Communicator() {}
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-    unsigned int statusCode = 0;
+    unsigned int statusCode = 0, size = 0;
     RequestInfo ri = RequestInfo();
     RequestResult rr = RequestResult();
-    LoggedUser loggedUser = LoggedUser();
     mtx.lock();
     _handlers[clientSocket] = new LoginRequestHandler(rhf);
     mtx.unlock();
@@ -30,7 +29,24 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
     try
     {
-        buildRI(ri, clientSocket);
+        mtx.lock();
+        size = rhf.getLoginMeneger().getLoggedUsers().size();
+        mtx.unlock();
+        do 
+        {
+            if (Helper::socketHasData(clientSocket))
+            {
+                buildRI(ri, clientSocket);
+                mtx.lock();
+                rr = _handlers[clientSocket]->handleRequest(ri);
+                mtx.unlock();
+                Helper::sendVector(clientSocket, rr.buffer);
+                _handlers[clientSocket] = rr.newHandler;
+            }
+        } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
+        LoggedUser loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
+        std::cout << "user logged: " << loggedUser.getUserName();
+      /*  buildRI(ri, clientSocket);
         while (rr.newHandler->isRequestRelevant(ri))
         {
             mtx.lock();
@@ -38,21 +54,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
             mtx.unlock();
             Helper::sendVector(clientSocket, rr.buffer);
             _handlers[clientSocket] = rr.newHandler;
-            buildRI(ri, clientSocket);
-        }
-         /*   delete rr.newHandler;
-            loggedUser.setUserName(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
-            rr.newHandler = new MenuRequestHandler(rhf, loggedUser);
-            buildRI(ri, clientSocket);*/
-        ///* buildRI(ri, clientSocket);
-        // if (rr.newHandler->isRequestRelevant(ri))
-        // {
-        //     mtx.lock();
-        //     rr = _handlers[clientSocket]->handleRequest(ri);
-        //     mtx.unlock();
-        //     Helper::sendVector(clientSocket, rr.buffer);
-        // }
-        // _handlers[clientSocket] = rr.newHandler;*/
+        }*/
     }
     catch (const std::exception& e)
     {
@@ -96,7 +98,7 @@ void Communicator::buildRI(RequestInfo& ri, SOCKET clientSocket)
     for (i = 0; i < clientMsgLength; i++)
     {
         ri.buffer.push_back(static_cast<unsigned char>(clientMsg[i]));
-    }
+    }   
 
     std::cout << "DEBUG: The message is: " << clientMsg << std::endl;
 
