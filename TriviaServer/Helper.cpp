@@ -21,6 +21,16 @@ int Helper::getMessageTypeCode(const SOCKET sc)
 	return  res;
 }
 
+bool Helper::socketHasData(SOCKET socket) 
+{
+	char buf;
+	int result = recv(socket, &buf, 1, MSG_PEEK);
+	if (result == -1) 
+		return false;
+	else if (result == 0) 
+		return false;
+	return true;
+}
 
 void Helper::send_update_message_to_client(const SOCKET sc, const string& file_content, const string& second_username, const string &all_users)
 {

@@ -148,17 +148,18 @@ bool SqliteDataBase::open()
 			return false;
 		}
 
-		addNewQuestion(Question("What is the name of your family doctor?", "Boris", "Arik", "Gavriel", "Ofek"));
-		addNewQuestion(Question("Who is the creator of Trivia?", "Liam and Gavriel", "Liam", "Gavriel", "The Janitor"));
-		addNewQuestion(Question("Which city is the capital of Israel?", "Jerusalem", "Tel Aviv", "Yavne", "Chernobyl"));
-		addNewQuestion(Question("Which country does not exist?", "Palestine", "Albania", "Kosovo", "Bosnia"));
-		addNewQuestion(Question("What is orange's color?", "Orange", "Red", "Black", "Purple"));
-		addNewQuestion(Question("What is the best religion?", "Judaism", "Islam", "Christianity", "Being Palestinian"));
-		addNewQuestion(Question("First programming language is...", "Assembly", "Python", "C++", "C"));
-		addNewQuestion(Question("Which of the following is not a language?", "Palestinian", "Russian", "Hebrew", "English"));
-		addNewQuestion(Question("Who is Jubzik?", "Gavriel's pet", "Gopnik", "The Janitor", "Ofek"));
+		addNewQuestion(Question("What is the name of your family doctor?", "Boris", "Arik", "Gavriel", "Ofek")); // 1
+		addNewQuestion(Question("Who is the creator of Trivia?", "Liam and Gavriel", "Liam", "Gavriel", "The Janitor")); // 1
+		addNewQuestion(Question("Which city is the capital of Israel?", "Jerusalem", "Tel Aviv", "Yavne", "Chernobyl"));// 1
+		addNewQuestion(Question("Which country does not exist?", "Palestine", "Albania", "Kosovo", "Bosnia"));// 1
+		addNewQuestion(Question("What is orange s color?", "Orange", "Red", "Black", "Purple"));
+		addNewQuestion(Question("What is the best religion?", "Judaism", "Islam", "Christianity", "Being Palestinian"));// 1
+		addNewQuestion(Question("First programming language is...", "Assembly", "Python", "C++", "C"));// 1
+		addNewQuestion(Question("Which of the following is not a language?", "Palestinian", "Russian", "Hebrew", "English"));// 1
+		addNewQuestion(Question("Who is Jubzik?", "Liam", "Gavriels pet", "The Janitor", "Ofek"));
 		addNewQuestion(Question("Who is Shmulik?", "Cyber Teacher", "Penguin", "Actor", "Diver"));
-		addNewQuestion(Question("Did you like the game?", "Yes", "No", "I don't know", "Maybe"));
+		addNewQuestion(Question("Did you like the game?", "Yes", "No", "I dont know", "Maybe"));
+		addNewQuestion(Question("What is ofek s shape?", "Rectangle", "tangle", "exagon", "air conditioner"));
 	}
 	else
 	{

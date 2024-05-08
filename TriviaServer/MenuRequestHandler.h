@@ -20,7 +20,7 @@ public:
 	RequestResult createRoom(RequestInfo ri);
 
 private:
-	LoggedUser _user;
+	LoggedUser& _user;
 	RequestHandlerFactory& _RHF;
 	RequestResult rr;
 };

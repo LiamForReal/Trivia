@@ -30,24 +30,29 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
     try
     {
-        while (ri.id != 300)
+        buildRI(ri, clientSocket);
+        while (rr.newHandler->isRequestRelevant(ri))
         {
-            buildRI(ri, clientSocket); 
-            if (ri.id == LOGIN_RC)
-            {
-                delete rr.newHandler;
-                loggedUser.setUserName(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
-                rr.newHandler = new MenuRequestHandler(rhf ,loggedUser);
-            }
-            if (rr.newHandler->isRequestRelevant(ri))
-            {
-                mtx.lock();
-                rr = _handlers[clientSocket]->handleRequest(ri);
-                mtx.unlock();
-                Helper::sendVector(clientSocket, rr.buffer);
-            }
+            mtx.lock();
+            rr = _handlers[clientSocket]->handleRequest(ri);
+            mtx.unlock();
+            Helper::sendVector(clientSocket, rr.buffer);
             _handlers[clientSocket] = rr.newHandler;
+            buildRI(ri, clientSocket);
         }
+         /*   delete rr.newHandler;
+            loggedUser.setUserName(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
+            rr.newHandler = new MenuRequestHandler(rhf, loggedUser);
+            buildRI(ri, clientSocket);*/
+        ///* buildRI(ri, clientSocket);
+        // if (rr.newHandler->isRequestRelevant(ri))
+        // {
+        //     mtx.lock();
+        //     rr = _handlers[clientSocket]->handleRequest(ri);
+        //     mtx.unlock();
+        //     Helper::sendVector(clientSocket, rr.buffer);
+        // }
+        // _handlers[clientSocket] = rr.newHandler;*/
     }
     catch (const std::exception& e)
     {
