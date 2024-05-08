@@ -9,6 +9,7 @@ public:
 
 	LoginManager();
 	~LoginManager();
+	vector<LoggedUser> getLoggedUsers() const;
 	void logout(const string name);
 	unsigned int login(const string name, const string pass);
 	unsigned int singup(const string name, const string pass, const string mail);

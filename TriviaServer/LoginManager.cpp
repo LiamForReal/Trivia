@@ -54,7 +54,6 @@ unsigned int LoginManager::singup(const string name, const string pass, const st
 	if (!_dataBace->isUserExist(name) && _dataBace->isPasswordMatch(pass))
 	{
 		User user = User(pass, name, mail);
-		this->_loggedUsers.push_back(LoggedUser(name));
 		_dataBace->addNewUser(user);
 		std::cout << "signup successfully!\n";
 		return SIGNUP_STATUS;
@@ -66,4 +65,9 @@ unsigned int LoginManager::singup(const string name, const string pass, const st
 	}
 	std::cout << "user name is already in the system\n";
 	return SIGNUP_ERROR;
+}
+
+vector<LoggedUser> LoginManager::getLoggedUsers() const
+{
+	return this->_loggedUsers;
 }
