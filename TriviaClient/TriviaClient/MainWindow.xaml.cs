@@ -153,5 +153,22 @@ namespace TriviaClient
             this.createRoom.mainWindow = this;
             this.createRoom.Show();
         }
+
+        public void SendToServer(List<byte> list)
+        {
+            byte[] buffer = list.ToArray();
+            this.clientStream.Write(buffer, 0, buffer.Length);
+            this.clientStream.Flush();
+
+            // FOR DEBUG:
+            byte[] response = new byte[4096];
+            this.clientStream.Read(response, 0, 4096);
+
+            foreach (byte b in response)
+            {
+                Console.Write((char)b);
+            }
+            Console.WriteLine();
+        }
     }
 }
