@@ -21,6 +21,7 @@ namespace TriviaClient
     {
         public PersonalStats personalStats;
         public BestScores bestScores;
+        public MainWindow mainWindow;
 
         public StatsMenu()
         {
@@ -29,19 +30,24 @@ namespace TriviaClient
 
         private void BestScoresButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.bestScores = new BestScores();
+            this.bestScores.statsMenu = this;
             this.bestScores.Show();
         }
 
         private void PersonalStatsButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.personalStats = new PersonalStats();
+            this.personalStats.statsMenu = this;
             this.personalStats.Show();
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+            this.mainWindow.Show();
         }
     }
 }

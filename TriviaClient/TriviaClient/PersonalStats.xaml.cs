@@ -19,6 +19,7 @@ namespace TriviaClient
     /// </summary>
     public partial class PersonalStats : Window
     {
+        public StatsMenu statsMenu;
         public PersonalStats()
         {
             InitializeComponent();
@@ -27,6 +28,7 @@ namespace TriviaClient
         private void QuitButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+            this.statsMenu.Show();
         }
     }
 }

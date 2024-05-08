@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
+using System.Windows.Interop;
 
 namespace TriviaClient
 {
@@ -31,7 +32,7 @@ namespace TriviaClient
 
         public MainWindow()
         {
-/*            try
+            try
             {
                 this.client = new TcpClient();
                 IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888);
@@ -41,18 +42,27 @@ namespace TriviaClient
             catch (Exception ex)
             {
                 MessageBox.Show("Could not connect to trivia server", "[Trivia] Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
-            }*/
+                //this.Close();
+            }
 
             InitializeComponent();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.logInScreen = new LogInScreen();
             this.logInScreen.mainWindow = this;
             this.logInScreen.Show();
-            // this.Hide();
+
+            if (this.isUserLogged)
+            {
+                var button = (Button)(this.FindName("SignUpButton"));
+                if (button != null)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -89,7 +99,9 @@ namespace TriviaClient
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.signUpScreen = new SignUpScreen();
+            this.signUpScreen.mainWindow = this;
             this.signUpScreen.Show();
         }
 
@@ -104,17 +116,33 @@ namespace TriviaClient
             this.isUserLogged = false;
             this.username = "";
             this.HelloLabel.Content = "";
+
+            var button = (Button)(this.FindName("LogInButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Visible;
+            }
+
+            button = (Button)(this.FindName("SignUpButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Visible;
+            }
         }
 
         private void StatsMenuButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.statsMenu = new StatsMenu();
+            this.statsMenu.mainWindow = this;
             this.statsMenu.Show();
         }
 
         private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             this.joinRoom = new JoinRoom();
+            this.joinRoom.mainWindow = this;
             this.joinRoom.Show();
         }
 
@@ -124,6 +152,23 @@ namespace TriviaClient
             this.createRoom = new CreateRoom();
             this.createRoom.mainWindow = this;
             this.createRoom.Show();
+        }
+
+        public void SendToServer(List<byte> list)
+        {
+            byte[] buffer = list.ToArray();
+            this.clientStream.Write(buffer, 0, buffer.Length);
+            this.clientStream.Flush();
+
+            // FOR DEBUG:
+            byte[] response = new byte[4096];
+            this.clientStream.Read(response, 0, 4096);
+
+            foreach (byte b in response)
+            {
+                Console.Write((char)b);
+            }
+            Console.WriteLine();
         }
     }
 }

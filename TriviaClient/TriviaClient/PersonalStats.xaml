@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="[Trivia] Personal Statistics" Height="450" Width="500">
+        Title="[Trivia] Personal Statistics" Height="450" Width="500" WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="../Resources/personal_stats_background.jpg"/>
+        <ImageBrush ImageSource="/Resources/personal_stats_background.jpg"/>
     </Window.Background>
 
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">
@@ -55,7 +55,16 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">
-                <Button Name="QuitButton" Content="Quit" Width="100" Height="20" Click="QuitButton_Click"/>
+                <Button Name="QuitButton" Content="Quit" Width="100" Click="QuitButton_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
             </StackPanel>
 
         </Grid>

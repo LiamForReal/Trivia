@@ -19,8 +19,8 @@ namespace TriviaClient
     /// </summary>
     public partial class SignUpScreen : Window
     {
+        public MainWindow mainWindow;
         private bool revealPassword = false;
-
         public SignUpScreen()
         {
             this.revealPassword = false;
@@ -30,6 +30,7 @@ namespace TriviaClient
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+            this.mainWindow.Show();
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)

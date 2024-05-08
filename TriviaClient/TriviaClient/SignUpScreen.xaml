@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="[Trivia] Sign Up" Height="450" Width="400">
+        Title="[Trivia] Sign Up" Height="450" Width="400" WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="../Resources/sign_up_background.jpg"/>
+        <ImageBrush ImageSource="/Resources/sign_up_background.jpg"/>
     </Window.Background>
 
 
@@ -54,8 +54,26 @@
             </StackPanel>
 
             <StackPanel Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal" Margin="10, 10, 10, 10">
-                <Button Name="CancelButton" Content="Cancel" Height="20" Width="60" HorizontalAlignment="Left" Margin="20" Click="CancelButton_Click"/>
-                <Button Name="SignUpButton" Content="Sign Up" Height="20" Width="60" HorizontalAlignment="Right" Margin="20" Click="SignUpButton_Click"/>
+                <Button Name="CancelButton" Content="Cancel" Width="100" HorizontalAlignment="Left" Margin="20" Click="CancelButton_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
+                <Button Name="SignUpButton" Content="Sign Up" Width="100" HorizontalAlignment="Right" Margin="20" Click="SignUpButton_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
             </StackPanel>
 
         </Grid>

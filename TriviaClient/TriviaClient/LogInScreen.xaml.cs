@@ -31,9 +31,10 @@ namespace TriviaClient
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+            this.mainWindow.Show();
         }
 
-        private void LoginInButton_Click(object sender, RoutedEventArgs e)
+        private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.mainWindow.isUserLogged)
             {
@@ -45,10 +46,34 @@ namespace TriviaClient
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
+
             this.mainWindow.username = this.UsernameTextBox.Text;
             this.mainWindow.isUserLogged = true;
             this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
             this.Close();
+            this.mainWindow.Show();
+            
+            try
+            {
+                LoginRequest lr = new LoginRequest(this.UsernameTextBox.Text, this.PasswordTextBox.Password);
+                this.mainWindow.SendToServer(lr.Serialize());
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Does Not Connected To Server!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+            }
+
+            var button = (Button)(this.mainWindow.FindName("LogInButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Collapsed;
+            }
+
+            button = (Button)(this.mainWindow.FindName("SignUpButton"));
+            if (button != null)
+            {
+                button.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
-        Title="[Trivia] Join Room" Height="600" Width="800">
+        Title="[Trivia] Join Room" Height="600" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="/Resources/join_room_background.png"/>
     </Window.Background>
@@ -29,15 +29,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,25,5,5" Orientation="Vertical">
-                <Label Content="Join Room" Foreground="Aqua" HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,0,5,5" Orientation="Vertical">
+                <Label Content="Join Room" Foreground="Aqua" HorizontalAlignment="Center" FontSize="32" FontWeight="ExtraBold" Margin="10,-5,10,0" />
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,70,5,5" Orientation="Vertical">
                 <Rectangle Grid.RowSpan="4"
                 Grid.ColumnSpan="2"
                 Width="580"
-                Height="240"
+                Height="300"
                 Panel.ZIndex="-1"
                 Fill="Orange"
                 Opacity=".5"
@@ -47,36 +47,38 @@
                 StrokeThickness="2" />
             </StackPanel>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Horizontal">
-                <Label Content="Room Name: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
-                <TextBox x:Name="RoomNameTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="79"/>
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Vertical">
+                <Label Content="Rooms List: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,75,5,10" FontSize="24"/>
+                <ListBox Name="RoomsListBox" Width="200" Height="200">
+                    <!--ListBoxItem Content="Jubzik's Room"></ListBoxItem-->
+                </ListBox>
+                <Label Name="NoRoomsAvailable" Content="No Rooms Available" Foreground="White" FontWeight="ExtraBold" FontSize="18" HorizontalAlignment="Center"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,70,5,5" Orientation="Horizontal">
-                <Label Content="Number Of Players: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
-                <TextBox x:Name="NumberOfPlayersTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="26"/>
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="5" Orientation="Vertical">
+                <Button Name="JoinButton" Content="Join" Width="100" Click="JoinButton_Click" Margin="5"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
             </StackPanel>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,130,5,5" Orientation="Horizontal">
-                <Label Content="Number Of Questions: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
-                <TextBox x:Name="NumberOfQuestionsTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,190,5,5" Orientation="Horizontal">
-                <Label Content="Time For Question: " Foreground="White" FontWeight="ExtraBlack" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,5,5,5"/>
-                <TextBox x:Name="TimeForQuestionTextBox" Width="200" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="32"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">
-                <Button Name="RefreshButton" Content="Refresh" Width="100" Height="20" Click="RefreshButton_Click" Margin="5"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="2" Grid.Column="0" Margin="20" Orientation="Vertical">
-                <Button Name="JoinButton" Content="Join" Width="100" Height="20" Click="JoinButton_Click" Margin="5"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="3" Grid.Column="0" Margin="20" Orientation="Vertical">
-                <Button Name="QuitButton" Content="Quit" Width="100" Height="20" Click="QuitButton_Click"/>
+            <StackPanel Grid.Row="3" Grid.Column="0" Margin="5" Orientation="Vertical">
+                <Button Name="QuitButton" Content="Quit" Width="100" Click="QuitButton_Click" Margin="5"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
             </StackPanel>
 
 

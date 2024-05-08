@@ -15,30 +15,18 @@ using System.Windows.Shapes;
 namespace TriviaClient
 {
     /// <summary>
-    /// Interaction logic for JoinRoom.xaml
+    /// Interaction logic for ConnectedRoom.xaml
     /// </summary>
-    public partial class JoinRoom : Window
+    public partial class ConnectedRoom : Window
     {
-        public MainWindow mainWindow;
-        public JoinRoom()
+        public ConnectedRoom()
         {
             InitializeComponent();
         }
 
-        private void JoinButton_Click(object sender, RoutedEventArgs e)
+        private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void QuitButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-            this.mainWindow.Show();
         }
     }
 }
