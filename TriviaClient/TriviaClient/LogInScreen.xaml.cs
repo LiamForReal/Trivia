@@ -50,13 +50,18 @@ namespace TriviaClient
             this.mainWindow.username = this.UsernameTextBox.Text;
             this.mainWindow.isUserLogged = true;
             this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
+            this.mainWindow.CreateRoomButton.IsEnabled = true;
+            this.mainWindow.JoinRoomButton.IsEnabled = true;
+            this.mainWindow.LogOutButton.IsEnabled = true;
+            this.mainWindow.StatsMenuButton.IsEnabled = true;
             this.Close();
             this.mainWindow.Show();
             
             try
             {
-                LoginRequest lr = new LoginRequest(this.UsernameTextBox.Text, this.PasswordTextBox.Password);
-                this.mainWindow.SendToServer(lr.Serialize());
+                Communicator com = new Communicator();
+                //string msg =$@"{{'username': '{this.username}', 'password': '{this.password}'}}";
+                //this.mainWindow.SendToServer(lr.Serialize());
             }
             catch(Exception ex)
             {
