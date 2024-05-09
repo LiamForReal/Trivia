@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace TriviaClient
 {
-    internal class Communicator
+    internal static class Communicator
     {
-        public List<byte> Serialize(string jsonMsg, uint status)
+        public static List<byte> Serialize(string jsonMsg, byte status)
         {
             List<byte> list = new List<byte>();
-            list.Add((byte)(status));
+            list.Add(status);
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
