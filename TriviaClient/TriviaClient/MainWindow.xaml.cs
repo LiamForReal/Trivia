@@ -128,6 +128,11 @@ namespace TriviaClient
             {
                 button.Visibility = Visibility.Visible;
             }
+            this.CreateRoomButton.IsEnabled = false;
+            this.JoinRoomButton.IsEnabled = false;
+            this.LogOutButton.IsEnabled = false;
+            this.LogOutButton.Visibility = Visibility.Collapsed;
+            this.StatsMenuButton.IsEnabled = false;
         }
 
         private void StatsMenuButton_Click(object sender, RoutedEventArgs e)

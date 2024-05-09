@@ -52,6 +52,7 @@ namespace TriviaClient
             this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
             this.mainWindow.CreateRoomButton.IsEnabled = true;
             this.mainWindow.JoinRoomButton.IsEnabled = true;
+            this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
             this.mainWindow.LogOutButton.IsEnabled = true;
             this.mainWindow.StatsMenuButton.IsEnabled = true;
             this.Close();
@@ -59,7 +60,7 @@ namespace TriviaClient
             
             try
             {
-                Communicator com = new Communicator();
+                //Communicator com = new Communicator();
                 //string msg =$@"{{'username': '{this.username}', 'password': '{this.password}'}}";
                 //this.mainWindow.SendToServer(lr.Serialize());
             }
