@@ -11,8 +11,13 @@ namespace TriviaClient
     {
         public static List<byte> Serialize(string jsonMsg, byte status)
         {
+        
             List<byte> list = new List<byte>();
             list.Add(status);
+
+            // example:
+            // LoginResponse loginResponse = LoginResponse.Deserialize(list);
+
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");

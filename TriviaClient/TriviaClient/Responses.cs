@@ -14,6 +14,14 @@ namespace TriviaClient
         }
 
         public uint status;
+
+        // like second constructor
+        public static LoginResponse Deserialize(List<byte> list)
+        {
+            // logic
+            // this.status = status from logic;
+            return new LoginResponse();
+        }
     }
 
     internal struct SignupResponse

@@ -16,6 +16,12 @@ namespace TriviaClient
 
         public string username;
         public string password;
+
+        public List<byte> Serialize()
+        {
+            // logic
+            return new List<byte>();
+        }
     }
 
     internal struct SignupRequest
