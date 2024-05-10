@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TriviaClient
 {
-    internal class Cods
+    public class Cods
     {
         public enum ResponseCode
         {
