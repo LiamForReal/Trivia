@@ -28,6 +28,48 @@ namespace TriviaClient
             public uint status;
         }
 
+        internal struct LogoutResponse
+        {
+            public LogoutResponse(uint status)
+            {
+                this.status = status;
+            }
 
+            public uint status;
+        }
+
+        internal struct GetPlayersInRoomResponse
+        {
+            public GetPlayersInRoomResponse(List<string> rooms)
+            {
+                this.rooms = rooms;
+            }
+
+            public List<string> rooms;
+        }
+
+        internal struct GetHighScoreResponse
+        {
+            public GetHighScoreResponse(uint status, List<string> statistics)
+            {
+                this.status = status;
+                this.statistics = statistics;
+            }
+
+            public uint status;
+            public List<string> statistics;
+        }
+
+        internal struct GetPersonalStatsResponse
+        {
+            public GetPersonalStatsResponse(uint status, List<string> statistics)
+            {
+                this.status = status;
+                this.statistics = statistics;
+            }
+
+            public uint status;
+            public List<string> statistics;
+        }
     }
 }
