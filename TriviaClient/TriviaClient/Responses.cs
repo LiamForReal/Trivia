@@ -6,70 +6,87 @@ using System.Threading.Tasks;
 
 namespace TriviaClient
 {
-    internal class Responses
+    internal struct LoginResponse
     {
-        internal struct LoginResponse
+        public LoginResponse(uint status)
         {
-            public LoginResponse(uint status)
-            {
-                this.status = status;
-            }
-
-            public uint status;
+            this.status = status;
         }
 
-        internal struct SignupResponse
-        {
-            public SignupResponse(uint status)
-            {
-                this.status = status;
-            }
+        public uint status;
+    }
 
-            public uint status;
+    internal struct SignupResponse
+    {
+        public SignupResponse(uint status)
+        {
+            this.status = status;
         }
 
-        internal struct LogoutResponse
-        {
-            public LogoutResponse(uint status)
-            {
-                this.status = status;
-            }
+        public uint status;
+    }
 
-            public uint status;
+    internal struct LogoutResponse
+    {
+        public LogoutResponse(uint status)
+        {
+            this.status = status;
         }
 
-        internal struct GetPlayersInRoomResponse
-        {
-            public GetPlayersInRoomResponse(List<string> rooms)
-            {
-                this.rooms = rooms;
-            }
+        public uint status;
+    }
 
-            public List<string> rooms;
+    internal struct GetPlayersInRoomResponse
+    {
+        public GetPlayersInRoomResponse(List<string> rooms)
+        {
+            this.rooms = rooms;
         }
 
-        internal struct GetHighScoreResponse
-        {
-            public GetHighScoreResponse(uint status, List<string> statistics)
-            {
-                this.status = status;
-                this.statistics = statistics;
-            }
+        public List<string> rooms;
+    }
 
-            public uint status;
-            public List<string> statistics;
+    internal struct GetHighScoreResponse
+    {
+        public GetHighScoreResponse(uint status, List<string> statistics)
+        {
+            this.status = status;
+            this.statistics = statistics;
         }
 
-        internal struct GetPersonalStatsResponse
-        {
-            public GetPersonalStatsResponse(uint status, List<string> statistics)
-            {
-                this.status = status;
-                this.statistics = statistics;
-            }
+        public uint status;
+        public List<string> statistics;
+    }
 
-            public uint status;
-            public List<string> statistics;
+    internal struct GetPersonalStatsResponse
+    {
+        public GetPersonalStatsResponse(uint status, List<string> statistics)
+        {
+            this.status = status;
+            this.statistics = statistics;
         }
+
+        public uint status;
+        public List<string> statistics;
+    }
+
+    internal struct JoinRoomResponse
+    {
+        public JoinRoomResponse(uint status)
+        {
+            this.status = status;
+        }
+
+        public uint status;
+    }
+
+    internal struct CreateRoomResponse
+    {
+        public CreateRoomResponse(uint status)
+        {
+            this.status = status;
+        }
+
+        public uint status;
     }
 }
