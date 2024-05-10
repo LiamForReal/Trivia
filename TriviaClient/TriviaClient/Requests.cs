@@ -17,6 +17,7 @@ namespace TriviaClient
         public string username;
         public string password;
     }
+
     internal struct SignupRequest
     {
         public SignupRequest(string username, string password, string email)
