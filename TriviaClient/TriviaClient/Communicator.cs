@@ -29,7 +29,42 @@ namespace TriviaClient
         public void /*Request**/ getMsgFromServer(Cods.ResponseCode requestCode)
         {
             //make a pure class Request and all the requests will inherit 
-            //from her and here you return the right msg by the code 
+            //from her only the two connection function(dont forget to put override in SendToServer and GetFromServer)
+            //and here you return the right msg by the code 
+
+            //switch(requestCode)
+            //{
+            //    case Cods.ResponseCode.LOGIN_RC:
+            //        loginRequest.SendLogIn(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.SIGNUP_RC:
+            //        signupRequest.SendSignUp(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.LOGOUT_RC:
+            //        logOutResquest.SendLogOut(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.GET_ROOMS_RC:
+            //        getRoomsRequest.SendGetRooms(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.GET_PLAYERS_IN_ROOM_RC:
+            //        getPlayersInRoomRequest.SendGetPlayerInRoom(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.JOIN_ROOM_RC:
+            //        joinRoomRequest.SendJoinRoom(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.CREATE_ROOM_RC:
+            //        createRoomRequest.SendCreateRoom(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.GET_HIGH_SCORE_RC:
+            //        getHighScoreRequest.SendHighScore(clientStream);
+            //        break;
+            //    case Cods.ResponseCode.GET_PERSONAL_STATS_RC:
+            //        getPersonalStatsRequest.SendPersonalStats(clientStream);
+            //        break;
+            //    default:
+            //        Console.WriteLine("invalid requst code not betwin 10 - 90");
+            //        break;
+            //}
         }
         public void sendMsgToServer(Cods.ResponseCode requestCode)
         {
