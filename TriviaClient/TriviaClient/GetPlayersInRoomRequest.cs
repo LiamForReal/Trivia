@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using static TriviaClient.GetHighScoreRequest;
+using static TriviaClient.GetPlayersInRoomRequest;
 
 namespace TriviaClient
 {
@@ -15,7 +17,7 @@ namespace TriviaClient
         {
             this.roomId = roomId;
         }
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
@@ -35,10 +37,20 @@ namespace TriviaClient
             return list;
         }
 
+        public void SendGetPlayerInRoom(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public GetPlayersInRoomResponse GetGetPlayerInRoom(NetworkStream clientStream)
+        {
+            GetPlayersInRoomResponse GetPlayersInRoomResponse = GetPlayersInRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return GetPlayersInRoomResponse;
+        }
+
         internal struct GetPlayersInRoomResponse
         {
-            public uint status;
-            public string[] rooms;
+            private uint status;
+            private string[] rooms;
             public GetPlayersInRoomResponse(uint status, string[] rooms)
             {
                 this.status = status;

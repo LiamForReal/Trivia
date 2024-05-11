@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using static TriviaClient.LoginRequest;
@@ -20,8 +21,7 @@ namespace TriviaClient
             this.password = password;
             this.email = email;
         }
-
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
@@ -41,9 +41,19 @@ namespace TriviaClient
             return list;
         }
 
+        public void SendSignUp(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public SignupResponse GetSignUp(NetworkStream clientStream)
+        {
+            SignupResponse SignUpResponse = SignupResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return SignUpResponse;
+        }
+
         internal struct SignupResponse
         {
-            public uint status;
+            private uint status;
             public SignupResponse(uint status)
             {
                 this.status = status;

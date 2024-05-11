@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using static TriviaClient.GetHighScoreRequest;
@@ -10,7 +11,7 @@ namespace TriviaClient
 {
     internal class GetPersonalStatsRequest
     {
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
@@ -30,10 +31,19 @@ namespace TriviaClient
             return list;
         }
 
+        public void SendPersonalStats(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public GetPersonalStatsResponse GetPersonalStats(NetworkStream clientStream)
+        {
+            GetPersonalStatsResponse GetPersonalStatsResponse = GetPersonalStatsResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return GetPersonalStatsResponse;
+        }
         internal struct GetPersonalStatsResponse
         {
-            public uint status;
-            public string[] statistics;
+            private uint status;
+            private string[] statistics;
             public GetPersonalStatsResponse(uint status, string[] statistics)
             {
                 this.status = status;

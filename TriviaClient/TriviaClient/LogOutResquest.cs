@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using static TriviaClient.SignupRequest;
@@ -10,7 +11,7 @@ namespace TriviaClient
 {
     internal class LogOutResquest
     {
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
@@ -18,9 +19,19 @@ namespace TriviaClient
 
             return list;
         }
+
+        public void SendLogOut(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public LogoutResponse GetLogOut(NetworkStream clientStream)
+        {
+            LogoutResponse LogOutResponse = LogoutResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return LogOutResponse;
+        }
         internal struct LogoutResponse
         {
-            public uint status;
+            private uint status;
             public LogoutResponse(uint status)
             {
                 this.status = status;

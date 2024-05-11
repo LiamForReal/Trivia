@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,16 +9,27 @@ namespace TriviaClient
 {
     internal class GetRoomsRequest
     {
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.GET_ROOMS_RC);
             return list;
         }
+
+        public void SendGetRooms(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public GetRoomsResponse GetGetRooms(NetworkStream clientStream)
+        {
+            GetRoomsResponse GetRoomsResponse = GetRoomsResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return GetRoomsResponse;
+        }
+
         internal struct GetRoomsResponse
         {
-            public uint status;
+            private uint status;
             public GetRoomsResponse(uint status)
             {
                 this.status = status;

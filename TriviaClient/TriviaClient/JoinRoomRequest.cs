@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using static TriviaClient.LoginRequest;
@@ -12,13 +13,13 @@ namespace TriviaClient
     internal class JoinRoomRequest
     {
 
-        public uint roomId;
+        private uint roomId;
         public JoinRoomRequest(uint roomId)
         {
             this.roomId = roomId;
         }
 
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
@@ -38,9 +39,19 @@ namespace TriviaClient
             return list;
         }
 
+        public void SendJoinRoom(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public JoinRoomResponse GetJoinRoom(NetworkStream clientStream)
+        {
+            JoinRoomResponse JoinRoomResponse = JoinRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return JoinRoomResponse;
+        }
+
         internal struct JoinRoomResponse
         {
-            public uint status;
+            private uint status;
             public JoinRoomResponse(uint status)
             {
                 this.status = status;

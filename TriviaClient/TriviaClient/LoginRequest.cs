@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media.TextFormatting;
 
 namespace TriviaClient
@@ -18,14 +20,12 @@ namespace TriviaClient
             this.username = username;
             this.password = password;
         }
-        public List<byte> Serialize()
+        private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.LOGIN_RC);
 
-            // example:
-            //LoginResponse loginResponse = LoginResponse.Deserialize(list);
             string jsonMsg = JsonConvert.SerializeObject(this);
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
@@ -39,9 +39,19 @@ namespace TriviaClient
 
             return list;
         }
+
+        public void SendLogIn(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public LoginResponse GetLogIn(NetworkStream clientStream)
+        {
+            LoginResponse loginResponse = LoginResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return loginResponse;
+        }
         internal struct LoginResponse
         {
-            public uint status;
+            private uint status;
             public LoginResponse(uint status)
             {
                 this.status = status;
