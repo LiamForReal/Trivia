@@ -46,12 +46,10 @@ namespace TriviaClient
             {
                 this.status = status;
             }
-
             public static LoginResponse Deserialize(List<byte> list)
             {
-                LoginResponse lr = new LoginResponse();
-                lr.status = (uint)list[0];
-                return lr;
+                LoginResponse response = new LoginResponse((uint)list[0]);
+                return response;
             }
         }
     }

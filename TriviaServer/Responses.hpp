@@ -13,6 +13,7 @@ typedef enum ResponseCode
 	JOIN_ROOM_RC = 60,
 	CREATE_ROOM_RC = 70,
 	GET_HIGH_SCORE_RC = 80,
+	GET_PERSONAL_STATS_RC = 90,
 	ERROR_RC = 255,
 } ResponseCode;
 
@@ -26,6 +27,7 @@ typedef enum Status
 	JOIN_ROOM_STATUS = 61,
 	CREATE_ROOM_STATUS = 71,
 	GET_HIGH_SCORE_STATUS = 81,
+	GET_PERSONAL_STATS_STATUS = 91
 } Status;
 
 typedef enum Errors
@@ -40,6 +42,7 @@ typedef enum Errors
 	CREATE_ROOM_ERROR = 75,
 	GET_HIGH_SCORE_ERROR = 85,
 	THERE_IS_NO_SCORES = 86,
+	GET_PERSONAL_STATS_ERROR = 95
 } Errors;
 
 typedef struct ErrorResponse

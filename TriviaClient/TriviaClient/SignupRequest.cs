@@ -51,9 +51,8 @@ namespace TriviaClient
 
             public static SignupResponse Deserialize(List<byte> list)
             {
-                SignupResponse sr = new SignupResponse();
-                sr.status = (uint)list[0];
-                return sr;
+                SignupResponse response = new SignupResponse((uint)list[0]);
+                return response;
             }
         }
     }

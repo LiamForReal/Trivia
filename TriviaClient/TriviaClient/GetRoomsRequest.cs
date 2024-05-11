@@ -1,34 +1,31 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static TriviaClient.SignupRequest;
 
 namespace TriviaClient
 {
-    internal class LogOutResquest
+    internal class GetRoomsRequest
     {
         public List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
-            list.Add((byte)Cods.ResponseCode.LOGOUT_RC);
-
+            list.Add((byte)Cods.ResponseCode.GET_ROOMS_RC);
             return list;
         }
-        internal struct LogoutResponse
+        internal struct GetRoomsResponse
         {
             public uint status;
-            public LogoutResponse(uint status)
+            public GetRoomsResponse(uint status)
             {
                 this.status = status;
             }
 
-            public static LogoutResponse Deserialize(List<byte> list)
+            public static GetRoomsResponse Deserialize(List<byte> list)
             {
-                LogoutResponse response = new LogoutResponse((uint)list[0]);
+                GetRoomsResponse response = new GetRoomsResponse((uint)list[0]);
                 return response;
             }
         }
