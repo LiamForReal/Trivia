@@ -31,11 +31,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendPersonalStats(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public GetPersonalStatsResponse GetPersonalStats(NetworkStream clientStream)
+        public GetPersonalStatsResponse GetFromServer(NetworkStream clientStream)
         {
             GetPersonalStatsResponse GetPersonalStatsResponse = GetPersonalStatsResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return GetPersonalStatsResponse;

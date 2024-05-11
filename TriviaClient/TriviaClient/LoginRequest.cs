@@ -40,11 +40,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendLogIn(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public LoginResponse GetLogIn(NetworkStream clientStream)
+        public LoginResponse GetFromServer(NetworkStream clientStream)
         {
             LoginResponse loginResponse = LoginResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return loginResponse;

@@ -17,11 +17,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendGetRooms(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public GetRoomsResponse GetGetRooms(NetworkStream clientStream)
+        public GetRoomsResponse GetFromServer(NetworkStream clientStream)
         {
             GetRoomsResponse GetRoomsResponse = GetRoomsResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return GetRoomsResponse;

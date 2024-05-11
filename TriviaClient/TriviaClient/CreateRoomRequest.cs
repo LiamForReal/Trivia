@@ -43,11 +43,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendCreateRoom(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public CreateRoomResponse GetCreateRoom(NetworkStream clientStream)
+        public CreateRoomResponse GetFromServer(NetworkStream clientStream)
         {
             CreateRoomResponse CreateRoomResponse = CreateRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return CreateRoomResponse;

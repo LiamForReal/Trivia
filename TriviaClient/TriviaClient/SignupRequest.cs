@@ -41,11 +41,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendSignUp(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public SignupResponse GetSignUp(NetworkStream clientStream)
+        public SignupResponse GetFromServer(NetworkStream clientStream)
         {
             SignupResponse SignUpResponse = SignupResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return SignUpResponse;

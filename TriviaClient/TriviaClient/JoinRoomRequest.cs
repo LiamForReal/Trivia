@@ -39,11 +39,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendJoinRoom(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public JoinRoomResponse GetJoinRoom(NetworkStream clientStream)
+        public JoinRoomResponse GetFromServer(NetworkStream clientStream)
         {
             JoinRoomResponse JoinRoomResponse = JoinRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return JoinRoomResponse;

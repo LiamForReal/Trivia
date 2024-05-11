@@ -20,11 +20,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendLogOut(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public LogoutResponse GetLogOut(NetworkStream clientStream)
+        public LogoutResponse GetFromServert(NetworkStream clientStream)
         {
             LogoutResponse LogOutResponse = LogoutResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return LogOutResponse;

@@ -19,11 +19,11 @@ namespace TriviaClient
             return list;
         }
         
-        public void SendHighScore(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public GetHighScoreResponse GetHighScore(NetworkStream clientStream)
+        public GetHighScoreResponse GetFromServer(NetworkStream clientStream)
         {
             GetHighScoreResponse GetHighScoreResponse = GetHighScoreResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return GetHighScoreResponse;

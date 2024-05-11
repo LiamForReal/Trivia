@@ -37,11 +37,11 @@ namespace TriviaClient
             return list;
         }
 
-        public void SendGetPlayerInRoom(NetworkStream clientStream)
+        public void GetFromServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public GetPlayersInRoomResponse GetGetPlayerInRoom(NetworkStream clientStream)
+        public GetPlayersInRoomResponse SendToServer(NetworkStream clientStream)
         {
             GetPlayersInRoomResponse GetPlayersInRoomResponse = GetPlayersInRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return GetPlayersInRoomResponse;
