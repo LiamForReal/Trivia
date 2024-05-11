@@ -21,9 +21,10 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         private bool revealPassword = false;
-
+        private LoginRequest loginRequest;
         public LogInScreen()
         {
+            loginRequest = new LoginRequest("", "");
             this.revealPassword = false;
             InitializeComponent();
         }
@@ -47,38 +48,42 @@ namespace TriviaClient
                 return;
             }
 
-            this.mainWindow.username = this.UsernameTextBox.Text;
-            this.mainWindow.isUserLogged = true;
-            this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
-            this.mainWindow.CreateRoomButton.IsEnabled = true;
-            this.mainWindow.JoinRoomButton.IsEnabled = true;
-            this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
-            this.mainWindow.LogOutButton.IsEnabled = true;
-            this.mainWindow.StatsMenuButton.IsEnabled = true;
-            this.Close();
-            this.mainWindow.Show();
-            
             try
             {
-                //Communicator com = new Communicator();
+
+                loginRequest.username = $@"liam";
+                loginRequest.password = $@"1Aa@";
+                loginRequest.SendToServer(mainWindow.clientStream);
+                if ((Cods.Status)(loginRequest.GetFromServer(mainWindow.clientStream).status) == Cods.Status.LOGIN_STATUS)
+                {
+                    this.mainWindow.username = this.UsernameTextBox.Text;
+                    this.mainWindow.isUserLogged = true;
+                    this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
+                    this.mainWindow.CreateRoomButton.IsEnabled = true;
+                    this.mainWindow.JoinRoomButton.IsEnabled = true;
+                    this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
+                    this.mainWindow.LogOutButton.IsEnabled = true;
+                    this.mainWindow.StatsMenuButton.IsEnabled = true;
+                    this.Close();
+                    this.mainWindow.Show();
+
+                    var button = (Button)(this.mainWindow.FindName("LogInButton"));
+                    if (button != null)
+                    {
+                        button.Visibility = Visibility.Collapsed;
+                    }
+
+                    button = (Button)(this.mainWindow.FindName("SignUpButton"));
+                    if (button != null)
+                    {
+                        button.Visibility = Visibility.Collapsed;
+                    }
+                }
                 //string msg =$@"{{'username': '{this.username}', 'password': '{this.password}'}}";
-                //this.mainWindow.SendToServer(lr.Serialize());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("Does Not Connected To Server!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
-            }
-
-            var button = (Button)(this.mainWindow.FindName("LogInButton"));
-            if (button != null)
-            {
-                button.Visibility = Visibility.Collapsed;
-            }
-
-            button = (Button)(this.mainWindow.FindName("SignUpButton"));
-            if (button != null)
-            {
-                button.Visibility = Visibility.Collapsed;
+                MessageBox.Show("Login failed!", "[LogIn] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
             }
         }
 

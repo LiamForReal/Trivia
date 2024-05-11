@@ -12,9 +12,9 @@ namespace TriviaClient
     internal class SignupRequest
     {
 
-        private string username;
-        private string password;
-        private string email;
+        public string username;
+        public string password;
+        public string email;
         public SignupRequest(string username, string password, string email)
         {
             this.username = username;
@@ -53,7 +53,7 @@ namespace TriviaClient
 
         internal struct SignupResponse
         {
-            private uint status;
+            public uint status;
             public SignupResponse(uint status)
             {
                 this.status = status;

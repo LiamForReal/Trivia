@@ -42,8 +42,8 @@ namespace TriviaClient
         }
         internal struct GetPersonalStatsResponse
         {
-            private uint status;
-            private string[] statistics;
+            public uint status;
+            public string[] statistics;
             public GetPersonalStatsResponse(uint status, string[] statistics)
             {
                 this.status = status;

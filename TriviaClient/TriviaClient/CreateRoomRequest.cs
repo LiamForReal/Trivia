@@ -12,10 +12,10 @@ namespace TriviaClient
 {
     internal class CreateRoomRequest
     {
-        private string roomName;
-        private uint maxUsers;
-        private uint questionCount;
-        private uint answerTimeout;
+        public string roomName;
+        public uint maxUsers;
+        public uint questionCount;
+        public uint answerTimeout;
         public CreateRoomRequest(string roomName, uint maxUsers, uint questionCount, uint answerTimeout)
         {
             this.roomName = roomName;
@@ -54,7 +54,7 @@ namespace TriviaClient
         }
         internal struct CreateRoomResponse
         {
-            private uint status;
+            public uint status;
             public CreateRoomResponse(uint status)
             {
                 this.status = status;

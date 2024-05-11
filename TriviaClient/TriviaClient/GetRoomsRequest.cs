@@ -29,7 +29,7 @@ namespace TriviaClient
 
         internal struct GetRoomsResponse
         {
-            private uint status;
+            public uint status;
             public GetRoomsResponse(uint status)
             {
                 this.status = status;

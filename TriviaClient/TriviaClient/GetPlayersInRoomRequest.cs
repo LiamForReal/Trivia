@@ -49,8 +49,8 @@ namespace TriviaClient
 
         internal struct GetPlayersInRoomResponse
         {
-            private uint status;
-            private string[] rooms;
+            public uint status;
+            public string[] rooms;
             public GetPlayersInRoomResponse(uint status, string[] rooms)
             {
                 this.status = status;

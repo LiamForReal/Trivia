@@ -13,7 +13,7 @@ namespace TriviaClient
     internal class JoinRoomRequest
     {
 
-        private uint roomId;
+        public uint roomId;
         public JoinRoomRequest(uint roomId)
         {
             this.roomId = roomId;
@@ -51,7 +51,7 @@ namespace TriviaClient
 
         internal struct JoinRoomResponse
         {
-            private uint status;
+            public uint status;
             public JoinRoomResponse(uint status)
             {
                 this.status = status;

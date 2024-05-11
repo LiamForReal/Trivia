@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Media.TextFormatting;
@@ -12,8 +13,8 @@ namespace TriviaClient
 {
     internal class LoginRequest
     {
-        private string username;
-        private string password;
+        public string username;
+        public string password;
 
         public LoginRequest(string username, string password)
         {
@@ -51,7 +52,7 @@ namespace TriviaClient
         }
         internal struct LoginResponse
         {
-            private uint status;
+            public uint status;
             public LoginResponse(uint status)
             {
                 this.status = status;

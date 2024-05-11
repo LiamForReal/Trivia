@@ -31,7 +31,7 @@ namespace TriviaClient
         }
         internal struct LogoutResponse
         {
-            private uint status;
+            public uint status;
             public LogoutResponse(uint status)
             {
                 this.status = status;

@@ -30,8 +30,8 @@ namespace TriviaClient
         }
         internal struct GetHighScoreResponse
         {
-            private uint status;
-            private string[] statistics;
+            public uint status;
+            public string[] statistics;
             public GetHighScoreResponse(uint status, string[] statistics)
             {
                 this.status = status;
