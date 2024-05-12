@@ -42,7 +42,9 @@ namespace TriviaClient
                 MessageBox.Show("There Is A User That Is Already Logged!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.PasswordTextBox.Password))
+            else if ((!this.revealPassword && (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.PasswordTextBox.Password))) ||
+                (this.revealPassword && (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.RevealedTextBox.Text)))
+            )
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 this.PasswordTextBox.Password = "";
