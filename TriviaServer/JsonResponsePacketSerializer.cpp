@@ -60,7 +60,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(SIGNUP_STATUS));
+	vec[0] = ((unsigned char)(signupResponse.status));
 
 	unsigned int len = 0;
 
@@ -84,7 +84,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(LOGOUT_STATUS));
+	vec[0] = ((unsigned char)(logoutResponse.status));
 
 	unsigned int len = 0;
 
@@ -108,7 +108,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(GET_ROOMS_STATUS));
+	vec[0] = ((unsigned char)(getRoomsResponse.status));
 
 	unsigned int len = 0;
 
@@ -147,7 +147,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(GET_PLAYERS_IN_ROOM_STATUS));
+	vec[0] = ((unsigned char)(getPlayerInRoomResponse.status));
 
 	unsigned int len = 0;
 
@@ -174,7 +174,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(JOIN_ROOM_STATUS));
+	vec[0] = ((unsigned char)(joinRoomResponse.status));
 
 	unsigned int len = 0;
 
@@ -198,7 +198,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(CREATE_ROOM_STATUS));
+	vec[0] = ((unsigned char)(createRoomResponse.status));
 
 	unsigned int len = 0;
 
@@ -222,7 +222,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(GET_HIGH_SCORE_STATUS));
+	vec[0] = ((unsigned char)(getHighScoreResponse.status));
 
 	unsigned int len = 0;
 
@@ -249,7 +249,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(GET_HIGH_SCORE_STATUS));
+	vec[0] = ((unsigned char)(getPersonalStatsResponse.status));
 
 	unsigned int len = 0;
 
