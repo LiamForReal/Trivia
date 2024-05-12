@@ -36,7 +36,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 {
 	std::vector<unsigned char> vec(INIT_VEC_SIZE);
 	// Add Response Code
-	vec[0] = ((unsigned char)(LOGIN_RC));
+	vec[0] = ((unsigned char)(LOGIN_STATUS));
 
 	unsigned int len = 0;
 

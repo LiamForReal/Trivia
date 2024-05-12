@@ -37,10 +37,12 @@ void Communicator::handleNewClient(SOCKET clientSocket)
             if (Helper::socketHasData(clientSocket))
             {
                 buildRI(ri, clientSocket);
+                std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
                 mtx.lock();
                 rr = _handlers[clientSocket]->handleRequest(ri);
                 mtx.unlock();
                 Helper::sendVector(clientSocket, rr.buffer);
+                std::cout << "DEBUG RESPONSE CODE: " << rr.buffer[0] << std::endl;
                 _handlers[clientSocket] = rr.newHandler;
             }
         } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);

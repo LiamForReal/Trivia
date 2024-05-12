@@ -21,6 +21,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	{
 		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
 		status = rhf.getLoginMeneger().login(lr.username, lr.password);
+		std::cout << "DEBUG: STATUS " << status << std::endl;
 		LoginResponse lresponse;
 		lresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
@@ -35,7 +36,21 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
 		username = sr.username;
 	}
-	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+	//std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+
+	rr.buffer = std::vector<unsigned char>();
+	for (int i = 0; i < buffer.size(); i++)
+	{
+		rr.buffer.push_back(buffer[i]);
+	}
+
 	rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(username));
+
+	std::cout << "DEBUG: BUFFER ";
+	for (int i = 0; i < rr.buffer.size(); i++)
+	{
+		std::cout << rr.buffer[i];
+	}
+	std::cout << std::endl; // suka blyat
 	return rr;
 }

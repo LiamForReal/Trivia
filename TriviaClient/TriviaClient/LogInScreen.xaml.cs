@@ -48,43 +48,45 @@ namespace TriviaClient
                 return;
             }
 
-            try
-            {
+            loginRequest.username = $@"liam";
+            loginRequest.password = $@"1Aa@";
+            loginRequest.SendToServer(mainWindow.clientStream);
 
-                loginRequest.username = $@"liam";
-                loginRequest.password = $@"1Aa@";
-                loginRequest.SendToServer(mainWindow.clientStream);
-                if ((Cods.Status)(loginRequest.GetFromServer(mainWindow.clientStream).status) == Cods.Status.LOGIN_STATUS)
+            MessageBox.Show("Before Login");
+
+            Cods.Status res = (Cods.Status)(loginRequest.GetFromServer(mainWindow.clientStream).status);
+
+            MessageBox.Show(res.ToString());
+
+
+            if (res == Cods.Status.LOGIN_STATUS)
+            {
+                MessageBox.Show("Inside Login");
+
+                this.mainWindow.username = this.UsernameTextBox.Text;
+                this.mainWindow.isUserLogged = true;
+                this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
+                this.mainWindow.CreateRoomButton.IsEnabled = true;
+                this.mainWindow.JoinRoomButton.IsEnabled = true;
+                this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
+                this.mainWindow.LogOutButton.IsEnabled = true;
+                this.mainWindow.StatsMenuButton.IsEnabled = true;
+                this.Close();
+                this.mainWindow.Show();
+
+                var button = (Button)(this.mainWindow.FindName("LogInButton"));
+                if (button != null)
                 {
-                    this.mainWindow.username = this.UsernameTextBox.Text;
-                    this.mainWindow.isUserLogged = true;
-                    this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
-                    this.mainWindow.CreateRoomButton.IsEnabled = true;
-                    this.mainWindow.JoinRoomButton.IsEnabled = true;
-                    this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
-                    this.mainWindow.LogOutButton.IsEnabled = true;
-                    this.mainWindow.StatsMenuButton.IsEnabled = true;
-                    this.Close();
-                    this.mainWindow.Show();
-
-                    var button = (Button)(this.mainWindow.FindName("LogInButton"));
-                    if (button != null)
-                    {
-                        button.Visibility = Visibility.Collapsed;
-                    }
-
-                    button = (Button)(this.mainWindow.FindName("SignUpButton"));
-                    if (button != null)
-                    {
-                        button.Visibility = Visibility.Collapsed;
-                    }
+                    button.Visibility = Visibility.Collapsed;
                 }
-                //string msg =$@"{{'username': '{this.username}', 'password': '{this.password}'}}";
+
+                button = (Button)(this.mainWindow.FindName("SignUpButton"));
+                if (button != null)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "[LogIn] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
-            }
+            MessageBox.Show("After Login");
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)
