@@ -83,7 +83,7 @@ namespace TriviaClient
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Login failed!", "[LogIn] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "[LogIn] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
             }
         }
 

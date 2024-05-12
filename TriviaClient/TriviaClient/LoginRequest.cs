@@ -27,7 +27,7 @@ namespace TriviaClient
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.LOGIN_RC);
 
-            string jsonMsg = JsonConvert.SerializeObject(this);
+            string jsonMsg = $@"{{'username': '{this.username}', 'password' : '{this.password}'}}"; // JsonConvert.SerializeObject(this);
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
