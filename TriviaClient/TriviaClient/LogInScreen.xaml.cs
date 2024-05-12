@@ -45,11 +45,22 @@ namespace TriviaClient
             else if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.PasswordTextBox.Password))
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                this.PasswordTextBox.Password = "";
+                this.UsernameTextBox.Text = "";
+                this.RevealedTextBox.Text = "";
                 return;
             }
 
-            loginRequest.username = $@"liam";
-            loginRequest.password = $@"1Aa@";
+            loginRequest.username = this.UsernameTextBox.Text;
+            if (this.revealPassword)
+            {
+                loginRequest.password = this.RevealedTextBox.Text;
+            }
+            else
+            {
+                loginRequest.password = this.PasswordTextBox.Password;
+            }
+            
             loginRequest.SendToServer(mainWindow.clientStream);
 
             MessageBox.Show("Before Login");

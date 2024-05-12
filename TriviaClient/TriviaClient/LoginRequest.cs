@@ -23,7 +23,6 @@ namespace TriviaClient
         }
         private List<byte> Serialize()
         {
-
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.LOGIN_RC);
 

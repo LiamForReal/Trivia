@@ -1,7 +1,10 @@
 #include "LoginRequestHandler.h"
 #include <iostream>
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& newRhf) : rhf(newRhf) {}
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& newRhf) : rhf(newRhf) 
+{
+	this->rr = RequestResult();
+}
 
 LoginRequestHandler::~LoginRequestHandler() {}
 
@@ -12,9 +15,10 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
+	this->rr = RequestResult();
+
 	std::vector<unsigned char> buffer;
 	unsigned int status = 0;
-	RequestResult rr = RequestResult();
 	string username = "";
 
 	if (LOGIN_RC == requestInfo.id)
@@ -36,21 +40,8 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
 		username = sr.username;
 	}
-	//std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
-
-	rr.buffer = std::vector<unsigned char>();
-	for (int i = 0; i < buffer.size(); i++)
-	{
-		rr.buffer.push_back(buffer[i]);
-	}
+	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
 
 	rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(username));
-
-	std::cout << "DEBUG: BUFFER ";
-	for (int i = 0; i < rr.buffer.size(); i++)
-	{
-		std::cout << rr.buffer[i];
-	}
-	std::cout << std::endl; // suka blyat
 	return rr;
 }
