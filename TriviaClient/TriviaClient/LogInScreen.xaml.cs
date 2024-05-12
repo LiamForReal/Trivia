@@ -65,17 +65,10 @@ namespace TriviaClient
             
             loginRequest.SendToServer(mainWindow.clientStream);
 
-            MessageBox.Show("Before Login");
-
             Cods.Status res = (Cods.Status)(loginRequest.GetFromServer(mainWindow.clientStream).status);
-
-            MessageBox.Show(res.ToString());
-
 
             if (res == Cods.Status.LOGIN_STATUS)
             {
-                MessageBox.Show("Inside Login");
-
                 this.mainWindow.username = this.UsernameTextBox.Text;
                 this.mainWindow.isUserLogged = true;
                 this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
@@ -99,7 +92,6 @@ namespace TriviaClient
                     button.Visibility = Visibility.Collapsed;
                 }
             }
-            MessageBox.Show("After Login");
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)

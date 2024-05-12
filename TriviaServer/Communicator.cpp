@@ -21,6 +21,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     unsigned int statusCode = 0, size = 0;
     RequestInfo ri = RequestInfo();
     RequestResult rr = RequestResult();
+    LoggedUser loggedUser;
     mtx.lock();
     _handlers[clientSocket] = new LoginRequestHandler(rhf);
     mtx.unlock();
@@ -32,34 +33,49 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         mtx.lock();
         size = rhf.getLoginMeneger().getLoggedUsers().size();
         mtx.unlock();
-        do 
+        while (true)
         {
-            if (Helper::socketHasData(clientSocket))
+            if (loggedUser.getUserName() == "\0")
             {
-                buildRI(ri, clientSocket);
-                std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
-                mtx.lock();
-                rr = _handlers[clientSocket]->handleRequest(ri);
-                mtx.unlock();
-                Helper::sendVector(clientSocket, rr.buffer);
-                std::cout << "DEBUG RESPONSE CODE: " << rr.buffer[0] << std::endl;
-                _handlers[clientSocket] = rr.newHandler;
+                do
+                {
+                    if (Helper::socketHasData(clientSocket))
+                    {
+                        buildRI(ri, clientSocket);
+                        std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
+                        mtx.lock();
+                        rr = _handlers[clientSocket]->handleRequest(ri);
+                        mtx.unlock();
+                        Helper::sendVector(clientSocket, rr.buffer);
+                        std::cout << "DEBUG RESPONSE CODE: " << rr.buffer[0] << std::endl;
+                        _handlers[clientSocket] = rr.newHandler;
+                    }
+                } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
+                loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
+                std::cout << "user login: " << loggedUser.getUserName();
             }
-        } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
-        LoggedUser loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
-        std::cout << "user logged: " << loggedUser.getUserName();
-        while (rr.newHandler->isRequestRelevant(ri))
-        {
-            if (Helper::socketHasData(clientSocket))
+            
+            while (rr.newHandler->isRequestRelevant(ri))
             {
-                buildRI(ri, clientSocket);
-                mtx.lock();
-                rr = _handlers[clientSocket]->handleRequest(ri);
-                mtx.unlock();
-                Helper::sendVector(clientSocket, rr.buffer);
-                _handlers[clientSocket] = rr.newHandler;
+                if (Helper::socketHasData(clientSocket))
+                {
+                    buildRI(ri, clientSocket);
+                    if (ri.id == LOGOUT_RC)
+                    {
+                        std::cout << "user logout: " << loggedUser.getUserName();
+                        loggedUser.setUserName("\0");
+                    }
+                    mtx.lock();
+                    rr = _handlers[clientSocket]->handleRequest(ri);
+                    mtx.unlock();
+                    Helper::sendVector(clientSocket, rr.buffer);
+                    mtx.lock();
+                    _handlers[clientSocket] = rr.newHandler;
+                    mtx.unlock();
+                }
             }
         }
+
     }
     catch (const std::exception& e)
     {
