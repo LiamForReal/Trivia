@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -92,6 +93,7 @@ namespace TriviaClient
                     button.Visibility = Visibility.Collapsed;
                 }
             }
+            else MessageBox.Show("[LogIn] error!");
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)

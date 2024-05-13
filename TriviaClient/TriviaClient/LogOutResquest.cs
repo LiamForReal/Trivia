@@ -16,7 +16,6 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.LOGOUT_RC);
-
             return list;
         }
 
@@ -24,7 +23,7 @@ namespace TriviaClient
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public LogoutResponse GetFromServert(NetworkStream clientStream)
+        public LogoutResponse GetFromServer(NetworkStream clientStream)
         {
             LogoutResponse LogOutResponse = LogoutResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return LogOutResponse;
