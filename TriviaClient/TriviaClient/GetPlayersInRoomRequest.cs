@@ -23,7 +23,7 @@ namespace TriviaClient
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.GET_PLAYERS_IN_ROOM_RC);
 
-            string jsonMsg = JsonConvert.SerializeObject(this);
+            string jsonMsg = $@"{{'roomId': '{this.roomId}}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");

@@ -21,8 +21,10 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         private bool revealPassword = false;
+        private SignupRequest request;
         public SignUpScreen()
         {
+            request = new SignupRequest("", "", "");
             this.revealPassword = false;
             InitializeComponent();
         }
@@ -35,9 +37,28 @@ namespace TriviaClient
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
+            request.username = this.UsernameTextBox.Text;
+            request.email = this.EmailTextBox.Text;
+            if (this.revealPassword)
+            {
+                request.password = this.RevealedTextBox.Text;
+            }
+            else
+            {
+                request.password = this.PasswordTextBox.Password;
+            }
 
+            request.SendToServer(mainWindow.clientStream);
+
+            Cods.Status res = (Cods.Status)(request.GetFromServer(mainWindow.clientStream).status);
+
+            if (res == Cods.Status.SIGNUP_STATUS)
+            {
+                this.Close();
+                this.mainWindow.Show();
+                MessageBox.Show("[SignUp] successfully!");
+            } else  MessageBox.Show("[SignUp] error!");
         }
-
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)
         {
             revealPassword = !revealPassword;

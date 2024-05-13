@@ -14,13 +14,13 @@ namespace TriviaClient
     {
         public string roomName;
         public uint maxUsers;
-        public uint questionCount;
+        public uint questionsCount;
         public uint answerTimeout;
-        public CreateRoomRequest(string roomName, uint maxUsers, uint questionCount, uint answerTimeout)
+        public CreateRoomRequest(string roomName, uint maxUsers, uint questionsCount, uint answerTimeout)
         {
             this.roomName = roomName;
             this.maxUsers = maxUsers;
-            this.questionCount = questionCount;
+            this.questionsCount = questionsCount;
             this.answerTimeout = answerTimeout;
         }
         private List<byte> Serialize()
@@ -28,8 +28,7 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
-
-            string jsonMsg = JsonConvert.SerializeObject(this);
+            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers' : '{this.maxUsers}', ' 'questionsCount': '{this.questionsCount}', 'answerTimeout' : '{this.answerTimeout}'}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
