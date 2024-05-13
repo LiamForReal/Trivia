@@ -81,13 +81,9 @@ namespace TriviaClient
                 this.Close();
                 this.mainWindow.Show();
 
-                var button = (Button)(this.mainWindow.FindName("LogInButton"));
-                if (button != null)
-                {
-                    button.Visibility = Visibility.Collapsed;
-                }
-
-                button = (Button)(this.mainWindow.FindName("SignUpButton"));
+                this.LogInButton.Visibility = Visibility.Collapsed;
+               
+                var button = (Button)(this.mainWindow.FindName("SignUpButton"));
                 if (button != null)
                 {
                     button.Visibility = Visibility.Collapsed;

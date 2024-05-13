@@ -59,11 +59,7 @@ namespace TriviaClient
 
             if (this.isUserLogged)
             {
-                var button = (Button)(this.FindName("SignUpButton"));
-                if (button != null)
-                {
-                    button.Visibility = Visibility.Collapsed;
-                }
+                this.SignUpButton.Visibility = Visibility.Collapsed;
             }
         }
 
