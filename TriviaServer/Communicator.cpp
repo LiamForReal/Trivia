@@ -67,8 +67,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     ri = buildRI(clientSocket, statusCode);
                     if (ri.id == LOGOUT_RC)
                     {
-                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
-                        rr.newHandler = new LoginRequestHandler(rhf);             
+                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();             
                     }
                     mtx.lock();
                     rr = _handlers[clientSocket]->handleRequest(ri);

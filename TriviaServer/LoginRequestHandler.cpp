@@ -34,5 +34,6 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		sresponse.status = status;
 		this->rr.buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
 	}
+	//this->rr.newHandler = rhf.creatLoginRequestHandler();
 	return this->rr;
 }

@@ -1,7 +1,8 @@
 #include "MenuRequestHandler.h"
 
-MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf), _user(user)
+MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf)
 {
+    _user = user;
     rr = RequestResult();
 }
 
@@ -17,6 +18,7 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
     switch (ri.id)
     {
     case LOGOUT_RC:
+        std::cout << "im here\n";
         return signout(ri);
         break;
     case GET_ROOMS_RC:
@@ -35,18 +37,25 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         return getHighScore(ri);
         break;
     }
-    return rr;
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo ri)
 {
-    LogoutResponse lr;
-    std::vector<unsigned char> buffer;
-    _RHF.getLoginMeneger().logout(_user.getUserName());
-    lr.status = LOGOUT_STATUS;
+    LogoutResponse lr = LogoutResponse();
+    std::cout << "user name: " << _user.getUserName() << std::endl;
+    try
+    {
+        _RHF.getLoginMeneger().logout(_user.getUserName());
+        lr.status = LOGOUT_STATUS;
+    } 
+    catch (std::runtime_error e)
+    {
+        lr.status = LOGOUT_ERROR;
+    }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(lr);
     rr.newHandler = _RHF.creatLoginRequestHandler();
     this->_user.setUserName("");
+    std::cout << "im here3\n";
     return rr;
 }
 
