@@ -2,7 +2,7 @@
 
 LoggedUser::LoggedUser()
 {
-	username = "";
+	username = "\0";
 }
 
 LoggedUser::LoggedUser(string name)

@@ -15,9 +15,12 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
-	this->rr = RequestResult();
+	if (!this->rr.buffer.empty())
+	{
+		this->rr.buffer.clear();
+	}
 
-	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> buffer = std::vector<unsigned char>();
 	unsigned int status = 0;
 	string username = "";
 
@@ -30,6 +33,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		lresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
 		username = lr.username;
+		this->rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(username));
 	}
 	else if (SIGNUP_RC == requestInfo.id)
 	{
@@ -40,8 +44,8 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
 		username = sr.username;
 	}
-	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+	std::copy(buffer.begin(), buffer.end(), std::back_inserter(this->rr.buffer));
+	buffer.clear();
 
-	rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(username));
-	return rr;
+	return this->rr;
 }

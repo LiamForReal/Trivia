@@ -9,7 +9,7 @@ MenuRequestHandler::~MenuRequestHandler() {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
-    return ri.id >= 300 && ri.id <= 800;
+    return ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC;
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
@@ -43,7 +43,8 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
 {
     std::vector<unsigned char> buffer;
     _RHF.getLoginMeneger().logout(_user.getUserName());
-    rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    rr.newHandler = _RHF.creatLoginRequestHandler();
+    this->_user.setUserName("");
     return rr;
 }
 
