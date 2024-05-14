@@ -56,7 +56,6 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri)
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     if (_RHF.getRoomManager().getRooms().size() <= 0)
     {
-        //error
         return rr;
     }
     vector<RoomData> rd = _RHF.getRoomManager().getRooms();
@@ -161,7 +160,6 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 {
-    std::vector<unsigned char> buffer;
     unsigned int status = 0;
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
     vector<RoomData> roomData = _RHF.getRoomManager().getRooms();
@@ -181,8 +179,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     else _RHF.getRoomManager().createRoom(_user, rd);
     CreateRoomResponse crre;
     crre.status = status;
-    buffer = JsonResponsePacketSerializer::serializeResponse(crre);
-    std::copy(buffer.begin(), buffer.end(), rr.buffer.begin());
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
