@@ -42,6 +42,25 @@ namespace TriviaClient
             return list;
         }
 
+        internal struct RoomData
+        {
+            uint _id;
+            string _name;
+            uint _maxPlayers;
+            uint _numOfQuestionsInGame;
+            uint _timePerQuestion;
+            uint _isActive;
+
+            public RoomData(CreateRoomRequest crr,uint isActive, uint id)
+            {
+                _id = id;
+                _name = crr.roomName;
+                _maxPlayers = crr.maxUsers;
+                _numOfQuestionsInGame = crr.questionsCount;
+                _timePerQuestion = crr.answerTimeout;
+                _isActive = isActive;
+            }
+        };
         public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
