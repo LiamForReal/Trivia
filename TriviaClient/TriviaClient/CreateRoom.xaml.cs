@@ -22,7 +22,7 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         private CreateRoomRequest createRoomRequest;
-        public List<CreateRoomRequest.RoomData> rooms;
+        //public List<CreateRoomRequest.RoomData> rooms;
         public ConnectedRoom connectedRoom;
 
         public CreateRoom()
@@ -54,10 +54,10 @@ namespace TriviaClient
             Cods.Status res = (Cods.Status)(createRoomRequest.GetFromServer(mainWindow.clientStream).status);
             if (res == Cods.Status.CREATE_ROOM_STATUS)
             {
-                CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, rooms.Count());
-                rooms.Add(roomData);
+                //CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, /*rooms.Count()*/);
+                //rooms.Add(roomData);
                 this.Hide();
-
+                /*not finished*/
             }
             else MessageBox.Show("[CreateRoom] error");
         }
