@@ -19,7 +19,6 @@ namespace TriviaClient
             CREATE_ROOM_RC = 70,
             GET_HIGH_SCORE_RC = 80,
             GET_PERSONAL_STATS_RC = 90,
-            ERROR_RC = 255
         }
 
         public enum Status
