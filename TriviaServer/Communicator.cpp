@@ -24,7 +24,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     LoggedUser loggedUser = LoggedUser();
     mtx.lock();
     _handlers[clientSocket] = new LoginRequestHandler(rhf);
-    mtx.unlock();
+    mtx.unlock(); 
     rr.newHandler = _handlers[clientSocket];
 
     try
@@ -36,6 +36,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         {
             if (loggedUser.getUserName() == "")
             {
+                std::cout << "login again\n";
                 do
                 {
                     statusCode = Helper::socketHasData(clientSocket);
@@ -65,17 +66,16 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     ri.buffer.clear();
                     rr.buffer.clear();
                     ri = buildRI(clientSocket, statusCode);
-                    if (ri.id == LOGOUT_RC)
-                    {
-                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();             
-                    }
                     mtx.lock();
                     rr = _handlers[clientSocket]->handleRequest(ri);
                     mtx.unlock();
-                    std::cout << "before sending";
-                    std::cout << rr.buffer.size() << " - buffer's size";
                     Helper::sendVector(clientSocket, rr.buffer);
                     std::cout << "after sending";
+                    if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
+                    {
+                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
+                        _handlers[clientSocket] = rr.newHandler;
+                    }
                 }
             } while (rr.newHandler->isRequestRelevant(ri));
         }
