@@ -14,26 +14,25 @@ bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
 {
-
     switch (ri.id)
     {
     case LOGOUT_RC:
-        rr = signout(ri);
+        return signout(ri);
         break;
     case GET_ROOMS_RC:
-        rr = getRooms(ri);
+        return getRooms(ri);
         break;
     case GET_PLAYERS_IN_ROOM_RC:
-        rr = getPlayersInRoom(ri);
+        return getPlayersInRoom(ri);
         break;
     case JOIN_ROOM_RC:
-        rr = joinRoom(ri);
+        return joinRoom(ri);
         break;
     case CREATE_ROOM_RC:
-        rr = createRoom(ri);
+        return createRoom(ri);
         break;
     case GET_HIGH_SCORE_RC:
-        rr = getHighScore(ri);
+        return getHighScore(ri);
         break;
     }
     return rr;
@@ -41,8 +40,11 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
 
 RequestResult MenuRequestHandler::signout(RequestInfo ri)
 {
+    LogoutResponse lr;
     std::vector<unsigned char> buffer;
     _RHF.getLoginMeneger().logout(_user.getUserName());
+    lr.status = LOGOUT_STATUS;
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(lr);
     rr.newHandler = _RHF.creatLoginRequestHandler();
     this->_user.setUserName("");
     return rr;

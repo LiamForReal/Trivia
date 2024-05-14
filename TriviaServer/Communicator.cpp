@@ -21,12 +21,11 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     unsigned int statusCode = 0, size = 0;
     RequestInfo ri = RequestInfo();
     RequestResult rr = RequestResult();
-    LoggedUser loggedUser;
+    LoggedUser loggedUser = LoggedUser();
     mtx.lock();
     _handlers[clientSocket] = new LoginRequestHandler(rhf);
     mtx.unlock();
     rr.newHandler = _handlers[clientSocket];
-    
 
     try
     {
@@ -35,73 +34,53 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         mtx.unlock();
         while (true)
         {
-            if (loggedUser.getUserName() == "\0")
+            if (loggedUser.getUserName() == "")
             {
                 do
                 {
-                    if ( true )//Helper::socketHasData(clientSocket))
+                    statusCode = Helper::socketHasData(clientSocket);
+                    if (statusCode != 0 && statusCode != -1)
                     {
-                        try
-                        {
-                            ri.buffer.clear();
-                            rr.buffer.clear();
-                            ri = buildRI(clientSocket);
-                        }
-                        catch (...)
-                        {
-                            std::cout << "la problema" << std::endl;
-                        }
-
+                        ri.buffer.clear();
+                        rr.buffer.clear();
+                        ri = buildRI(clientSocket, statusCode);
                         std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
-                        mtx.lock();
-                        try
-                        {
-                            rr = _handlers[clientSocket]->handleRequest(ri);
-                        }
-                        catch (...)
-                        {
-                            std::cerr << "WTH bro liam" << std::endl;
-                        }
-                        mtx.unlock();
-                        try
-                        {
-
-                            Helper::sendVector(clientSocket, std::ref(rr.buffer));
-                            std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
-                            _handlers[clientSocket] = rr.newHandler;
-                        }
-                        catch (...)
-                        {
-                            std::cerr << "Could not send vector" << std::endl;
-                        }
+                        rr = rr.newHandler->handleRequest(ri);
+                        if (rr.newHandler == nullptr)
+                            rr.newHandler = _handlers[clientSocket];
+                        else _handlers[clientSocket] = rr.newHandler;
+                        Helper::sendVector(clientSocket, std::ref(rr.buffer));
+                        std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
                     }
                 } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
-                std::cout << "user login: " << loggedUser.getUserName();
+                std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
             
-            while (rr.newHandler->isRequestRelevant(ri))
+            do
             {
-                std::cout << "SECOND WHILE" << std::endl;
-                if ( true)// Helper::socketHasData(clientSocket))
+                statusCode = Helper::socketHasData(clientSocket);
+                if (statusCode != 0 && statusCode != -1)
                 {
                     ri.buffer.clear();
                     rr.buffer.clear();
-                    ri = buildRI(clientSocket);
+                    ri = buildRI(clientSocket, statusCode);
+                    std::cout << "after ri\n";
                     if (ri.id == LOGOUT_RC)
                     {
-                        std::cout << "user logout: " << loggedUser.getUserName();
-                        loggedUser.setUserName("\0");
+                        rr.newHandler = new LoginRequestHandler(rhf);
+                        loggedUser.setUserName("");
+                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
                     }
                     mtx.lock();
                     rr = _handlers[clientSocket]->handleRequest(ri);
                     mtx.unlock();
+                    std::cout << "before sending";
+                    std::cout << rr.buffer.size() << " - buffer's size";
                     Helper::sendVector(clientSocket, rr.buffer);
-                    mtx.lock();
-                    _handlers[clientSocket] = rr.newHandler;
-                    mtx.unlock();
+                    std::cout << "after sending";
                 }
-            }
+            } while (rr.newHandler->isRequestRelevant(ri));
         }
 
     }
@@ -118,22 +97,22 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     closesocket(clientSocket);
 }
 
-RequestInfo Communicator::buildRI(SOCKET clientSocket)
+RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
 {
     RequestInfo ri = RequestInfo();
     ri.buffer = std::vector<unsigned char>();
     std::string clientMsg = "";
-    unsigned int statusCode = 0;
     unsigned int clientMsgLength = 0;
     size_t i = 0;
     int j = 0;
 
-    ri.id = 0;
-
-    statusCode = (unsigned int)Helper::getStatusCodeFromSocket(clientSocket);
+    ri.id = statusCode;
 
     std::cout << "DEBUG: Status code: " << statusCode << std::endl;
     ri.buffer.insert(ri.buffer.begin(), STATUS_CODE_BYTES_LENGTH, static_cast<unsigned char>(statusCode));
+
+    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC)
+        return ri;
 
     clientMsgLength = Helper::getLengthPartFromSocket(clientSocket);
 

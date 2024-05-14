@@ -31,6 +31,5 @@ LoginManager& RequestHandlerFactory::getLoginMeneger()
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser loggedUser)
 {
-	MenuRequestHandler* mrh = new MenuRequestHandler(*this, loggedUser);
-	return mrh;
+	return new MenuRequestHandler(*this, loggedUser);
 }

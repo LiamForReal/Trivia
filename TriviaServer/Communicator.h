@@ -10,7 +10,7 @@ class Communicator
 		Communicator();
 		~Communicator();
 		void handleNewClient(SOCKET clientSocket);
-		RequestInfo buildRI(SOCKET clientSocket);
+		RequestInfo buildRI(SOCKET clientSocket, unsigned int statusCode);
 
 	private:
 		std::map<SOCKET, IRequestHandler*> _handlers;

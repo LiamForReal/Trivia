@@ -16,14 +16,17 @@ LoginManager::~LoginManager()
 
 void LoginManager::logout(const string name)
 {
+	std::cout << "logged users vector: \n";
 	for (int i = 0; i < _loggedUsers.size(); ++i)
 	{
+		std::cout << _loggedUsers[i].getUserName() << std::endl;
 		if (_loggedUsers[i].getUserName() == name)
 		{
 			_loggedUsers.erase(_loggedUsers.begin() + i);
 			return;
 		}
 	}
+	throw std::runtime_error("faild to logout");
 }
 
 unsigned int LoginManager::login(const string name, const string pass)
@@ -37,7 +40,6 @@ unsigned int LoginManager::login(const string name, const string pass)
 				break;
 		}
 	}
-	
 	if (_dataBace->isUserExist(name, pass) && i == _loggedUsers.size() - 1)
 	{
 		this->_loggedUsers.push_back(LoggedUser(name));

@@ -78,10 +78,10 @@ namespace TriviaClient
                 this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
                 this.mainWindow.LogOutButton.IsEnabled = true;
                 this.mainWindow.StatsMenuButton.IsEnabled = true;
+                this.mainWindow.LogInButton.Visibility = Visibility.Collapsed;
                 this.Close();
                 this.mainWindow.Show();
-
-                this.LogInButton.Visibility = Visibility.Collapsed;
+                
                
                 var button = (Button)(this.mainWindow.FindName("SignUpButton"));
                 if (button != null)
