@@ -1,7 +1,10 @@
 #include "LoginRequestHandler.h"
 #include <iostream>
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& newRhf) : rhf(newRhf) {}
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& newRhf) : rhf(newRhf) 
+{
+	this->rr = RequestResult();
+}
 
 LoginRequestHandler::~LoginRequestHandler() {}
 
@@ -12,15 +15,17 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
+	this->rr = RequestResult();
+
 	std::vector<unsigned char> buffer;
 	unsigned int status = 0;
-	RequestResult rr = RequestResult();
 	string username = "";
 
 	if (LOGIN_RC == requestInfo.id)
 	{
 		LoginRequest lr = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
 		status = rhf.getLoginMeneger().login(lr.username, lr.password);
+		std::cout << "DEBUG: STATUS " << status << std::endl;
 		LoginResponse lresponse;
 		lresponse.status = status;
 		buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
@@ -36,6 +41,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		username = sr.username;
 	}
 	std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+
 	rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(username));
 	return rr;
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,10 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         private bool revealPassword = false;
-
+        private LoginRequest loginRequest;
         public LogInScreen()
         {
+            loginRequest = new LoginRequest("", "");
             this.revealPassword = false;
             InitializeComponent();
         }
@@ -41,39 +43,53 @@ namespace TriviaClient
                 MessageBox.Show("There Is A User That Is Already Logged!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.PasswordTextBox.Password))
+            else if ((!this.revealPassword && (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.PasswordTextBox.Password))) ||
+                (this.revealPassword && (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.RevealedTextBox.Text)))
+            )
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                this.PasswordTextBox.Password = "";
+                this.UsernameTextBox.Text = "";
+                this.RevealedTextBox.Text = "";
                 return;
             }
 
-            this.mainWindow.username = this.UsernameTextBox.Text;
-            this.mainWindow.isUserLogged = true;
-            this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
-            this.Close();
-            this.mainWindow.Show();
+            loginRequest.username = this.UsernameTextBox.Text;
+            if (this.revealPassword)
+            {
+                loginRequest.password = this.RevealedTextBox.Text;
+            }
+            else
+            {
+                loginRequest.password = this.PasswordTextBox.Password;
+            }
             
-            try
-            {
-                LoginRequest lr = new LoginRequest(this.UsernameTextBox.Text, this.PasswordTextBox.Password);
-                this.mainWindow.SendToServer(lr.Serialize());
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Does Not Connected To Server!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
-            }
+            loginRequest.SendToServer(mainWindow.clientStream);
 
-            var button = (Button)(this.mainWindow.FindName("LogInButton"));
-            if (button != null)
-            {
-                button.Visibility = Visibility.Collapsed;
-            }
+            Cods.Status res = (Cods.Status)(loginRequest.GetFromServer(mainWindow.clientStream).status);
 
-            button = (Button)(this.mainWindow.FindName("SignUpButton"));
-            if (button != null)
+            if (res == Cods.Status.LOGIN_STATUS)
             {
-                button.Visibility = Visibility.Collapsed;
+                this.mainWindow.username = this.UsernameTextBox.Text;
+                this.mainWindow.isUserLogged = true;
+                this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
+                this.mainWindow.CreateRoomButton.IsEnabled = true;
+                this.mainWindow.JoinRoomButton.IsEnabled = true;
+                this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
+                this.mainWindow.LogOutButton.IsEnabled = true;
+                this.mainWindow.StatsMenuButton.IsEnabled = true;
+                this.Close();
+                this.mainWindow.Show();
+
+                this.LogInButton.Visibility = Visibility.Collapsed;
+               
+                var button = (Button)(this.mainWindow.FindName("SignUpButton"));
+                if (button != null)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                }
             }
+            else MessageBox.Show("[LogIn] error!");
         }
 
         private void RevealPasswordButton_Click(object sender, RoutedEventArgs e)

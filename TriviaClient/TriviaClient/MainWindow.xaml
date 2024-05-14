@@ -92,7 +92,9 @@
                         Style="{DynamicResource RoundedButtonStyle}"
                         Opacity="0.8"
                 />
-                <Button Name="LogOutButton" Content="Log Out" Width="140" Margin="5" Click="LogOutButton_Click"                         
+                <Button Name="LogOutButton" Content="Log Out" Width="140" Margin="5" Click="LogOutButton_Click"  
+                        Visibility="Collapsed"
+                        IsEnabled="False"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"

@@ -4,29 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Media.TextFormatting;
+using static TriviaClient.LoginRequest;
 
 namespace TriviaClient
 {
-    internal class LoginRequest
-    {
-        public string username;
-        public string password;
 
-        public LoginRequest(string username, string password)
+    internal class JoinRoomRequest
+    {
+
+        public uint roomId;
+        public JoinRoomRequest(uint roomId)
         {
-            this.username = username;
-            this.password = password;
+            this.roomId = roomId;
         }
+
         private List<byte> Serialize()
         {
-            List<byte> list = new List<byte>();
-            list.Add((byte)Cods.ResponseCode.LOGIN_RC);
 
-            string jsonMsg = $@"{{'username': '{this.username}', 'password' : '{this.password}'}}";
+            List<byte> list = new List<byte>();
+            list.Add((byte)Cods.ResponseCode.JOIN_ROOM_RC);
+
+            string jsonMsg = $@"{{'roomId': '{this.roomId}}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
@@ -44,23 +43,26 @@ namespace TriviaClient
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public LoginResponse GetFromServer(NetworkStream clientStream)
+        public JoinRoomResponse GetFromServer(NetworkStream clientStream)
         {
-            LoginResponse loginResponse = LoginResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return loginResponse;
+            JoinRoomResponse JoinRoomResponse = JoinRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return JoinRoomResponse;
         }
-        internal struct LoginResponse
+
+        internal struct JoinRoomResponse
         {
             public uint status;
-            public LoginResponse(uint status)
+            public JoinRoomResponse(uint status)
             {
                 this.status = status;
             }
-            public static LoginResponse Deserialize(List<byte> list)
+
+            public static JoinRoomResponse Deserialize(List<byte> list)
             {
-                LoginResponse response = new LoginResponse((uint)list[0]);
+                JoinRoomResponse response = new JoinRoomResponse((uint)list[0]);
                 return response;
             }
         }
     }
+
 }

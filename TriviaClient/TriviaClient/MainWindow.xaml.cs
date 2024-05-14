@@ -30,10 +30,12 @@ namespace TriviaClient
         public TcpClient client;
         public NetworkStream clientStream;
 
+        private LogOutResquest logOutResquest;
         public MainWindow()
         {
             try
             {
+                logOutResquest = new LogOutResquest();
                 this.client = new TcpClient();
                 IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888);
                 client.Connect(serverEndPoint);
@@ -42,7 +44,7 @@ namespace TriviaClient
             catch (Exception ex)
             {
                 MessageBox.Show("Could not connect to trivia server", "[Trivia] Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                //this.Close();
+                this.Close();
             }
 
             InitializeComponent();
@@ -57,11 +59,7 @@ namespace TriviaClient
 
             if (this.isUserLogged)
             {
-                var button = (Button)(this.FindName("SignUpButton"));
-                if (button != null)
-                {
-                    button.Visibility = Visibility.Collapsed;
-                }
+                this.SignUpButton.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -112,22 +110,23 @@ namespace TriviaClient
                 MessageBox.Show("There Is No User Logged!", "[Trivia] Message", MessageBoxButton.OK, icon: MessageBoxImage.Exclamation);
                 return;
             }
-
-            this.isUserLogged = false;
-            this.username = "";
-            this.HelloLabel.Content = "";
-
-            var button = (Button)(this.FindName("LogInButton"));
-            if (button != null)
+            logOutResquest.SendToServer(clientStream);
+            Cods.Status res = (Cods.Status)logOutResquest.GetFromServer(clientStream).status;
+            if (res == Cods.Status.LOGOUT_STATUS)
             {
-                button.Visibility = Visibility.Visible;
-            }
+                this.isUserLogged = false;
+                this.username = "";
+                this.HelloLabel.Content = "";
 
-            button = (Button)(this.FindName("SignUpButton"));
-            if (button != null)
-            {
-                button.Visibility = Visibility.Visible;
+                this.LogInButton.Visibility = Visibility.Visible;
+                this.SignUpButton.Visibility = Visibility.Visible;
+                this.CreateRoomButton.IsEnabled = false;
+                this.JoinRoomButton.IsEnabled = false;
+                this.LogOutButton.IsEnabled = false;
+                this.LogOutButton.Visibility = Visibility.Collapsed;
+                this.StatsMenuButton.IsEnabled = false;
             }
+            else MessageBox.Show("[LogOut] error!");
         }
 
         private void StatsMenuButton_Click(object sender, RoutedEventArgs e)

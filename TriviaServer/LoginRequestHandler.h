@@ -16,5 +16,6 @@ class LoginRequestHandler : virtual public IRequestHandler
 		RequestResult handleRequest(const RequestInfo& requestInfo) override;
 	private:
 		RequestHandlerFactory& rhf;
+		RequestResult rr;
 };
 

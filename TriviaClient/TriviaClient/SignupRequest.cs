@@ -4,29 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Media.TextFormatting;
+using static TriviaClient.LoginRequest;
 
 namespace TriviaClient
 {
-    internal class LoginRequest
+    internal class SignupRequest
     {
+
         public string username;
         public string password;
-
-        public LoginRequest(string username, string password)
+        public string email;
+        public SignupRequest(string username, string password, string email)
         {
             this.username = username;
             this.password = password;
+            this.email = email;
         }
         private List<byte> Serialize()
         {
-            List<byte> list = new List<byte>();
-            list.Add((byte)Cods.ResponseCode.LOGIN_RC);
 
-            string jsonMsg = $@"{{'username': '{this.username}', 'password' : '{this.password}'}}";
+            List<byte> list = new List<byte>();
+            list.Add((byte)Cods.ResponseCode.SIGNUP_RC);
+
+            string jsonMsg = $@"{{'username': '{this.username}', 'password' : '{this.password}', 'email' : '{this.email}'}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
@@ -44,21 +45,23 @@ namespace TriviaClient
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public LoginResponse GetFromServer(NetworkStream clientStream)
+        public SignupResponse GetFromServer(NetworkStream clientStream)
         {
-            LoginResponse loginResponse = LoginResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return loginResponse;
+            SignupResponse SignUpResponse = SignupResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return SignUpResponse;
         }
-        internal struct LoginResponse
+
+        internal struct SignupResponse
         {
             public uint status;
-            public LoginResponse(uint status)
+            public SignupResponse(uint status)
             {
                 this.status = status;
             }
-            public static LoginResponse Deserialize(List<byte> list)
+
+            public static SignupResponse Deserialize(List<byte> list)
             {
-                LoginResponse response = new LoginResponse((uint)list[0]);
+                SignupResponse response = new SignupResponse((uint)list[0]);
                 return response;
             }
         }
