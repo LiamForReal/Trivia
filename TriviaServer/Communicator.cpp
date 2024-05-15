@@ -36,7 +36,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         {
             if (loggedUser.getUserName() == "")
             {
-                std::cout << "login again\n";
                 do
                 {
                     statusCode = Helper::socketHasData(clientSocket);

@@ -2,8 +2,9 @@
 
 void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
-	Room room(roomData);
+	Room room = Room(roomData);
 	this->m_rooms.insert({roomData.id, room});
+	/*use user*/
 }
 
 void RoomManager::deleteRoom(const unsigned int& id)

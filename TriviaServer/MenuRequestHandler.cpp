@@ -18,7 +18,6 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
     switch (ri.id)
     {
     case LOGOUT_RC:
-        std::cout << "im here\n";
         return signout(ri);
         break;
     case GET_ROOMS_RC:
@@ -42,7 +41,6 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
 RequestResult MenuRequestHandler::signout(RequestInfo ri)
 {
     LogoutResponse lr = LogoutResponse();
-    std::cout << "user name: " << _user.getUserName() << std::endl;
     try
     {
         _RHF.getLoginMeneger().logout(_user.getUserName());
@@ -169,25 +167,24 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 {
-    unsigned int status = 0;
+    CreateRoomResponse crre = CreateRoomResponse();
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
-    vector<RoomData> roomData = _RHF.getRoomManager().getRooms();
-    RoomData rd;
-    for (auto it = roomData.begin(); it != roomData.end(); ++it)
+    RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName , crr.maxUsers, crr.questionsCount, crr.answerTimeout, false);
+    vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
+    for (auto it = rooms.begin(); it != rooms.end(); ++it)
     {
-        if (it->name == crr.roomName && it->maxPlayers == crr.maxUsers &&
-            it->numOfQuestionsInGame == crr.questionsCount && it->timePerQuestion == crr.answerTimeout)
+        if (it->id == roomData.id || it->name == roomData.name)
         {
-            status = CREATE_ROOM_STATUS;
-            rd = *it;
-            break;
+            crre.status = CREATE_ROOM_ERROR;
         }
     }
-    if (status != CREATE_ROOM_STATUS)
-        status = CREATE_ROOM_ERROR;
-    else _RHF.getRoomManager().createRoom(_user, rd);
-    CreateRoomResponse crre;
-    crre.status = status;
+
+    if (crre.status != CREATE_ROOM_ERROR)
+    {
+        crre.status = CREATE_ROOM_STATUS;
+        _RHF.getRoomManager().createRoom(_user, roomData);
+    }
+      
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
