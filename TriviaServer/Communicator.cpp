@@ -42,6 +42,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     statusCode = Helper::socketHasData(clientSocket);
                     if (statusCode != 0 && statusCode != -1)
                     {
+                        std::cout << "LOGIN REQUEST HANDLER\n\n";
                         ri.buffer.clear();
                         rr.buffer.clear();
                         ri = buildRI(clientSocket, statusCode);
@@ -63,6 +64,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 statusCode = Helper::socketHasData(clientSocket);
                 if (statusCode != 0 && statusCode != -1)
                 {
+                    std::cout << "MENU REQUEST HANDLER\n\n";
                     ri.buffer.clear();
                     rr.buffer.clear();
                     ri = buildRI(clientSocket, statusCode);
@@ -75,6 +77,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     {
                         std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
                         _handlers[clientSocket] = rr.newHandler;
+                        loggedUser.setUserName("");
                     }
                 }
             } while (rr.newHandler->isRequestRelevant(ri));
