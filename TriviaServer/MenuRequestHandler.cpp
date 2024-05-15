@@ -57,7 +57,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     return rr;
 }
 
-RequestResult MenuRequestHandler::getRooms(RequestInfo ri)
+RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
 {
     std::vector<unsigned char> buffer;
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
@@ -85,7 +85,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri)
     return rr;
 }
 
-RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri)
+RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
 {
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
@@ -103,7 +103,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri)
     return rr;
 }
 
-RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri)
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) //go over
 {
     string playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
     unsigned char* tmp = new unsigned char[playerStats.size() + 1];
@@ -114,7 +114,7 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri)
     return rr;
 }
 
-RequestResult MenuRequestHandler::getHighScore(RequestInfo ri)
+RequestResult MenuRequestHandler::getHighScore(RequestInfo ri) //go over
 {
 
     vector<string> HighScores = _RHF.getStatisticsManager().getHighScore();
@@ -148,7 +148,7 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo ri)
     return rr;
 }
 
-RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)
+RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
 {
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
