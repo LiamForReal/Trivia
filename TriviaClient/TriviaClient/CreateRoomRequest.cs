@@ -28,7 +28,7 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
-            string jsonMsg = $@"{{'roomName' : '{this.roomName}', 'maxUsers' : '{this.maxUsers}', 'questionsCount' : '{this.questionsCount}', 'answerTimeout' : '{this.answerTimeout}'}}";
+            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers': '{this.maxUsers}', 'questionsCount': '{this.questionsCount}', 'answerTimeout': '{this.answerTimeout}'}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
@@ -41,7 +41,15 @@ namespace TriviaClient
 
             return list;
         }
-
+        public void SendToServer(NetworkStream clientStream)
+        {
+            SocketTools.SendToServer(Serialize(), clientStream);
+        }
+        public CreateRoomResponse GetFromServer(NetworkStream clientStream)
+        {
+            CreateRoomResponse CreateRoomResponse = CreateRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return CreateRoomResponse;
+        }
         internal struct RoomData
         {
             uint _id;
@@ -61,15 +69,6 @@ namespace TriviaClient
                 _isActive = isActive;
             }
         };
-        public void SendToServer(NetworkStream clientStream)
-        {
-            SocketTools.SendToServer(Serialize(), clientStream);
-        }
-        public CreateRoomResponse GetFromServer(NetworkStream clientStream)
-        {
-            CreateRoomResponse CreateRoomResponse = CreateRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return CreateRoomResponse;
-        }
         internal struct CreateRoomResponse
         {
             public uint status;

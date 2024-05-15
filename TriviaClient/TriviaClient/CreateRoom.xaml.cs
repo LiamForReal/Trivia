@@ -27,6 +27,8 @@ namespace TriviaClient
 
         public CreateRoom()
         {
+            rooms = new List<CreateRoomRequest.RoomData>(4096);
+            connectedRoom = new ConnectedRoom();
             createRoomRequest = new CreateRoomRequest("", 0, 0, 0);
             InitializeComponent();
         }
@@ -46,22 +48,35 @@ namespace TriviaClient
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
-            createRoomRequest.roomName = this.RoomNameTextBox.Text;
-            createRoomRequest.maxUsers = uint.Parse(this.NumberOfPlayersTextBox.Text);
-            createRoomRequest.answerTimeout = uint.Parse(this.TimeForQuestionTextBox.Text);
-            createRoomRequest.questionsCount = uint.Parse(this.NumberOfQuestionsTextBox.Text);
-            createRoomRequest.SendToServer(mainWindow.clientStream);
+            try
+            {
+                createRoomRequest.roomName = this.RoomNameTextBox.Text;
+                createRoomRequest.maxUsers = uint.Parse(this.NumberOfPlayersTextBox.Text);
+                createRoomRequest.answerTimeout = uint.Parse(this.TimeForQuestionTextBox.Text);
+                createRoomRequest.questionsCount = uint.Parse(this.NumberOfQuestionsTextBox.Text);
+                createRoomRequest.SendToServer(mainWindow.clientStream);
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                return;
+            }
+            
             Cods.Status res = (Cods.Status)(createRoomRequest.GetFromServer(mainWindow.clientStream).status);
             if (res == Cods.Status.CREATE_ROOM_STATUS)
             {
-                CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, (uint)this.rooms.Count());
-                if(!rooms.Contains(roomData)) 
+                try
                 {
+                    CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, (uint)this.rooms.Count());
                     rooms.Add(roomData);
-                    this.Close();
-                    connectedRoom.Show();
                 }
-                else MessageBox.Show("[CreateRoom] error rooms already exist");
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    return;
+                }
+                
+                this.Close();
+                connectedRoom.Show();
             }
             else MessageBox.Show("[CreateRoom] error");
         }
