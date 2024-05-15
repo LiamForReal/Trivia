@@ -23,7 +23,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     RequestResult rr = RequestResult();
     LoggedUser loggedUser = LoggedUser();
     mtx.lock();
-    _handlers[clientSocket] = new LoginRequestHandler(rhf);
+    _handlers[clientSocket] = rhf.creatLoginRequestHandler();
     mtx.unlock(); 
     rr.newHandler = _handlers[clientSocket];
 
@@ -43,8 +43,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     if (statusCode != 0 && statusCode != -1)
                     {
                         std::cout << "LOGIN REQUEST HANDLER\n\n";
-                        ri.buffer.clear();
-                        rr.buffer.clear();
                         ri = buildRI(clientSocket, statusCode);
                         std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
                         rr = rr.newHandler->handleRequest(ri);
@@ -65,8 +63,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 if (statusCode != 0 && statusCode != -1)
                 {
                     std::cout << "MENU REQUEST HANDLER\n\n";
-                    ri.buffer.clear();
-                    rr.buffer.clear();
                     ri = buildRI(clientSocket, statusCode);
                     mtx.lock();
                     rr = _handlers[clientSocket]->handleRequest(ri);
@@ -91,9 +87,12 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     catch (const std::runtime_error& e)
     {
         std::cerr << e.what() << std::endl;
+        ri.id = LOGOUT_RC;
+        ri.buffer.clear();
+        _handlers[clientSocket]->handleRequest(ri);
+        std::cout << "client - " << clientSocket << " crashed!";
     }
     ri.buffer.clear();
-
     closesocket(clientSocket);
 }
 

@@ -28,7 +28,7 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
-            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers' : '{this.maxUsers}', ' 'questionsCount': '{this.questionsCount}', 'answerTimeout' : '{this.answerTimeout}'}}";
+            string jsonMsg = $@"{{'roomName' : '{this.roomName}', 'maxUsers' : '{this.maxUsers}', 'questionsCount' : '{this.questionsCount}', 'answerTimeout' : '{this.answerTimeout}'}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
@@ -51,7 +51,7 @@ namespace TriviaClient
             uint _timePerQuestion;
             uint _isActive;
 
-            public RoomData(CreateRoomRequest crr,uint isActive, uint id)
+            public RoomData(CreateRoomRequest crr, uint isActive, uint id)
             {
                 _id = id;
                 _name = crr.roomName;
