@@ -27,7 +27,7 @@ namespace TriviaClient
 
         public CreateRoom()
         {
-            rooms = new List<CreateRoomRequest.RoomData>(4096);
+            rooms = new List<CreateRoomRequest.RoomData>();
             connectedRoom = new ConnectedRoom();
             createRoomRequest = new CreateRoomRequest("", 0, 0, 0);
             InitializeComponent();

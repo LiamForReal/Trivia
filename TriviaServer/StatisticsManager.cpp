@@ -34,6 +34,7 @@ vector<string> StatisticsManager::getHighScore() const
 	}
 	return fiveBestScores;
 }
+
 string StatisticsManager::getUserStatistics(string username) const
 {
 	string userStatistics; //user statistics: number of games | number of correct answers | number of wrong answers | avrage time for answer
