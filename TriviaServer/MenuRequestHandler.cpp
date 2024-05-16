@@ -61,6 +61,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     return rr;
 }
 
+// TOFIX
 RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
 {
     std::vector<unsigned char> buffer;
@@ -91,6 +92,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
 {
+    rr.buffer = std::vector<unsigned char>();
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
     GetPlayersInRoomRequest gpr = JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(ri.buffer);
@@ -102,7 +104,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     gpre.status = status;
     gpre.players = room.getAllUsers();
     buffer = JsonResponsePacketSerializer::serializeResponse(gpre);
-    std::copy(buffer.begin(), buffer.end(), rr.buffer.begin());
+    std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
