@@ -107,11 +107,11 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
 RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) //go over
 {
     string playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
-    unsigned char* tmp = new unsigned char[playerStats.size() + 1];
-    std::copy(playerStats.begin(), playerStats.end(), tmp);
-    tmp[playerStats.size()] = '\0';
-    std::copy(rr.buffer.begin(), rr.buffer.end(), tmp);
+    GetPersonalStatsResponse gpsr = GetPersonalStatsResponse();
+    gpsr.status = GET_PERSONAL_STATS_STATUS;
+    gpsr.statistics = playerStats;
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(gpsr);
     return rr;
 }
 

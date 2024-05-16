@@ -254,13 +254,13 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	unsigned int len = 0;
 
 	json srJson = {
-		{"statistics", json(getPersonalStatsResponse.statistics)},
+		{"statistics", getPersonalStatsResponse.statistics},
 		{"status", getPersonalStatsResponse.status},
 	};
 
 	std::string srJsonStr = srJson.dump();
 
-	std::cout << "[Json Strings and Vecs] DEBUG: " << srJsonStr << std::endl;
+	std::cout << "[Json Strings] DEBUG: " << srJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
 	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
