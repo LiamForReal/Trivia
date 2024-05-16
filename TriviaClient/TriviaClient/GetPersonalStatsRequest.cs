@@ -16,18 +16,6 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.GET_PERSONAL_STATS_RC);
-
-            string jsonMsg = JsonConvert.SerializeObject(this);
-
-            jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
-            jsonMsg = jsonMsg.Replace("'", "\"");
-            jsonMsg = jsonMsg.Substring(1, jsonMsg.Length - 2);
-
-            UInt32 length = (UInt32)(jsonMsg.Length);
-            list.AddRange(BitConverter.GetBytes(length));
-
-            list.AddRange(Encoding.ASCII.GetBytes(jsonMsg));
-
             return list;
         }
 
