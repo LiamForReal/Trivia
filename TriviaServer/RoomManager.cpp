@@ -19,7 +19,7 @@ unsigned int RoomManager::getRoomState(const unsigned int& id)
 	{
 		return this->m_rooms[id].getMetadata().isActive;
 	}
-	return -1; // error that might occur
+	return ACTIVITY_ERROR; // error that might occur
 }
 
 std::vector<RoomData> RoomManager::getRooms()

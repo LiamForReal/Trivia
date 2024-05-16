@@ -132,19 +132,23 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo ri) //go over
     return rr;
 }
 
+// NOTE for future safety from hacks: check if player is already in room,
+// and return ERROR if positive.
 RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
 {
+    rr.buffer = std::vector<unsigned char>();
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
     Room room = _RHF.getRoomManager().getRoom(jrr.roomId);
-    if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && _RHF.getRoomManager().getRoomState(jrr.roomId) == 0)
+    if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && (ACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
         status = JOIN_ROOM_STATUS;
     else status = JOIN_ROOM_ERROR;
     JoinRoomResponse jrre;
     jrre.status = status;
     buffer = JsonResponsePacketSerializer::serializeResponse(jrre);
-    std::copy(buffer.begin(), buffer.end(), rr.buffer.begin());
+    std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
