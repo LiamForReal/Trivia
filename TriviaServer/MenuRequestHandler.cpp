@@ -1,4 +1,5 @@
 #include "MenuRequestHandler.h"
+#include <algorithm>
 
 MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf)
 {
@@ -116,35 +117,15 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) //go over
 
 RequestResult MenuRequestHandler::getHighScore(RequestInfo ri) //go over
 {
-
     vector<string> HighScores = _RHF.getStatisticsManager().getHighScore();
     int i = 0, size = 0, j = 0;
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
-    string code = std::to_string(GET_HIGH_SCORE_ERROR);
-    if (HighScores.size() == 0)
-    {
-        //std::copy(rr.buffer.begin(), rr.buffer.end(), code);
-        return rr;
-    }
+    GetHighScoreResponse ghsr = GetHighScoreResponse();
+    ghsr.status = GET_HIGH_SCORE_STATUS;
+    ghsr.statistics = vector<string>();
+    std::copy(HighScores.begin(), HighScores.end(), std::back_inserter(ghsr.statistics));
 
-    for (i = 0; i < HighScores.size(); i++)
-        size += HighScores[i].size();
-
-    string tmp = "";
-
-    for (i = 0; i < HighScores.size(); i++)
-    {
-        for (j = 0; j < HighScores[i].size(); j++)
-        {
-            HighScores[i][j] = tmp[j];
-        }
-        tmp += '|';
-    }
-
-    unsigned char* tmp2 = new unsigned char[tmp.size() + 1];
-    tmp2[tmp.size()] = '\0';
-    std::copy(tmp.begin(), tmp.end(), tmp2);
-    delete[] tmp2;
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(ghsr);
     return rr;
 }
 
