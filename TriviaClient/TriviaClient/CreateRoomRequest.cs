@@ -62,10 +62,10 @@ namespace TriviaClient
             public RoomData(CreateRoomRequest crr, uint isActive, uint id)
             {
                 _id = id;
-                _name = crr.roomName;
-                _maxPlayers = crr.maxUsers;
-                _numOfQuestionsInGame = crr.questionsCount;
-                _timePerQuestion = crr.answerTimeout;
+                _name = (string)crr.roomName;
+                _maxPlayers = (uint)crr.maxUsers;
+                _numOfQuestionsInGame = (uint)crr.questionsCount;
+                _timePerQuestion = (uint)crr.answerTimeout;
                 _isActive = isActive;
             }
         };

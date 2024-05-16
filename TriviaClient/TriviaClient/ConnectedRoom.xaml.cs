@@ -19,14 +19,18 @@ namespace TriviaClient
     /// </summary>
     public partial class ConnectedRoom : Window
     {
+        public MainWindow mainWindow;
+        public CreateRoom room;
         public ConnectedRoom()
         {
+            mainWindow = new MainWindow();
             InitializeComponent();
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
+            mainWindow.Show();
         }
     }
 }
