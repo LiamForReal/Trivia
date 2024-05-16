@@ -23,14 +23,20 @@ namespace TriviaClient
         public CreateRoom room;
         public ConnectedRoom()
         {
-            mainWindow = new MainWindow();
             InitializeComponent();
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.mainWindow != null)
+            {
+                this.mainWindow.Show();
+            }
+            if (this.room != null)
+            {
+                this.room.Show();
+            }
             this.Close();
-            mainWindow.Show();
         }
     }
 }

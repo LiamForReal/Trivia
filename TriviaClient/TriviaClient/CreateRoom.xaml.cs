@@ -28,7 +28,6 @@ namespace TriviaClient
         public CreateRoom()
         {
             rooms = new List<CreateRoomRequest.RoomData>();
-            connectedRoom = new ConnectedRoom();
             createRoomRequest = new CreateRoomRequest("", 0, 0, 0);
             InitializeComponent();
         }
@@ -41,7 +40,12 @@ namespace TriviaClient
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            if(this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
+            connectedRoom = new ConnectedRoom();
+            connectedRoom.room = this;
+            connectedRoom.mainWindow = this.mainWindow;
+            this.connectedRoom.mainWindow = this.mainWindow;
+
+            if (this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
                 || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "")
 
             {
