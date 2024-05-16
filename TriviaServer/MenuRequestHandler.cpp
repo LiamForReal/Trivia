@@ -36,6 +36,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
     case GET_HIGH_SCORE_RC:
         return getHighScore(ri);
         break;
+    case GET_PERSONAL_STATS_RC:
+        return getPersonalStats(ri);
+        break;
     }
 }
 
@@ -104,7 +107,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     return rr;
 }
 
-RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) //go over
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo ri) //go over
 {
     string playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
     GetPersonalStatsResponse gpsr = GetPersonalStatsResponse();
