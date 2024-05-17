@@ -61,32 +61,22 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     return rr;
 }
 
-// TOFIX
+// FIXED HOPEFULLY
 RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
 {
-    std::vector<unsigned char> buffer;
+    GetRoomsResponse grr = GetRoomsResponse();
+    //std::vector<unsigned char> buffer;
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     if (_RHF.getRoomManager().getRooms().size() <= 0)
     {
         return rr;
     }
     vector<RoomData> rd = _RHF.getRoomManager().getRooms();
-    string tmp = "{";
-    for (int i = 0; i < rd.size(); i++)
-    {
 
-        tmp += "[" + std::to_string(rd[i].id) + "," + rd[i].name + "," + std::to_string(rd[i].maxPlayers)
-            + "," + std::to_string(rd[i].numOfQuestionsInGame) + "," + std::to_string(rd[i].timePerQuestion) + "],";
-    }
-    tmp = tmp.substr(0, tmp.size() - 1);
-    unsigned char* tmp2 = new unsigned char[tmp.size() + 1];
-    tmp2[tmp.size()] = '\0';
-    std::copy(tmp.begin(), tmp.end(), tmp2);
-    for (int i = 0; i < buffer.size(); i++)
-    {
-        rr.buffer[i] = buffer[i];
-    }
-    delete[] tmp2;
+    grr.status = GET_ROOMS_STATUS;
+    std::copy(rd.begin(), rd.end(), std::back_inserter(grr.rooms));
+
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(grr);
     return rr;
 }
 
@@ -105,6 +95,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     gpre.players = room.getAllUsers();
     buffer = JsonResponsePacketSerializer::serializeResponse(gpre);
     std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
@@ -161,6 +152,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
     RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName , crr.maxUsers, crr.questionsCount, crr.answerTimeout, false);
     vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
+    crre.status = CREATE_ROOM_STATUS;
     for (auto it = rooms.begin(); it != rooms.end(); ++it)
     {
         if (it->id == roomData.id || it->name == roomData.name)
