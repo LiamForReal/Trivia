@@ -148,7 +148,7 @@ namespace TriviaClient
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            this.createRoom = new CreateRoom();
+            this.createRoom = new CreateRoom(this);
             this.createRoom.mainWindow = this;
             this.createRoom.Show();
         }

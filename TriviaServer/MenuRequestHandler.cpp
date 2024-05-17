@@ -109,9 +109,9 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     return rr;
 }
 
-RequestResult MenuRequestHandler::getPersonalStats(RequestInfo ri) //go over
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo ri)
 {
-    string playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
+    vector<string> playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
     GetPersonalStatsResponse gpsr = GetPersonalStatsResponse();
     gpsr.status = GET_PERSONAL_STATS_STATUS;
     gpsr.statistics = playerStats;

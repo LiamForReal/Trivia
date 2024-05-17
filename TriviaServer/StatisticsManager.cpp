@@ -35,14 +35,14 @@ vector<string> StatisticsManager::getHighScore() const
 	return fiveBestScores;
 }
 
-string StatisticsManager::getUserStatistics(string username) const
+vector<string> StatisticsManager::getUserStatistics(string username) const
 {
-	string userStatistics; //user statistics: number of games | number of correct answers | number of wrong answers | avrage time for answer
+	vector<string> userStatistics; //user statistics: number of games | number of correct answers | number of wrong answers | avrage time for answer
 	double correctAnswers = 0.0;
-	userStatistics += std::to_string(_db->getNumOfPlayerGames(username)) + "|";
+	userStatistics.push_back(std::to_string(_db->getNumOfPlayerGames(username)));
 	correctAnswers = _db->getNumOfCorrectAnswers(username);
-	userStatistics += std::to_string(correctAnswers) + "|";
-	userStatistics += std::to_string(_db->getNumOfTotalAnswers(username) - correctAnswers) + "|";
-	userStatistics += std::to_string(_db->getPlayerAverageAnswerTime(username));
+	userStatistics.push_back(std::to_string(correctAnswers));
+	userStatistics.push_back(std::to_string(_db->getNumOfTotalAnswers(username) - correctAnswers));
+	userStatistics.push_back(std::to_string(_db->getPlayerAverageAnswerTime(username)));
 	return userStatistics; 
 }
