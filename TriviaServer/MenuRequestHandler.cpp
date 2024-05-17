@@ -62,23 +62,37 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
 }
 
 // FIXED HOPEFULLY
-RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
-{
-    GetRoomsResponse grr = GetRoomsResponse();
-    //std::vector<unsigned char> buffer;
+RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
+    GetRoomsResponse grr;
+    grr.status = GET_ROOMS_STATUS;
+
+    rr.buffer = std::vector<unsigned char>();
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
-    if (_RHF.getRoomManager().getRooms().size() <= 0)
-    {
+
+    std::cout << "INIT DATA" << std::endl;
+
+    // Check if there are no rooms and return early if so
+    if (_RHF.getRoomManager().getRooms().empty()) {
+        rr.buffer = JsonResponsePacketSerializer::serializeResponse(grr);
         return rr;
     }
-    vector<RoomData> rd = _RHF.getRoomManager().getRooms();
 
-    grr.status = GET_ROOMS_STATUS;
-    std::copy(rd.begin(), rd.end(), std::back_inserter(grr.rooms));
+    std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
 
-    rr.buffer = JsonResponsePacketSerializer::serializeResponse(grr);
+    std::cout << "START COPYING PROCESS" << std::endl;
+
+    grr.rooms = rd; // Direct assignment of the vector
+
+    std::cout << "COPIED ROOM_DATA VECTOR WITH SUCCESS" << std::endl;
+
+    std::vector<unsigned char> buffer = JsonResponsePacketSerializer::serializeResponse(grr);
+    rr.buffer = buffer; // Direct assignment of the vector
+
+    std::cout << "COPIED BYTES VECTOR WITH SUCCESS" << std::endl;
+
     return rr;
 }
+
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
 {

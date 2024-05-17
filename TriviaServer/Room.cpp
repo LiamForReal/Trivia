@@ -40,5 +40,6 @@ std::vector<std::string> Room::getAllUsers()
 
 RoomData Room::getMetadata() const
 {
-	return this->m_metadata;
+	RoomData deepcopied = this->m_metadata;
+	return deepcopied;
 }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static TriviaClient.GetRoomsRequest;
 
 namespace TriviaClient
 {
@@ -22,7 +23,9 @@ namespace TriviaClient
         public MainWindow mainWindow;
         public JoinRoom(MainWindow main)
         {
+            this.mainWindow = main;
             InitializeComponent();
+            this.RefreshAvailableRooms();
         }
 
         private void JoinButton_Click(object sender, RoutedEventArgs e)
@@ -39,6 +42,14 @@ namespace TriviaClient
         {
             this.Close();
             this.mainWindow.Show();
+        }
+
+        private void RefreshAvailableRooms()
+        {
+            GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
+            getRoomsRequest.SendToServer(this.mainWindow.clientStream);
+            GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
+            //getRoomsResponse.
         }
     }
 }

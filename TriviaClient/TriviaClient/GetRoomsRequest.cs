@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TriviaClient
 {
@@ -30,13 +31,24 @@ namespace TriviaClient
         internal struct GetRoomsResponse
         {
             public uint status;
+            public List<CreateRoomRequest.RoomData> rooms;
+
+            public GetRoomsResponse(uint status, List<CreateRoomRequest.RoomData> rooms)
+            {
+                this.status = status;
+                this.rooms = rooms;
+            }
+
             public GetRoomsResponse(uint status)
             {
                 this.status = status;
+                this.rooms = new List<CreateRoomRequest.RoomData>();
             }
 
             public static GetRoomsResponse Deserialize(List<byte> list)
             {
+                MessageBox.Show(list.ToString());
+
                 GetRoomsResponse response = new GetRoomsResponse((uint)list[0]);
                 return response;
             }
