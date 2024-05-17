@@ -1,5 +1,18 @@
 #include "StatisticsManager.h"
 
+StatisticsManager::StatisticsManager()
+{
+	this->_db = new SqliteDataBase();
+	if (!this->_db->open())
+		throw std::runtime_error("Failed to open database!");
+}
+
+StatisticsManager::~StatisticsManager() 
+{
+	this->_db->close();
+	delete _db;
+}
+
 vector<string> StatisticsManager::getHighScore() const
 {
 	vector<string> fiveBestScores;
@@ -11,7 +24,9 @@ vector<string> StatisticsManager::getHighScore() const
 	{
 		divCorrectAnsInTotal = _db->getNumOfCorrectAnswers(itU->getName()) / _db->getNumOfTotalAnswers(itU->getName());
 		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) - (_db->getNumOfPlayerGames(itU->getName()) / 100);
-		userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
+		if (divCorrectAnsInTotal != 0 || addAvrageToNumOfGames != 0)
+			userScores[itU->getName()] = 0;
+		else userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
 	}
 	
 	for (int i = 0; i < 5; i++)
@@ -32,6 +47,7 @@ vector<string> StatisticsManager::getHighScore() const
 			score = 0;
 		}
 	}
+	//done here
 	return fiveBestScores;
 }
 
