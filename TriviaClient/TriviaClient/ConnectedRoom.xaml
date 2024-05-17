@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="[Trivia] Connected Room" Height="600" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="/Resources/create_room_background.jpg"/>
+        <ImageBrush ImageSource="/Resources/connected_room_background.jpg"/>
     </Window.Background>
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">
         <GroupBox.Header>
