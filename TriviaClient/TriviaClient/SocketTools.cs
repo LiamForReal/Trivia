@@ -21,6 +21,7 @@ namespace TriviaClient
         {
             List<byte> responseData = new List<byte>();
             byte statusCode = (byte)clientStream.ReadByte();
+            MessageBox.Show(statusCode.ToString());
             responseData.Add(statusCode);
             byte[] lengthBytes = new byte[4];
             int result =  clientStream.Read(lengthBytes, 0, 4);

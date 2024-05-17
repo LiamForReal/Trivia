@@ -109,7 +109,7 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
     std::cout << "DEBUG: Status code: " << statusCode << std::endl;
     ri.buffer.insert(ri.buffer.begin(), STATUS_CODE_BYTES_LENGTH, static_cast<unsigned char>(statusCode));
 
-    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC)
+    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || statusCode == GET_PERSONAL_STATS_RC)
         return ri;
 
     clientMsgLength = Helper::getLengthPartFromSocket(clientSocket);

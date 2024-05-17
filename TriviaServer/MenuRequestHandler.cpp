@@ -1,4 +1,5 @@
 #include "MenuRequestHandler.h"
+#include <algorithm>
 
 MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf)
 {
@@ -35,6 +36,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
     case GET_HIGH_SCORE_RC:
         return getHighScore(ri);
         break;
+    case GET_PERSONAL_STATS_RC:
+        return getPersonalStats(ri);
+        break;
     }
 }
 
@@ -57,6 +61,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     return rr;
 }
 
+// TOFIX
 RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
 {
     std::vector<unsigned char> buffer;
@@ -87,6 +92,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
 {
+    rr.buffer = std::vector<unsigned char>();
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
     GetPlayersInRoomRequest gpr = JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(ri.buffer);
@@ -98,69 +104,53 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     gpre.status = status;
     gpre.players = room.getAllUsers();
     buffer = JsonResponsePacketSerializer::serializeResponse(gpre);
-    std::copy(buffer.begin(), buffer.end(), rr.buffer.begin());
+    std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
 
-RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& ri) //go over
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo ri)
 {
-    string playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
-    unsigned char* tmp = new unsigned char[playerStats.size() + 1];
-    std::copy(playerStats.begin(), playerStats.end(), tmp);
-    tmp[playerStats.size()] = '\0';
-    std::copy(rr.buffer.begin(), rr.buffer.end(), tmp);
+    vector<string> playerStats = _RHF.getStatisticsManager().getUserStatistics(_user.getUserName());
+    GetPersonalStatsResponse gpsr = GetPersonalStatsResponse();
+    gpsr.status = GET_PERSONAL_STATS_STATUS;
+    gpsr.statistics = playerStats;
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(gpsr);
     return rr;
 }
 
 RequestResult MenuRequestHandler::getHighScore(RequestInfo ri) //go over
 {
-
     vector<string> HighScores = _RHF.getStatisticsManager().getHighScore();
     int i = 0, size = 0, j = 0;
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
-    string code = std::to_string(GET_HIGH_SCORE_ERROR);
-    if (HighScores.size() == 0)
-    {
-        //std::copy(rr.buffer.begin(), rr.buffer.end(), code);
-        return rr;
-    }
+    GetHighScoreResponse ghsr = GetHighScoreResponse();
+    ghsr.status = GET_HIGH_SCORE_STATUS;
+    ghsr.statistics = vector<string>();
+    std::copy(HighScores.begin(), HighScores.end(), std::back_inserter(ghsr.statistics));
 
-    for (i = 0; i < HighScores.size(); i++)
-        size += HighScores[i].size();
-
-    string tmp = "";
-
-    for (i = 0; i < HighScores.size(); i++)
-    {
-        for (j = 0; j < HighScores[i].size(); j++)
-        {
-            HighScores[i][j] = tmp[j];
-        }
-        tmp += '|';
-    }
-
-    unsigned char* tmp2 = new unsigned char[tmp.size() + 1];
-    tmp2[tmp.size()] = '\0';
-    std::copy(tmp.begin(), tmp.end(), tmp2);
-    delete[] tmp2;
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(ghsr);
     return rr;
 }
 
+// NOTE for future safety from hacks: check if player is already in room,
+// and return ERROR if positive.
 RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
 {
+    rr.buffer = std::vector<unsigned char>();
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
     Room room = _RHF.getRoomManager().getRoom(jrr.roomId);
-    if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && _RHF.getRoomManager().getRoomState(jrr.roomId) == 0)
+    if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && (ACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
         status = JOIN_ROOM_STATUS;
     else status = JOIN_ROOM_ERROR;
     JoinRoomResponse jrre;
     jrre.status = status;
     buffer = JsonResponsePacketSerializer::serializeResponse(jrre);
-    std::copy(buffer.begin(), buffer.end(), rr.buffer.begin());
+    std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }

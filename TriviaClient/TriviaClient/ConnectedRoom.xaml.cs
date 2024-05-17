@@ -21,9 +21,9 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public CreateRoom room;
-        public ConnectedRoom()
+        public ConnectedRoom(MainWindow main)
         {
-            mainWindow = new MainWindow();
+            mainWindow = main;
             InitializeComponent();
         }
 

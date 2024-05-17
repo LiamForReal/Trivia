@@ -6,7 +6,7 @@ class StatisticsManager
 {
 public:
 	vector<string> getHighScore() const;
-	string getUserStatistics(string username) const;
+	vector<string> getUserStatistics(string username) const;
 private:
 	IDatabase* _db;
 };
