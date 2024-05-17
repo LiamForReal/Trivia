@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using static TriviaClient.GetRoomsRequest;
 
 namespace TriviaClient
@@ -30,12 +31,7 @@ namespace TriviaClient
 
         private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            this.RefreshAvailableRooms();
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -49,7 +45,14 @@ namespace TriviaClient
             GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
             getRoomsRequest.SendToServer(this.mainWindow.clientStream);
             GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
-            //getRoomsResponse.
+            if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
+            {
+                this.RoomsListBox.Items.Clear();
+                foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
+                {
+                    this.RoomsListBox.Items.Add(rd.name);
+                }
+            }
         }
     }
 }

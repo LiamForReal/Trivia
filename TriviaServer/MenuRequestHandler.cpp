@@ -71,6 +71,10 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
 
     std::cout << "INIT DATA" << std::endl;
 
+    //// Test Start
+    _RHF.getRoomManager().createRoom(LoggedUser("liam"), RoomData(1, "Liam Room", 5, 5, 5, ACTIVE_ROOM));
+    //// Test End
+
     // Check if there are no rooms and return early if so
     if (_RHF.getRoomManager().getRooms().empty()) {
         rr.buffer = JsonResponsePacketSerializer::serializeResponse(grr);
@@ -78,6 +82,9 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
     }
 
     std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
+    //// Test Start
+    rd.emplace_back(RoomData(1, "Gavriel Room", 5, 5, 5, ACTIVE_ROOM));
+    //// Test End
 
     std::cout << "START COPYING PROCESS" << std::endl;
 

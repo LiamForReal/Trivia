@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -47,9 +49,25 @@ namespace TriviaClient
 
             public static GetRoomsResponse Deserialize(List<byte> list)
             {
-                MessageBox.Show(list.ToString());
-
                 GetRoomsResponse response = new GetRoomsResponse((uint)list[0]);
+
+                UInt32 length = BitConverter.ToUInt32(list.GetRange(1, 4).ToArray());
+
+                if (length > 0)
+                {
+                    byte[] bytes = list.GetRange(5, (int)(length)).ToArray();
+                    char[] chars = (System.Text.Encoding.UTF8.GetString(bytes).ToCharArray());
+                    string jsonMessage = "";
+
+                    foreach (char ch in chars)
+                    {
+                        jsonMessage += ch;
+                    }
+
+                    response = JsonConvert.DeserializeObject<GetRoomsResponse>(jsonMessage);
+                }
+
+
                 return response;
             }
         }
