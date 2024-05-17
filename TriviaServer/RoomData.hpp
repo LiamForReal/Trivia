@@ -39,5 +39,17 @@ typedef struct RoomData
 		this->isActive = _active;
 	}
 
+	RoomData& operator=(const RoomData& other)
+	{
+		this->id = other.id;
+		this->name = other.name;
+		this->maxPlayers = other.maxPlayers;
+		this->numOfQuestionsInGame = other.numOfQuestionsInGame;
+		this->timePerQuestion = other.timePerQuestion;
+		this->isActive = other.isActive;
+		
+		return *this;
+	}
+
 	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, id, name, maxPlayers, numOfQuestionsInGame, timePerQuestion, isActive);	
 } RoomData;

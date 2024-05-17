@@ -23,6 +23,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         break;
     case GET_ROOMS_RC:
         return getRooms(ri);
+        //// Test Start
+        _RHF.getRoomManager().createRoom(LoggedUser("gaby"), RoomData(5, "Gaby Room", 5, 5, 5, ACTIVE_ROOM));
+        //// Test End
         break;
     case GET_PLAYERS_IN_ROOM_RC:
         return getPlayersInRoom(ri);
@@ -61,34 +64,45 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     return rr;
 }
 
-// TOFIX
-RequestResult MenuRequestHandler::getRooms(RequestInfo ri) //go over
-{
-    std::vector<unsigned char> buffer;
+// FIXED HOPEFULLY
+RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
+    GetRoomsResponse grr;
+    grr.status = GET_ROOMS_STATUS;
+
+    rr.buffer = std::vector<unsigned char>();
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
-    if (_RHF.getRoomManager().getRooms().size() <= 0)
-    {
+
+    std::cout << "INIT DATA" << std::endl;
+
+    //// Test Start
+    _RHF.getRoomManager().createRoom(LoggedUser("liam"), RoomData(1, "Liam Room", 5, 5, 5, ACTIVE_ROOM));
+    //// Test End
+
+    // Check if there are no rooms and return early if so
+    if (_RHF.getRoomManager().getRooms().empty()) {
+        rr.buffer = JsonResponsePacketSerializer::serializeResponse(grr);
         return rr;
     }
-    vector<RoomData> rd = _RHF.getRoomManager().getRooms();
-    string tmp = "{";
-    for (int i = 0; i < rd.size(); i++)
-    {
 
-        tmp += "[" + std::to_string(rd[i].id) + "," + rd[i].name + "," + std::to_string(rd[i].maxPlayers)
-            + "," + std::to_string(rd[i].numOfQuestionsInGame) + "," + std::to_string(rd[i].timePerQuestion) + "],";
-    }
-    tmp = tmp.substr(0, tmp.size() - 1);
-    unsigned char* tmp2 = new unsigned char[tmp.size() + 1];
-    tmp2[tmp.size()] = '\0';
-    std::copy(tmp.begin(), tmp.end(), tmp2);
-    for (int i = 0; i < buffer.size(); i++)
-    {
-        rr.buffer[i] = buffer[i];
-    }
-    delete[] tmp2;
+    std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
+    //// Test Start
+    rd.emplace_back(RoomData(1, "Gavriel Room", 5, 5, 5, ACTIVE_ROOM));
+    //// Test End
+
+    std::cout << "START COPYING PROCESS" << std::endl;
+
+    grr.rooms = rd; // Direct assignment of the vector
+
+    std::cout << "COPIED ROOM_DATA VECTOR WITH SUCCESS" << std::endl;
+
+    std::vector<unsigned char> buffer = JsonResponsePacketSerializer::serializeResponse(grr);
+    rr.buffer = buffer; // Direct assignment of the vector
+
+    std::cout << "COPIED BYTES VECTOR WITH SUCCESS" << std::endl;
+
     return rr;
 }
+
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
 {
@@ -105,6 +119,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     gpre.players = room.getAllUsers();
     buffer = JsonResponsePacketSerializer::serializeResponse(gpre);
     std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
+
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
@@ -161,6 +176,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
     RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName , crr.maxUsers, crr.questionsCount, crr.answerTimeout, false);
     vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
+    crre.status = CREATE_ROOM_STATUS;
     for (auto it = rooms.begin(); it != rooms.end(); ++it)
     {
         if (it->id == roomData.id || it->name == roomData.name)

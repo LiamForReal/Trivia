@@ -52,21 +52,21 @@ namespace TriviaClient
         }
         internal struct RoomData
         {
-            uint _id;
-            string _name;
-            uint _maxPlayers;
-            uint _numOfQuestionsInGame;
-            uint _timePerQuestion;
-            uint _isActive;
+            public uint id;
+            public string name;
+            public uint maxPlayers;
+            public uint numOfQuestionsInGame;
+            public uint timePerQuestion;
+            public uint isActive;
 
             public RoomData(CreateRoomRequest crr, uint isActive, uint id)
             {
-                _id = id;
-                _name = (string)crr.roomName;
-                _maxPlayers = (uint)crr.maxUsers;
-                _numOfQuestionsInGame = (uint)crr.questionsCount;
-                _timePerQuestion = (uint)crr.answerTimeout;
-                _isActive = isActive;
+                this.id = id;
+                this.name = (string)crr.roomName;
+                this.maxPlayers = (uint)crr.maxUsers;
+                this.numOfQuestionsInGame = (uint)crr.questionsCount;
+                this.timePerQuestion = (uint)crr.answerTimeout;
+                this.isActive = isActive;
             }
         };
         internal struct CreateRoomResponse

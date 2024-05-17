@@ -24,11 +24,11 @@ unsigned int RoomManager::getRoomState(const unsigned int& id)
 
 std::vector<RoomData> RoomManager::getRooms()
 {
-	std::vector<RoomData> vec;
+	std::vector<RoomData> vec = std::vector<RoomData>();
 
 	for (auto it = this->m_rooms.begin(); it != this->m_rooms.end(); it++)
 	{
-		vec.push_back(it->second.getMetadata());
+		vec.insert(vec.end(), it->second.getMetadata());
 	}
 
 	return vec;
