@@ -13,7 +13,7 @@ StatisticsManager::~StatisticsManager()
 	delete _db;
 }
 
-vector<string> StatisticsManager::getHighScore() const
+vector<string> StatisticsManager::getHighScore()
 {
 	vector<string> fiveBestScores;
 	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime - numOfGames / 100)
