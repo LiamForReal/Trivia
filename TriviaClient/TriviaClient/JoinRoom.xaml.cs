@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using static TriviaClient.GetRoomsRequest;
+using System.ComponentModel;
 
 namespace TriviaClient
 {
@@ -22,16 +24,20 @@ namespace TriviaClient
     public partial class JoinRoom : Window
     {
         public MainWindow mainWindow;
+        private BackgroundWorker refreshBackgroundWorker = new BackgroundWorker();
+
         public JoinRoom(MainWindow main)
         {
             this.mainWindow = main;
             InitializeComponent();
-            this.RefreshAvailableRooms();
+
+            this.refreshBackgroundWorker.WorkerSupportsCancellation = true;
+            this.refreshBackgroundWorker.WorkerReportsProgress = true;
         }
 
         private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
-            this.RefreshAvailableRooms();
+
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -52,6 +58,15 @@ namespace TriviaClient
                 {
                     this.RoomsListBox.Items.Add(rd.name);
                 }
+            }
+        }
+
+        private void RefreshAvailableRoomsLoop()
+        {
+            while (true)
+            {
+                RefreshAvailableRooms();
+                Thread.Sleep(3000);
             }
         }
     }

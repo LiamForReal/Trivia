@@ -67,7 +67,6 @@ namespace TriviaClient
                     response = JsonConvert.DeserializeObject<GetRoomsResponse>(jsonMessage);
                 }
 
-
                 return response;
             }
         }

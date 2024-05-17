@@ -23,6 +23,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         break;
     case GET_ROOMS_RC:
         return getRooms(ri);
+        //// Test Start
+        _RHF.getRoomManager().createRoom(LoggedUser("gaby"), RoomData(5, "Gaby Room", 5, 5, 5, ACTIVE_ROOM));
+        //// Test End
         break;
     case GET_PLAYERS_IN_ROOM_RC:
         return getPlayersInRoom(ri);
