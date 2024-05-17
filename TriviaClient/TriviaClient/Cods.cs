@@ -31,7 +31,7 @@ namespace TriviaClient
             JOIN_ROOM_STATUS = 61,
             CREATE_ROOM_STATUS = 71,
             GET_HIGH_SCORE_STATUS = 81,
-            GET_PERSONAL_STATS_STATUS = 95
+            GET_PERSONAL_STATS_STATUS = 91
         }
 
         public enum Errors

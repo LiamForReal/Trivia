@@ -48,8 +48,8 @@ namespace TriviaClient
         private void PersonalStatsButton_Click(object sender, RoutedEventArgs e)
         {
             getPersonalStatsRequest.SendToServer(mainWindow.clientStream);
-            Cods.Status res = (Cods.Status)(getPersonalStatsRequest.GetFromServer(mainWindow.clientStream).status);
-            if (res == Cods.Status.GET_PERSONAL_STATS_STATUS)
+            GetPersonalStatsRequest.GetPersonalStatsResponse response = getPersonalStatsRequest.GetFromServer(mainWindow.clientStream);
+            if ((Cods.Status)response.status == Cods.Status.GET_PERSONAL_STATS_STATUS)
             {
                 this.Hide();
                 this.personalStats = new PersonalStats(this);
