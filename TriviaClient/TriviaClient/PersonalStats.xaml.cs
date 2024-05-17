@@ -20,8 +20,9 @@ namespace TriviaClient
     public partial class PersonalStats : Window
     {
         public StatsMenu statsMenu;
-        public PersonalStats()
+        public PersonalStats(StatsMenu menu)
         {
+            statsMenu = menu;
             InitializeComponent();
         }
 

@@ -20,7 +20,7 @@ namespace TriviaClient
     public partial class JoinRoom : Window
     {
         public MainWindow mainWindow;
-        public JoinRoom()
+        public JoinRoom(MainWindow main)
         {
             InitializeComponent();
         }
