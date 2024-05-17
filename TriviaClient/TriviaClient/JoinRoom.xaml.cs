@@ -28,7 +28,7 @@ namespace TriviaClient
 
         public JoinRoom(MainWindow main)
         {
-            this.mainWindow = main;
+            mainWindow = main;
             InitializeComponent();
 
             this.refreshBackgroundWorker.WorkerSupportsCancellation = true;
