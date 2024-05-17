@@ -22,6 +22,7 @@ namespace TriviaClient
         public MainWindow mainWindow;
         public JoinRoom(MainWindow main)
         {
+            mainWindow = main;
             InitializeComponent();
         }
 
