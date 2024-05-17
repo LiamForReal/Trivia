@@ -17,18 +17,23 @@ vector<string> StatisticsManager::getHighScore()
 {
 	vector<string> fiveBestScores;
 	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime - numOfGames / 100)
+	std::cout << "0\n";
 	map<string, double> userScores;
 	double divCorrectAnsInTotal = 0.0, addAvrageToNumOfGames = 0.0, score = 0.0;
 	string name = "";
+	std::cout << "1\n";
 	for (auto itU = users.begin(); itU != users.end(); ++itU)
 	{
+		if (_db->getNumOfTotalAnswers(itU->getName()) == 0 || _db->getPlayerAverageAnswerTime(itU->getName()) == 0 || _db->getNumOfTotalAnswers(itU->getName()) == 0)
+		{
+			userScores[itU->getName()] = 0;
+			continue;
+		}
 		divCorrectAnsInTotal = _db->getNumOfCorrectAnswers(itU->getName()) / _db->getNumOfTotalAnswers(itU->getName());
 		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) - (_db->getNumOfPlayerGames(itU->getName()) / 100);
-		if (divCorrectAnsInTotal != 0 || addAvrageToNumOfGames != 0)
-			userScores[itU->getName()] = 0;
-		else userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
+	    userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
 	}
-	
+	std::cout << "2\n";
 	for (int i = 0; i < 5; i++)
 	{
 		if (!userScores.empty())
@@ -47,6 +52,7 @@ vector<string> StatisticsManager::getHighScore()
 			score = 0;
 		}
 	}
+	std::cout << "3\n";
 	//done here
 	return fiveBestScores;
 }
