@@ -93,6 +93,8 @@ namespace TriviaClient
             {
                 this.client.Close();
             }
+
+            LogOutButton_Click(null, null);
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
