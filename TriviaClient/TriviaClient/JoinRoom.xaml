@@ -49,7 +49,7 @@
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Vertical">
                 <Label Content="Rooms List: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,75,5,10" FontSize="24"/>
-                <ListBox Name="RoomsListBox" Width="200" Height="200">
+                <ListBox Name="RoomsListBox" Width="200" Height="200" SelectionChanged="RoomsListBox_SelectionChanged">
                     <!--ListBoxItem Content="Jubzik's Room"></ListBoxItem-->
                 </ListBox>
                 <Label Name="NoRoomsAvailable" Content="No Rooms Available" Foreground="White" FontWeight="ExtraBold" FontSize="18" HorizontalAlignment="Center"/>

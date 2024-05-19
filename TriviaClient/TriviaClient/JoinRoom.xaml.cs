@@ -18,11 +18,9 @@ using System.ComponentModel;
 
 namespace TriviaClient
 {
-    /// <summary>
-    /// Interaction logic for JoinRoom.xaml
-    /// </summary>
     public partial class JoinRoom : Window
     {
+        public ConnectedRoom connectedRoom;
         public MainWindow mainWindow;
         private BackgroundWorker refreshBackgroundWorker = new BackgroundWorker();
 
@@ -30,6 +28,8 @@ namespace TriviaClient
         {
             mainWindow = main;
             InitializeComponent();
+
+            this.JoinButton.IsEnabled = false;
 
             this.refreshBackgroundWorker.WorkerSupportsCancellation = true;
             this.refreshBackgroundWorker.WorkerReportsProgress = true;
@@ -43,7 +43,21 @@ namespace TriviaClient
 
         private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.RoomsListBox.SelectedItem != null)
+            {
+                string selectedRoom = this.RoomsListBox.SelectedItem.ToString();
+                MessageBox.Show($"Joining room: {selectedRoom}");
 
+                this.Hide();
+                this.refreshBackgroundWorker.CancelAsync();
+                this.connectedRoom = new ConnectedRoom(this.mainWindow);
+                this.connectedRoom.Show();
+                this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
+            }
+            else
+            {
+                MessageBox.Show("Please select a room to join.");
+            }
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -60,7 +74,6 @@ namespace TriviaClient
             GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
             if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
             {
-                // this.RoomsListBox.Items.Clear();
                 if (getRoomsResponse.rooms.Count <= 0)
                 {
                     this.NoRoomsAvailable.Content = "No Rooms Available";
@@ -76,6 +89,15 @@ namespace TriviaClient
                     {
                         this.RoomsListBox.Items.Add(rd.name);
                     }
+                }
+
+                if (this.RoomsListBox.SelectedItem != null)
+                {
+                    this.JoinButton.IsEnabled = true;
+                }
+                else
+                {
+                    this.JoinButton.IsEnabled = false;
                 }
             }
         }
@@ -112,6 +134,17 @@ namespace TriviaClient
             }
         }
 
-
+        private void RoomsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.RoomsListBox.SelectedItem != null)
+            {
+                this.JoinButton.IsEnabled = true;
+            }
+            else
+            {
+                this.JoinButton.IsEnabled = false;
+            }
+        }
     }
+
 }
