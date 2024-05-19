@@ -50,11 +50,11 @@ namespace TriviaClient
         internal struct GetPlayersInRoomResponse
         {
             public uint status;
-            public string[] rooms;
-            public GetPlayersInRoomResponse(uint status, string[] rooms)
+            public string[] players;
+            public GetPlayersInRoomResponse(uint status, string[] players)
             {
                 this.status = status;
-                this.rooms = rooms;
+                this.players = players;
             }
 
             public static GetPlayersInRoomResponse Deserialize(List<byte> list)
