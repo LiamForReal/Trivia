@@ -87,14 +87,16 @@ namespace TriviaClient
             }
 
             this.Close();
-            
-            // fix this
+          
+            if (this.isUserLogged)
+            {
+                this.LogOutButton_Click(sender, e); // if doesnt work it is liam's fault!!!
+            }
+
             if (this.client != null)
             {
                 this.client.Close();
             }
-
-            LogOutButton_Click(null, null);
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
