@@ -60,10 +60,13 @@ namespace TriviaClient
             GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
             if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
             {
-                this.RoomsListBox.Items.Clear();
+                // this.RoomsListBox.Items.Clear();
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    this.RoomsListBox.Items.Add(rd.name);
+                    if (!this.RoomsListBox.Items.Contains(rd.name))
+                    {
+                        this.RoomsListBox.Items.Add(rd.name);
+                    }
                 }
             }
         }
