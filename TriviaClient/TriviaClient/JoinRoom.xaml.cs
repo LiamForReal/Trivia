@@ -61,6 +61,15 @@ namespace TriviaClient
             if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
             {
                 // this.RoomsListBox.Items.Clear();
+                if (getRoomsResponse.rooms.Count <= 0)
+                {
+                    this.NoRoomsAvailable.Content = "No Rooms Available";
+                }
+                else
+                {
+                    this.NoRoomsAvailable.Content = "";
+                }
+
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
                     if (!this.RoomsListBox.Items.Contains(rd.name))
