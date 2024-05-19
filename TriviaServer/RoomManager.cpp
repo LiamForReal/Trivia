@@ -3,23 +3,24 @@
 void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room = Room(roomData);
+	for (auto it = m_rooms.begin(); it != m_rooms.end(); ++it)
+	{
+		if(room == it->second)
+			throw std::runtime_error("room with this name already exist");
+	}	
 	this->m_rooms.insert({roomData.id, room});
-	/*use user*/
 }
 
 void RoomManager::deleteRoom(const unsigned int& id)
 {
-	this->m_rooms.erase(id);
+	if (isLegalRoom(id))
+		this->m_rooms.erase(id);
 }
 
 unsigned int RoomManager::getRoomState(const unsigned int& id)
 {
-	auto it = this->m_rooms.find(id);
-	if (it != this->m_rooms.end())
-	{
+	if (isLegalRoom(id))
 		return this->m_rooms[id].getMetadata().isActive;
-	}
-	return ACTIVITY_ERROR; // error that might occur
 }
 
 std::vector<RoomData> RoomManager::getRooms()
@@ -36,10 +37,14 @@ std::vector<RoomData> RoomManager::getRooms()
 
 Room& RoomManager::getRoom(const unsigned int& id)
 {
-	return std::ref(this->m_rooms[id]);
+	if(isLegalRoom(id))
+		return std::ref(this->m_rooms[id]);
 }
 
 bool RoomManager::isLegalRoom(const unsigned int& id)
 {
-	return bool(getRooms().size());
+	if (m_rooms.find(id) != m_rooms.end())
+		return true;
+	throw std::runtime_error("room doesnt exist");
+	return false;
 }
