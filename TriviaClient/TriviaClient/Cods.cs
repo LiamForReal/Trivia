@@ -17,6 +17,7 @@ namespace TriviaClient
             GET_PLAYERS_IN_ROOM_RC = 50,
             JOIN_ROOM_RC = 60,
             CREATE_ROOM_RC = 70,
+            LEAVE_ROOM_RC = 77,
             GET_HIGH_SCORE_RC = 80,
             GET_PERSONAL_STATS_RC = 90,
         }
@@ -30,8 +31,9 @@ namespace TriviaClient
             GET_PLAYERS_IN_ROOM_STATUS = 51,
             JOIN_ROOM_STATUS = 61,
             CREATE_ROOM_STATUS = 71,
+            LEAVE_ROOM_STATUS = 78,
             GET_HIGH_SCORE_STATUS = 81,
-            GET_PERSONAL_STATS_STATUS = 95
+            GET_PERSONAL_STATS_STATUS = 91
         }
 
         public enum Errors
@@ -44,6 +46,7 @@ namespace TriviaClient
             GET_PLAYERS_IN_ROOM_ERROR = 55,
             JOIN_ROOM_ERROR = 65,
             CREATE_ROOM_ERROR = 75,
+            LEAVE_ROOM_ERROR = 79,
             GET_HIGH_SCORE_ERROR = 85,
             THERE_IS_NO_SCORES = 86,
             GET_PERSONAL_STATS_ERROR = 95

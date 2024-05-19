@@ -1,12 +1,14 @@
 #pragma once
-#include "IDatabase.h"
+#include "SqliteDataBase.h"
 #include "includes.hpp"
 
 class StatisticsManager
 {
 public:
-	vector<string> getHighScore() const;
-	string getUserStatistics(string username) const;
+	StatisticsManager();
+	~StatisticsManager();
+	vector<string> getHighScore();
+	vector<string> getUserStatistics(string username) const;
 private:
 	IDatabase* _db;
 };

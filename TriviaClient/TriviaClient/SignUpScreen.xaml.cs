@@ -37,6 +37,17 @@ namespace TriviaClient
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
+            if ((!this.revealPassword && (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.PasswordTextBox.Password)) ) ||
+                (this.revealPassword && (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text) || string.IsNullOrWhiteSpace(this.RevealedTextBox.Text)) ) ||
+                string.IsNullOrWhiteSpace(this.EmailTextBox.Text)
+            )
+            {
+                MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                this.PasswordTextBox.Password = "";
+                this.UsernameTextBox.Text = "";
+                this.RevealedTextBox.Text = "";
+                return;
+            }
             request.username = this.UsernameTextBox.Text;
             request.email = this.EmailTextBox.Text;
             if (this.revealPassword)

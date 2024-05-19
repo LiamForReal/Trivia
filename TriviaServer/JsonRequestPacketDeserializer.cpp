@@ -126,9 +126,8 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const 
 CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer)
 {
 	CreateRoomRequest crr;
-	std::string jsonDataStr = "";
-
-	unsigned int len = 0, i = 0;
+	std::string jsonDataStr = "", tmp = "";
+	unsigned int len = 0, i = 0, t = 0;
 
 	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
 	// std::cout << len << std::endl;
@@ -143,13 +142,16 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(co
 	try
 	{
 		crr.roomName = jsonData["roomName"];
-		crr.maxUsers = jsonData["maxUsers"];
-		crr.questionsCount = jsonData["questionsCount"];
-		crr.answerTimeout = jsonData["answerTimeout"];
+		tmp = jsonData["maxUsers"];
+		crr.maxUsers = static_cast<unsigned int>(std::stoi(tmp));
+		tmp = jsonData["questionsCount"];
+		crr.questionsCount = static_cast<unsigned int>(std::stoi(tmp));
+		tmp = jsonData["answerTimeout"];
+		crr.answerTimeout = static_cast<unsigned int>(std::stoi(tmp));
 	}
 	catch (...)
 	{
-		throw std::runtime_error("Invalid json structure passed");
+		throw std::runtime_error("Invalid json structure passed" + std::to_string(t));
 	}
 
 	return crr;

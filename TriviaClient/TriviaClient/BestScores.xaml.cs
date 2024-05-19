@@ -20,8 +20,9 @@ namespace TriviaClient
     public partial class BestScores : Window
     {
         public StatsMenu statsMenu;
-        public BestScores()
+        public BestScores(StatsMenu menu)
         {
+            statsMenu = menu;
             InitializeComponent();
         }
 

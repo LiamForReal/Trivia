@@ -28,7 +28,7 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
-            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers' : '{this.maxUsers}', ' 'questionsCount': '{this.questionsCount}', 'answerTimeout' : '{this.answerTimeout}'}}";
+            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers': '{this.maxUsers}', 'questionsCount': '{this.questionsCount}', 'answerTimeout': '{this.answerTimeout}'}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
@@ -41,26 +41,6 @@ namespace TriviaClient
 
             return list;
         }
-
-        internal struct RoomData
-        {
-            uint _id;
-            string _name;
-            uint _maxPlayers;
-            uint _numOfQuestionsInGame;
-            uint _timePerQuestion;
-            uint _isActive;
-
-            public RoomData(CreateRoomRequest crr,uint isActive, uint id)
-            {
-                _id = id;
-                _name = crr.roomName;
-                _maxPlayers = crr.maxUsers;
-                _numOfQuestionsInGame = crr.questionsCount;
-                _timePerQuestion = crr.answerTimeout;
-                _isActive = isActive;
-            }
-        };
         public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
@@ -70,6 +50,25 @@ namespace TriviaClient
             CreateRoomResponse CreateRoomResponse = CreateRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return CreateRoomResponse;
         }
+        internal struct RoomData
+        {
+            public uint id;
+            public string name;
+            public uint maxPlayers;
+            public uint numOfQuestionsInGame;
+            public uint timePerQuestion;
+            public uint isActive;
+
+            public RoomData(CreateRoomRequest crr, uint isActive, uint id)
+            {
+                this.id = id;
+                this.name = (string)crr.roomName;
+                this.maxPlayers = (uint)crr.maxUsers;
+                this.numOfQuestionsInGame = (uint)crr.questionsCount;
+                this.timePerQuestion = (uint)crr.answerTimeout;
+                this.isActive = isActive;
+            }
+        };
         internal struct CreateRoomResponse
         {
             public uint status;

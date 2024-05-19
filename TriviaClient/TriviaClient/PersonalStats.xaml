@@ -48,10 +48,10 @@
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Orientation="Vertical">
-                <Label Name="NumberOfGamesLabel" Content="Number Of Games - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
-                <Label Name="NumberOfRightAnswersLabel" Content="Number Of Right Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
-                <Label Name="NumberOfWrongAnswersLabel" Content="Number Of Wrong Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
-                <Label Name="AverageTimeForAnswerLabel" Content="Average Time For Answer - 0.0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label x:Name="NumberOfGamesLabel" Content="Number Of Games - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label x:Name="NumberOfRightAnswersLabel" Content="Number Of Right Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label x:Name="NumberOfWrongAnswersLabel" Content="Number Of Wrong Answers - 0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label x:Name="AverageTimeForAnswerLabel" Content="Average Time For Answer - 0.0" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">

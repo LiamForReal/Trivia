@@ -2,8 +2,9 @@
 
 void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
-	Room room(roomData);
+	Room room = Room(roomData);
 	this->m_rooms.insert({roomData.id, room});
+	/*use user*/
 }
 
 void RoomManager::deleteRoom(const unsigned int& id)
@@ -18,16 +19,16 @@ unsigned int RoomManager::getRoomState(const unsigned int& id)
 	{
 		return this->m_rooms[id].getMetadata().isActive;
 	}
-	return -1; // error that might occur
+	return ACTIVITY_ERROR; // error that might occur
 }
 
 std::vector<RoomData> RoomManager::getRooms()
 {
-	std::vector<RoomData> vec;
+	std::vector<RoomData> vec = std::vector<RoomData>();
 
 	for (auto it = this->m_rooms.begin(); it != this->m_rooms.end(); it++)
 	{
-		vec.push_back(it->second.getMetadata());
+		vec.insert(vec.end(), it->second.getMetadata());
 	}
 
 	return vec;

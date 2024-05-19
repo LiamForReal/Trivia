@@ -249,6 +249,8 @@ float SqliteDataBase::getPlayerAverageAnswerTime(string username)
 			AnswerTime += it->getAnswerTime();
 		}
 	}
+	if (!counter)
+		return 0;
 	return AnswerTime / counter;
 }
 

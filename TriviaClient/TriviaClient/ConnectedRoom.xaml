@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
         Title="[Trivia] Connected Room" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <ImageBrush ImageSource="/Resources/connected_room_background.jpg"/>
+    </Window.Background>
     <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
@@ -44,7 +47,7 @@
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Vertical">
-                <Label Content="Players List: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,75,5,10" FontSize="24"/>
+                <Label Content="Players In Room: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,75,5,10" FontSize="24"/>
                 <ListBox Name="PlayersListBox" Width="200" Height="200">
                     <!--ListBoxItem Content="Jubzik's Room"></ListBoxItem-->
                 </ListBox>

@@ -4,8 +4,8 @@ import json
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 8888
 CODES = {
-    "Login": 100,
-    "Signup": 200
+    "Login": 10,
+    "Signup": 20
 }
 BUFFER_SIZE = 1024
 BYTES_ORDER = 'little'

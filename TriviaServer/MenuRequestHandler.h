@@ -14,13 +14,13 @@ public:
 	RequestResult signout(RequestInfo ri);
 	RequestResult getRooms(RequestInfo ri);
 	RequestResult getPlayersInRoom(RequestInfo ri);
-	RequestResult getPersonalStats(RequestInfo& ri);
+	RequestResult getPersonalStats(RequestInfo ri);
 	RequestResult getHighScore(RequestInfo ri);
 	RequestResult joinRoom(RequestInfo ri);
 	RequestResult createRoom(RequestInfo ri);
 
 private:
-	LoggedUser& _user;
+	LoggedUser _user;
 	RequestHandlerFactory& _RHF;
 	RequestResult rr;
 };

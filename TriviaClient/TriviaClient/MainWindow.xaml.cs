@@ -87,8 +87,12 @@ namespace TriviaClient
             }
 
             this.Close();
-            
-            // fix this
+          
+            if (this.isUserLogged)
+            {
+                this.LogOutButton_Click(sender, e); // if doesnt work it is liam's fault!!!
+            }
+
             if (this.client != null)
             {
                 this.client.Close();
@@ -132,24 +136,21 @@ namespace TriviaClient
         private void StatsMenuButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            this.statsMenu = new StatsMenu();
-            this.statsMenu.mainWindow = this;
+            this.statsMenu = new StatsMenu(this);
             this.statsMenu.Show();
         }
 
         private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            this.joinRoom = new JoinRoom();
-            this.joinRoom.mainWindow = this;
+            this.joinRoom = new JoinRoom(this);
             this.joinRoom.Show();
         }
 
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            this.createRoom = new CreateRoom();
-            this.createRoom.mainWindow = this;
+            this.createRoom = new CreateRoom(this);
             this.createRoom.Show();
         }
 
