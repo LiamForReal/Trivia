@@ -23,7 +23,7 @@ namespace TriviaClient
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.GET_PLAYERS_IN_ROOM_RC);
 
-            string jsonMsg = $@"{{'roomId': '{this.roomId}}}";
+            string jsonMsg = $@"{{'roomId': {this.roomId}}}";
 
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
@@ -37,11 +37,12 @@ namespace TriviaClient
             return list;
         }
 
-        public void GetFromServer(NetworkStream clientStream)
+        public void SendToServer(NetworkStream clientStream)
         {
             SocketTools.SendToServer(Serialize(), clientStream);
         }
-        public GetPlayersInRoomResponse SendToServer(NetworkStream clientStream)
+
+        public GetPlayersInRoomResponse GetFromServer(NetworkStream clientStream)
         {
             GetPlayersInRoomResponse GetPlayersInRoomResponse = GetPlayersInRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
             return GetPlayersInRoomResponse;
@@ -51,6 +52,7 @@ namespace TriviaClient
         {
             public uint status;
             public string[] players;
+
             public GetPlayersInRoomResponse(uint status, string[] players)
             {
                 this.status = status;

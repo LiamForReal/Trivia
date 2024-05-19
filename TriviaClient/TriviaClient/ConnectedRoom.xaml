@@ -49,7 +49,6 @@
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,10,5,5" Orientation="Vertical">
                 <Label Content="Players In Room: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,75,5,10" FontSize="24"/>
                 <ListBox Name="PlayersListBox" Width="200" Height="200">
-                    <!--ListBoxItem Content="Jubzik's Room"></ListBoxItem-->
                 </ListBox>
             </StackPanel>
 
