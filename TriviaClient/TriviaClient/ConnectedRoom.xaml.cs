@@ -57,11 +57,12 @@ namespace TriviaClient
             GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
             getRoomsRequest.SendToServer(this.mainWindow.clientStream);
             GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
+
             if (this.ConnectedRoomNameLabel.Content != null && (uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
             {
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    if (rd.name == this.ConnectedRoomNameLabel.Content)
+                    if (rd.name == this.ConnectedRoomNameLabel.Content.ToString())
                     {
                         roomId = rd.id;
                         break;

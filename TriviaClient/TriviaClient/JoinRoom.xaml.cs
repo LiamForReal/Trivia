@@ -23,13 +23,14 @@ namespace TriviaClient
         public ConnectedRoom connectedRoom;
         public MainWindow mainWindow;
         private BackgroundWorker refreshBackgroundWorker = new BackgroundWorker();
-        Dictionary<string, CreateRoomRequest.RoomData> roomDataDict = new Dictionary<string, CreateRoomRequest.RoomData>();
+        private JoinRoomRequest jrr;
 
         public JoinRoom(MainWindow main)
         {
             mainWindow = main;
+            jrr = new JoinRoomRequest(0);
             InitializeComponent();
-
+            
             this.JoinButton.IsEnabled = false;
 
             this.refreshBackgroundWorker.WorkerSupportsCancellation = true;
@@ -44,16 +45,42 @@ namespace TriviaClient
 
         private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
+            uint roomId = 0;
+            string selectedRoom = this.RoomsListBox.SelectedItem.ToString();
+
             if (this.RoomsListBox.SelectedItem != null)
             {
-                string selectedRoom = this.RoomsListBox.SelectedItem.ToString();
+                GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
+                getRoomsRequest.SendToServer(this.mainWindow.clientStream);
+                GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
+
+                if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
+                {
+                    foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
+                    {
+                        if (rd.name == selectedRoom)
+                        {
+                            roomId = rd.id;
+                            break;
+                        }
+                    }
+                }
+
                 MessageBox.Show($"Joining room: {selectedRoom}");
 
-                this.Hide();
-                this.refreshBackgroundWorker.CancelAsync();
-                this.connectedRoom = new ConnectedRoom(this.mainWindow);
-                this.connectedRoom.Show();
-                this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
+                jrr.roomId = roomId;
+                jrr.SendToServer(this.mainWindow.clientStream);
+                uint statusCode= (uint)jrr.GetFromServer(this.mainWindow.clientStream).status;
+                MessageBox.Show(statusCode.ToString());
+                if((Cods.Status)statusCode == Cods.Status.JOIN_ROOM_STATUS)
+                {
+                    this.Hide();
+                    this.refreshBackgroundWorker.CancelAsync();
+                    this.connectedRoom = new ConnectedRoom(this.mainWindow);
+                    this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
+                    this.connectedRoom.Show();
+                } else MessageBox.Show("cant join room");
+
             }
             else
             {
@@ -89,7 +116,6 @@ namespace TriviaClient
                     if (!this.RoomsListBox.Items.Contains(rd.name))
                     {
                         this.RoomsListBox.Items.Add(rd.name);
-                        this.roomDataDict.Add(rd.name, rd);
                     }
                 }
 

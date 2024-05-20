@@ -6,8 +6,7 @@
 typedef enum RoomDataActivityStates
 {
 	ACTIVE_ROOM = 1,
-	INACTIVE_ROOM = 2,
-	ACTIVITY_ERROR = 999,
+	INACTIVE_ROOM = 0,
 } RoomDataActivityStates;
 
 typedef struct RoomData
