@@ -197,7 +197,11 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         }
 
         if (crre.status == CREATE_ROOM_STATUS)
+        {
             _RHF.getRoomManager().createRoom(_user, roomData);
+            _RHF.getRoomManager().getRoom(roomData.id).addUser(_user);
+        }
+            
     }
     catch(std::runtime_error& e)
     {
