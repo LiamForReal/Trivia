@@ -4,6 +4,7 @@ Room::Room() {}
 
 Room::Room(const RoomData& metadata)
 {
+	m_users = std::vector<LoggedUser>();
 	this->m_metadata = metadata;
 }
 
@@ -14,9 +15,9 @@ Room::~Room()
 
 void Room::addUser(const LoggedUser& user)
 {
-	if (m_metadata.isActive && m_metadata.maxPlayers >= m_users.size() + 1)
+	if (!m_metadata.isActive && m_metadata.maxPlayers >= m_users.size() + 1)
 		this->m_users.insert(this->m_users.end(), user);
-	throw std::runtime_error("can't insert to room");
+	else throw std::runtime_error("can't insert to room");
 }
 
 void Room::removeUser(const LoggedUser& user)
