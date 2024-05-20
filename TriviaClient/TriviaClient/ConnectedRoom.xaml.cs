@@ -47,6 +47,7 @@ namespace TriviaClient
         {
             this.Close();
             mainWindow.Show();
+            this.refreshBackgroundWorker.CancelAsync();
         }
 
         private void RefreshPlayersInRoom()

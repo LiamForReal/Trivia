@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static TriviaClient.GetHighScoreRequest;
 using static TriviaClient.GetPlayersInRoomRequest;
+using static TriviaClient.GetRoomsRequest;
 
 namespace TriviaClient
 {
@@ -61,15 +62,24 @@ namespace TriviaClient
 
             public static GetPlayersInRoomResponse Deserialize(List<byte> list)
             {
-                uint messageLength = BitConverter.ToUInt32(list.GetRange(0, 4).ToArray(), 0);
+                GetPlayersInRoomResponse response = new GetPlayersInRoomResponse();
 
-                byte[] messageBytes = list.GetRange(4, (int)messageLength).ToArray();
+                UInt32 length = BitConverter.ToUInt32(list.GetRange(1, 4).ToArray());
 
-                string jsonString = System.Text.Encoding.UTF8.GetString(messageBytes);
+                if (length > 0)
+                {
+                    byte[] bytes = list.GetRange(5, (int)(length)).ToArray();
+                    char[] chars = (System.Text.Encoding.UTF8.GetString(bytes).ToCharArray());
+                    string jsonMessage = "";
 
-                jsonString = jsonString.Substring(1, jsonString.Length - 2);
+                    foreach (char ch in chars)
+                    {
+                        jsonMessage += ch;
+                    }
 
-                GetPlayersInRoomResponse response = new GetPlayersInRoomResponse((uint)list[0], jsonString.Split(','));
+                    response = JsonConvert.DeserializeObject<GetPlayersInRoomResponse>(jsonMessage);
+                }
+
                 return response;
             }
         }

@@ -1,5 +1,11 @@
 #include "RoomManager.h"
 
+RoomManager::RoomManager()
+{
+	this->m_rooms = map<unsigned int, Room>();
+}
+RoomManager::~RoomManager() {}
+
 void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room = Room(roomData);
@@ -41,5 +47,5 @@ Room& RoomManager::getRoom(const unsigned int& id)
 
 bool RoomManager::isLegalRoom(const unsigned int& id)
 {
-	return bool(getRooms().size());
+	return id <= this->m_rooms[m_rooms.size() - 1].getMetadata().id;
 }

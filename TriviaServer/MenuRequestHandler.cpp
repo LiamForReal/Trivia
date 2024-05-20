@@ -23,9 +23,6 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         break;
     case GET_ROOMS_RC:
         return getRooms(ri);
-        //// Test Start
-        _RHF.getRoomManager().createRoom(LoggedUser("gaby"), RoomData(5, "Gaby Room", 5, 5, 5, ACTIVE_ROOM));
-        //// Test End
         break;
     case GET_PLAYERS_IN_ROOM_RC:
         return getPlayersInRoom(ri);
@@ -72,12 +69,6 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
     rr.buffer = std::vector<unsigned char>();
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
 
-    std::cout << "INIT DATA" << std::endl;
-
-    //// Test Start
-    _RHF.getRoomManager().createRoom(LoggedUser("liam"), RoomData(1, "Liam Room", 5, 5, 5, ACTIVE_ROOM));
-    //// Test End
-
     // Check if there are no rooms and return early if so
     if (_RHF.getRoomManager().getRooms().empty()) {
         rr.buffer = JsonResponsePacketSerializer::serializeResponse(grr);
@@ -85,9 +76,6 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
     }
 
     std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
-    //// Test Start
-    rd.emplace_back(RoomData(1, "Gavriel Room", 5, 5, 5, ACTIVE_ROOM));
-    //// Test End
 
     std::cout << "START COPYING PROCESS" << std::endl;
 
@@ -189,8 +177,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     {
         crre.status = CREATE_ROOM_STATUS;
         _RHF.getRoomManager().createRoom(_user, roomData);
+        _RHF.getRoomManager().getRoom(roomData.id).addUser(_user);
     }
-      
+    
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;

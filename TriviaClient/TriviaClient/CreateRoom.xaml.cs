@@ -42,9 +42,10 @@ namespace TriviaClient
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             connectedRoom = new ConnectedRoom(mainWindow);
-            connectedRoom.room = this;
+            connectedRoom.room = this;    
             connectedRoom.mainWindow = this.mainWindow;
             this.connectedRoom.mainWindow = this.mainWindow;
+            this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
 
             if (this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
                 || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "")
