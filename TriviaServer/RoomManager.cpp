@@ -1,5 +1,11 @@
 #include "RoomManager.h"
 
+RoomManager::RoomManager()
+{
+	this->m_rooms = map<unsigned int, Room>();
+}
+RoomManager::~RoomManager() {}
+
 void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room = Room(roomData);

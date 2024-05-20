@@ -12,7 +12,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static TriviaClient.CreateRoomRequest.RoomData;
 using static TriviaClient.GetRoomsRequest;
+using static TriviaClient.GetPlayersInRoomRequest;
 
 namespace TriviaClient
 {
@@ -28,7 +30,7 @@ namespace TriviaClient
 
         public ConnectedRoom(MainWindow main)
         {
-            mainWindow = main;
+            this.mainWindow = main;
             InitializeComponent();
 
             this.refreshBackgroundWorker.WorkerSupportsCancellation = true;
@@ -45,21 +47,40 @@ namespace TriviaClient
         {
             this.Close();
             mainWindow.Show();
+            this.refreshBackgroundWorker.CancelAsync();
         }
 
         private void RefreshPlayersInRoom()
         {
-/*            GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
+            uint roomId = 0;
+
+            GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
             getRoomsRequest.SendToServer(this.mainWindow.clientStream);
             GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
-            if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
+            if (this.ConnectedRoomNameLabel.Content != null && (uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
             {
-                this.RoomsListBox.Items.Clear();
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    this.RoomsListBox.Items.Add(rd.name);
+                    if (rd.name == this.ConnectedRoomNameLabel.Content)
+                    {
+                        roomId = rd.id;
+                        break;
+                    }
                 }
-            }*/
+
+                GetPlayersInRoomRequest getPlayersInRoomRequest = new GetPlayersInRoomRequest(roomId);
+                getPlayersInRoomRequest.SendToServer(this.mainWindow.clientStream);
+                GetPlayersInRoomRequest.GetPlayersInRoomResponse getPlayersInRoomResponse = getPlayersInRoomRequest.GetFromServer(this.mainWindow.clientStream);
+
+                if ((uint)(Cods.Status.GET_PLAYERS_IN_ROOM_STATUS) == getPlayersInRoomResponse.status)
+                {
+                    this.PlayersListBox.Items.Clear();
+                    foreach (string player in getPlayersInRoomResponse.players)
+                    {
+                        this.PlayersListBox.Items.Add(player);
+                    }
+                }
+            }
         }
 
         private void RefreshPlayersInRoomLoop_DoWork(object sender, DoWorkEventArgs e)

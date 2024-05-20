@@ -23,6 +23,7 @@ namespace TriviaClient
         public ConnectedRoom connectedRoom;
         public MainWindow mainWindow;
         private BackgroundWorker refreshBackgroundWorker = new BackgroundWorker();
+        Dictionary<string, CreateRoomRequest.RoomData> roomDataDict = new Dictionary<string, CreateRoomRequest.RoomData>();
 
         public JoinRoom(MainWindow main)
         {
@@ -88,6 +89,7 @@ namespace TriviaClient
                     if (!this.RoomsListBox.Items.Contains(rd.name))
                     {
                         this.RoomsListBox.Items.Add(rd.name);
+                        this.roomDataDict.Add(rd.name, rd);
                     }
                 }
 
