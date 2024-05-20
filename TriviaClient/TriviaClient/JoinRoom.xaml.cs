@@ -71,6 +71,7 @@ namespace TriviaClient
                 jrr.roomId = roomId;
                 jrr.SendToServer(this.mainWindow.clientStream);
                 uint statusCode= (uint)jrr.GetFromServer(this.mainWindow.clientStream).status;
+                MessageBox.Show(statusCode.ToString());
                 if((Cods.Status)statusCode == Cods.Status.JOIN_ROOM_STATUS)
                 {
                     this.Hide();

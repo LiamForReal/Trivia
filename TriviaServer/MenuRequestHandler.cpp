@@ -157,10 +157,10 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
     try
     {
-        Room room = _RHF.getRoomManager().getRoom(jrr.roomId);
-        if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && (ACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
+        if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && (INACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
         {
-            room.addUser(_user);
+            std::cout << "adding user...";
+            _RHF.getRoomManager().getRoom(jrr.roomId).addUser(_user);
             status = JOIN_ROOM_STATUS;
         } 
         else status = JOIN_ROOM_ERROR;
@@ -185,7 +185,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
     try
     {
-        RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, false);
+        RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;
         for (auto it = rooms.begin(); it != rooms.end(); ++it)
