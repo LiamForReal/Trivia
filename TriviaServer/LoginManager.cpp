@@ -12,40 +12,35 @@ LoginManager::LoginManager()
 LoginManager::~LoginManager()
 {
 	this->_dataBace->close();
+	delete _dataBace;
 }
 
 void LoginManager::logout(const string name)
 {
+	std::cout << "logged users vector: \n";
 	for (int i = 0; i < _loggedUsers.size(); ++i)
 	{
+		std::cout << _loggedUsers[i].getUserName() << std::endl;
 		if (_loggedUsers[i].getUserName() == name)
 		{
 			_loggedUsers.erase(_loggedUsers.begin() + i);
 			return;
 		}
-			
 	}
+	throw std::runtime_error("faild to logout");
 }
 
 unsigned int LoginManager::login(const string name, const string pass)
 {
-	int i = _loggedUsers.size() - 1;
-	if (!_loggedUsers.empty())
-	{
-		for (i = 0; i < _loggedUsers.size(); ++i)
-		{
-			if (_loggedUsers[i].getUserName() == name)
-				break;
-		}
-	}
-	
-	if (_dataBace->isUserExist(name, pass) && i == _loggedUsers.size() - 1)
+	auto it = std::find(_loggedUsers.begin(), _loggedUsers.end(), LoggedUser(name));
+
+	if (_dataBace->isUserExist(name, pass) && it == _loggedUsers.end())
 	{
 		this->_loggedUsers.push_back(LoggedUser(name));
 		std::cout << "logged successfully!\n";
 		return LOGIN_STATUS;
 	}
-	std::cout << "user not in the system or already loggeed!\n";
+	std::cout << "user not in the system or already logged!\n";
 	return LOGIN_ERROR;
 }
 
@@ -55,7 +50,6 @@ unsigned int LoginManager::singup(const string name, const string pass, const st
 	if (!_dataBace->isUserExist(name) && _dataBace->isPasswordMatch(pass))
 	{
 		User user = User(pass, name, mail);
-		this->_loggedUsers.push_back(LoggedUser(name));
 		_dataBace->addNewUser(user);
 		std::cout << "signup successfully!\n";
 		return SIGNUP_STATUS;
@@ -67,4 +61,9 @@ unsigned int LoginManager::singup(const string name, const string pass, const st
 	}
 	std::cout << "user name is already in the system\n";
 	return SIGNUP_ERROR;
+}
+
+vector<LoggedUser> LoginManager::getLoggedUsers() const
+{
+	return this->_loggedUsers;
 }

@@ -64,3 +64,95 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const std:
 
 	return sr;
 }
+
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(const std::vector<unsigned char>& buffer)
+{
+	GetPlayersInRoomRequest gpirr;
+	std::string jsonDataStr = "";
+
+	unsigned int len = 0, i = 0;
+
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	// std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try
+	{
+		gpirr.roomId = jsonData["roomId"];
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed");
+	}
+
+	return gpirr;
+}
+
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const std::vector<unsigned char>& buffer)
+{
+	JoinRoomRequest jrr;
+	std::string jsonDataStr = "";
+
+	unsigned int len = 0, i = 0;
+
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	// std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try
+	{
+		jrr.roomId = jsonData["roomId"];
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed");
+	}
+
+	return jrr;
+}
+
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer)
+{
+	CreateRoomRequest crr;
+	std::string jsonDataStr = "", tmp = "";
+	unsigned int len = 0, i = 0, t = 0;
+
+	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	// std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try
+	{
+		crr.roomName = jsonData["roomName"];
+		tmp = jsonData["maxUsers"];
+		crr.maxUsers = static_cast<unsigned int>(std::stoi(tmp));
+		tmp = jsonData["questionsCount"];
+		crr.questionsCount = static_cast<unsigned int>(std::stoi(tmp));
+		tmp = jsonData["answerTimeout"];
+		crr.answerTimeout = static_cast<unsigned int>(std::stoi(tmp));
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed" + std::to_string(t));
+	}
+
+	return crr;
+}

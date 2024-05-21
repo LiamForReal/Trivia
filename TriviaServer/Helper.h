@@ -19,7 +19,7 @@ class Helper
 {
 public:
 
-
+	static unsigned int socketHasData(SOCKET socket);
 	static int getMessageTypeCode(const SOCKET sc);
 	static int getIntPartFromSocket(const SOCKET sc, const int bytesNum);
 	static std::string getStringPartFromSocket(SOCKET sc, const int bytesNum);

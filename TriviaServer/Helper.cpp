@@ -21,6 +21,12 @@ int Helper::getMessageTypeCode(const SOCKET sc)
 	return  res;
 }
 
+unsigned int Helper::socketHasData(SOCKET socket) 
+{
+	char buf;
+	unsigned int code = Helper::getStatusCodeFromSocket(socket);
+	return code;
+}
 
 void Helper::send_update_message_to_client(const SOCKET sc, const string& file_content, const string& second_username, const string &all_users)
 {
@@ -50,17 +56,31 @@ string Helper::getStringPartFromSocket(const SOCKET sc, const int bytesNum)
 
 void Helper::sendVector(const SOCKET sc, const std::vector<unsigned char>& vec)
 {
+	std::cout << "Sending...\n";
 	const char* dataPtr = reinterpret_cast<const char*>(vec.data());
 	int dataSize = static_cast<int>(vec.size());
+	int totalBytesSent = 0;
 
-	int bytesSent = send(sc, dataPtr, dataSize, 0);
-
-	if (bytesSent == SOCKET_ERROR)
+	while (totalBytesSent < dataSize)
 	{
-		throw std::runtime_error("Error while sending message to client");
+		int bytesSent = send(sc, dataPtr + totalBytesSent, dataSize - totalBytesSent, 0);
+
+		if (bytesSent == SOCKET_ERROR)
+		{
+			throw std::runtime_error("Error while sending message to client");
+		}
+		else if (bytesSent == 0)
+		{
+			std::cerr << "Connection closed by the client\n";
+			throw std::runtime_error("Connection closed by the client");
+		}
+
+		totalBytesSent += bytesSent;
 	}
-	else if (bytesSent != dataSize)
+
+	if (totalBytesSent != dataSize)
 	{
+		std::cerr << "Failed to send entire message to client\n";
 		throw std::runtime_error("Failed to send entire message to client");
 	}
 }

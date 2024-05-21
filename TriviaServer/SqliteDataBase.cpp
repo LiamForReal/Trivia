@@ -7,16 +7,14 @@ bool SqliteDataBase::sendSQLMsg(const char* sql_command)
 	int res = sqlite3_exec(db, sqlStatementPerson, nullptr, nullptr, errMessagePerson);
 	if (res != SQLITE_OK)
 	{
-		std::cout << "false";
 		return false;
 	}
-	std::cout << "true";
 	return true;
 }
 
 int callbackUser(void* data, int argc, char** argv, char** azColName)
 {
-	std::vector<User>* users = (std::vector<User>*)data;
+	list<User>* users = (list<User>*)data;
 	User* user = new User("", "", "");
 	for (int i = 0; i < argc; i++)
 	{
@@ -26,14 +24,88 @@ int callbackUser(void* data, int argc, char** argv, char** azColName)
 			user->setPass(argv[i]);
 		else if (string(azColName[i]) == "EMAIL")
 			user->setMail(argv[i]);
+		else if (string(azColName[i]) == "ID")
+			user->setId(std::stoi(argv[i]));
 	}
 	users->push_back(*user);
 	return 0;
 }
 
-std::vector<User> SqliteDataBase::getUsers()
+int callbackQuestion(void* data, int argc, char** argv, char** azColName)
 {
-	std::vector<User> users;
+	list<Question>* questions = (list<Question>*)data;
+	Question* question = new Question("", "", "", "", "");
+	for (int i = 0; i < argc; i++)
+	{
+		if (string(azColName[i]) == "QUESTION")
+			question->setQ(argv[i]);
+		else if (string(azColName[i]) == "CORRECT_ANS")
+			question->setCA(argv[i]);
+		else if (string(azColName[i]) == "ANS2")
+			question->setWA1(argv[i]);
+		else if (string(azColName[i]) == "ANS3")
+			question->setWA2(argv[i]);
+		else if (string(azColName[i]) == "ANS4")
+			question->setWA3(argv[i]);
+		else if (string(azColName[i]) == "ID")
+			question->setId(std::stoi(argv[i]));
+	}
+	questions->push_back(*question);
+	return 0;
+}
+
+int callbackQuestionStatistics(void* data, int argc, char** argv, char** azColName)
+{
+	list<QuestionStatistics>* questionsStatistics = (list<QuestionStatistics>*)data;
+	QuestionStatistics* questionStatistics = new QuestionStatistics("", "", NULL, false);
+	for (int i = 0; i < argc; i++)
+	{
+		if (string(azColName[i]) == "USER_NAME")
+			questionStatistics->setUserName(argv[i]);
+		else if (string(azColName[i]) == "PLAYER_ANSWER")
+			questionStatistics->setPlayerAnswer(argv[i]);
+		else if (string(azColName[i]) == "IS_CORRECT")
+			questionStatistics->setIsCorrect(bool(std::stoi(argv[i])));
+		else if (string(azColName[i]) == "ANSWER_TIME")
+			questionStatistics->setAnswerTime(time_t(argv[i]));
+		else if (string(azColName[i]) == "QUESTION_ID")
+			questionStatistics->setQuestionId(std::stoi(argv[i]));
+		else if(string(azColName[i]) == "GAME_ID")
+			questionStatistics->setGameId(std::stoi(argv[i]));
+	}
+	questionsStatistics->push_back(*questionStatistics);
+	return 0;
+}
+
+list<QuestionStatistics> SqliteDataBase::getQuestionsStatistics()
+{
+	list<QuestionStatistics> questionsStatistics;
+	const char* sqlStatement = "SELECT * FROM STATISTICS";
+	char* errMessage = nullptr;
+	int res = sqlite3_exec(db, sqlStatement, callbackQuestionStatistics, &questionsStatistics, &errMessage);
+	if (res == SQLITE_OK)
+		return questionsStatistics;
+	std::cout << "Error getting db information - " << __func__ << std::endl;
+	throw std::runtime_error("SQL Error getting users from DB!");
+	return questionsStatistics;
+}
+
+list<Question> SqliteDataBase::getQuestions()
+{
+	list<Question> questions;
+	const char* sqlStatement = "SELECT * FROM QUESTIONS";
+	char* errMessage = nullptr;
+	int res = sqlite3_exec(db, sqlStatement, callbackQuestion, &questions, &errMessage);
+	if (res == SQLITE_OK)
+		return questions;
+	std::cout << "Error getting db information - " << __func__ << std::endl;
+	throw std::runtime_error("SQL Error getting users from DB!");
+	return questions;
+}
+
+list<User> SqliteDataBase::getUsers()
+{
+	list<User> users;
 	const char* sqlStatement = "SELECT * FROM USERS";
 	char* errMessage = nullptr;
 	int res = sqlite3_exec(db, sqlStatement, callbackUser, &users, &errMessage);
@@ -61,16 +133,33 @@ bool SqliteDataBase::isSmallLetter(int ch)
 
 bool SqliteDataBase::open()
 {
+	bool users = true, questions = true, statistics = true;
 	string dbFileName = "triviaDB.sqlite";
 	int file_exist = _access(dbFileName.c_str(), 0);
 	int res = sqlite3_open(dbFileName.c_str(), &db);
 	if (file_exist != 0)
 	{
-		if (!sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);"))
+		users = sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);");
+		questions = sendSQLMsg("CREATE TABLE IF NOT EXISTS QUESTIONS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION TEXT NOT NULL, CORRECT_ANS TEXT NOT NULL, ANS2 TEXT NOT NULL, ANS3 TEXT NOT NULL, ANS4 TEXT NOT NULL);");
+		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION_ID INT, USER_NAME TEXT NOT NULL, PLAYER_ANSWER TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER_TIME INTEGER NOT NULL, FOREIGN KEY(QUESTION_ID) REFERENCES QUESTIONS(ID));");
+		if(!users || !questions || !statistics)
 		{
 			std::cerr << "Error creating db!";
 			return false;
 		}
+
+		addNewQuestion(Question("What is the name of your family doctor?", "Boris", "Arik", "Gavriel", "Ofek")); // 1
+		addNewQuestion(Question("Who is the creator of Trivia?", "Liam and Gavriel", "Liam", "Gavriel", "The Janitor")); // 1
+		addNewQuestion(Question("Which city is the capital of Israel?", "Jerusalem", "Tel Aviv", "Yavne", "Chernobyl"));// 1
+		addNewQuestion(Question("Which country does not exist?", "Palestine", "Albania", "Kosovo", "Bosnia"));// 1
+		addNewQuestion(Question("What is orange s color?", "Orange", "Red", "Black", "Purple"));
+		addNewQuestion(Question("What is the best religion?", "Judaism", "Islam", "Christianity", "Being Palestinian"));// 1
+		addNewQuestion(Question("First programming language is...", "Assembly", "Python", "C++", "C"));// 1
+		addNewQuestion(Question("Which of the following is not a language?", "Palestinian", "Russian", "Hebrew", "English"));// 1
+		addNewQuestion(Question("Who is Jubzik?", "Liam", "Gavriels pet", "The Janitor", "Ofek"));
+		addNewQuestion(Question("Who is Shmulik?", "Cyber Teacher", "Penguin", "Actor", "Diver"));
+		addNewQuestion(Question("Did you like the game?", "Yes", "No", "I dont know", "Maybe"));
+		addNewQuestion(Question("What is ofek s shape?", "Rectangle", "tangle", "exagon", "air conditioner"));
 	}
 	else
 	{
@@ -92,7 +181,7 @@ void SqliteDataBase::close()
 
 bool SqliteDataBase::isUserExist(const string name)
 {
-	std::vector<User> users = getUsers();
+	list<User> users = getUsers();
 	for (auto it = users.begin(); it != users.end(); ++it)
 	{
 		if (name == it->getName()) 
@@ -103,7 +192,7 @@ bool SqliteDataBase::isUserExist(const string name)
 
 bool SqliteDataBase::isUserExist(const string name, const string pass)
 {
-	std::vector<User> users = getUsers();
+	list<User> users = getUsers();
 	for (auto it = users.begin(); it != users.end(); ++it)
 	{
 		if (name == it->getName() && pass == it->getPass())
@@ -133,11 +222,76 @@ bool SqliteDataBase::isPasswordMatch(const string password)
 
 void SqliteDataBase::addNewUser(User& user)
 {
-	std::vector<User> listUsers = getUsers();
-	string password = "";
 	std::string msg = "INSERT INTO USERS (USERNAME, PASSWORD,  EMAIL) VALUES ('" + user.getName() + "', '" + user.getPass() + "', '" + user.getMail() + "');";
 	const char* sqlStatement = msg.c_str();
 	if (sendSQLMsg(sqlStatement))
 		std::cout << "user added successfully!\n";
 	else std::cerr << "failed adding user!\n";
+}
+
+void SqliteDataBase::addNewQuestion(Question question)
+{
+	std::string msg = "INSERT INTO QUESTIONS (QUESTION, CORRECT_ANS,  ANS2, ANS3, ANS4) VALUES ('" + question.getQ() + "', '" + question.getCA() + "', '" + question.getWA1() + "', '" + question.getWA2() + "', '" + question.getWA3() + "');";
+	const char* sqlStatement = msg.c_str();
+	sendSQLMsg(sqlStatement);
+}
+
+float SqliteDataBase::getPlayerAverageAnswerTime(string username)
+{
+	float AnswerTime = 0.0;
+	int counter = 0;
+	list<QuestionStatistics> questionsStatistics = getQuestionsStatistics();
+	for (auto it = questionsStatistics.begin(); it != questionsStatistics.end(); ++it)
+	{
+		if (it->getUserName() == username)
+		{
+			counter++;
+			AnswerTime += it->getAnswerTime();
+		}
+	}
+	if (!counter)
+		return 0;
+	return AnswerTime / counter;
+}
+
+int SqliteDataBase::getNumOfCorrectAnswers(string username)
+{
+	int counter = 0;
+	list<QuestionStatistics> questionsStatistics = getQuestionsStatistics();
+	for (auto it = questionsStatistics.begin(); it != questionsStatistics.end(); ++it)
+	{
+		if (it->getIsCorrect() && it->getUserName() == username)
+			counter++;
+
+	}
+	return counter;
+}
+
+int SqliteDataBase::getNumOfTotalAnswers(string username)
+{
+	int counter = 0;
+	list<QuestionStatistics> questionsStatistics = getQuestionsStatistics();
+	for (auto it = questionsStatistics.begin(); it != questionsStatistics.end(); ++it)
+	{
+		if (it->getUserName() == username)
+			counter++;
+	}
+	return counter;
+}
+
+int SqliteDataBase::getNumOfPlayerGames(string username)
+{
+	int counter = 0;
+	list<QuestionStatistics> questionsStatistics = getQuestionsStatistics();
+	set<int> games;
+	for (auto it = questionsStatistics.begin(); it != questionsStatistics.end(); ++it)
+	{
+		if (it->getUserName() == username && games.find(it->getGameId()) == games.end())
+		{
+			games.insert(it->getGameId());
+			counter++;
+		}
+			
+	}
+	return counter;
 }

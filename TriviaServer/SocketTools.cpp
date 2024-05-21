@@ -78,7 +78,7 @@ void SocketTools::checkifInput()
 		std::getline(std::cin, input_string);
 		if (input_string == "EXIT")
 		{
-			closeAllSockets();
+			closesocket(_socket);
 			exit(1);
 		}
 	}
@@ -92,8 +92,6 @@ void SocketTools::acceptClient()
 		throw std::exception(__FUNCTION__);
 
 	TRACE("Client accepted !");
-	LoginRequestHandler* lrh = new LoginRequestHandler();
-	_loginHandlers[client_socket] = *lrh;
 	// create new thread for client	and detach from it
 	std::thread tr(&SocketTools::clientHandler, this, client_socket);
 	tr.detach();
@@ -104,12 +102,3 @@ void SocketTools::clientHandler(const SOCKET client_socket)
 {
 	this->_communicator.handleNewClient(client_socket);
 }
-
-void SocketTools::closeAllSockets()
-{
-	for (auto it = _loginHandlers.begin(); it != _loginHandlers.end(); it++)
-	{
-		closesocket(it->first);
-	}
-}
-
