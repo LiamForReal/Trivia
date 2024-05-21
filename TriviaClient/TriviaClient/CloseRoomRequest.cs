@@ -24,8 +24,8 @@ namespace TriviaClient
 
         public CloseRoomResponse GetFromServer(NetworkStream clientStream)
         {
-            CloseRoomResponse LogOutResponse = CloseRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return LogOutResponse;
+            CloseRoomResponse CloseRoomResponse = CloseRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return CloseRoomResponse;
         }
 
         internal struct CloseRoomResponse

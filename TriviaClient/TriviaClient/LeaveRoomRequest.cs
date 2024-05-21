@@ -23,8 +23,8 @@ namespace TriviaClient
 
         public LeaveRoomResponse GetFromServer(NetworkStream clientStream)
         {
-            LeaveRoomResponse LogOutResponse = LeaveRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return LogOutResponse;
+            LeaveRoomResponse LeaveRoomResponse = LeaveRoomResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return LeaveRoomResponse;
         }
 
         internal struct LeaveRoomResponse

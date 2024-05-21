@@ -24,8 +24,8 @@ namespace TriviaClient
 
         public StartGameResponse GetFromServer(NetworkStream clientStream)
         {
-            StartGameResponse LogOutResponse = StartGameResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return LogOutResponse;
+            StartGameResponse StartGameResponse = StartGameResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return StartGameResponse;
         }
 
         internal struct StartGameResponse
