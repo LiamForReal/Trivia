@@ -9,11 +9,12 @@ RoomManager::~RoomManager() {}
 void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room = Room(roomData);
+	room.addUser(user);
 	for (auto it = m_rooms.begin(); it != m_rooms.end(); ++it)
 	{
 		if (room == it->second)
 			throw std::runtime_error("room with this name already exist");
-	}	
+	}
 	this->m_rooms.insert({roomData.id, room});
 }
 

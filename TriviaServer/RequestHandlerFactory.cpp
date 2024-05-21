@@ -8,14 +8,14 @@ RequestHandlerFactory::RequestHandlerFactory()
 	this->_statisticsManager = new StatisticsManager();
 }
 
-RequestHandlerFactory::~RequestHandlerFactory() 
-{
-	::operator delete(this->_statisticsManager);
-	::operator delete(this->_roomManager);
-	::operator delete(this->loginMeneger);
-	this->dataBace->close();
-	::operator delete(this->dataBace);
-}
+RequestHandlerFactory::~RequestHandlerFactory() {}
+//{
+//	::operator delete(this->_statisticsManager);
+//	::operator delete(this->_roomManager);
+//	::operator delete(this->loginMeneger);
+//	this->dataBace->close();
+//	::operator delete(this->dataBace);
+//}
 
 RoomManager& RequestHandlerFactory::getRoomManager() const
 {

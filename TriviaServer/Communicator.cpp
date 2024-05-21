@@ -63,10 +63,22 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 {
                     std::cout << "MENU REQUEST HANDLER\n\n";
                     ri = buildRI(clientSocket, statusCode);
-                    mtx.lock();
-                    rr = _handlers[clientSocket]->handleRequest(ri);
-                    mtx.unlock();
-                    Helper::sendVector(clientSocket, rr.buffer);
+                    try
+                    {
+                        mtx.lock();
+                        rr = _handlers[clientSocket]->handleRequest(ri);
+                        mtx.unlock();
+                        Helper::sendVector(clientSocket, rr.buffer);
+                    }
+                    catch (std::runtime_error& e)
+                    {
+                        if (ri.id == GET_PLAYERS_IN_ROOM_RC)
+                        {
+                            Helper::sendVector(clientSocket, this->rhf.createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
+                        }
+                        else throw e;
+                    }
+                   
                     std::cout << "after sending";
                     if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
                     {
@@ -74,6 +86,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         _handlers[clientSocket] = rr.newHandler;
                         loggedUser.setUserName("");
                     }
+                    //_handlers[clientSocket] = rr.newHandler; how to change
                 }
             } while (rr.newHandler->isRequestRelevant(ri));
         }
