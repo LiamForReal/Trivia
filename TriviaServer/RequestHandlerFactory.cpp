@@ -31,11 +31,16 @@ LoginRequestHandler* RequestHandlerFactory::creatLoginRequestHandler()
 {
 	return new LoginRequestHandler(*this);
 }
+
 LoginManager& RequestHandlerFactory::getLoginMeneger()
 {
 	return *loginMeneger;
 }
 
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(unsigned int roomId)
+{
+	return new RoomAdminRequestHandler(*this, roomId);
+}
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser loggedUser)
 {

@@ -39,7 +39,11 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
     case GET_PERSONAL_STATS_RC:
         return getPersonalStats(ri);
         break;
+    default:
+        throw std::runtime_error("invalid request id [menu request handler]");
+        break;
     }
+    return RequestResult();
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo ri)
