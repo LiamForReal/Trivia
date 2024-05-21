@@ -3,16 +3,17 @@ class RequestHandlerFactory;
 #include "IRequestHandler.h"
 #include "RequestHandlerFactory.h"
 
-class RoomAdminRequestHandler : public IRequestHandler
+class RoomMemberRequestHandler : public IRequestHandler
 {
 public:
-	RoomAdminRequestHandler(RequestHandlerFactory& rhf, unsigned int roomId, LoggedUser owner);
-	~RoomAdminRequestHandler();
+	RoomMemberRequestHandler(RequestHandlerFactory& rhf, unsigned int roomId, LoggedUser member);
+	~RoomMemberRequestHandler();
 	bool isRequestRelevant(const RequestInfo& requestInfo) override;
 	RequestResult handleRequest(const RequestInfo& requestInfo) override;
+
 private:
 	RequestHandlerFactory& _rhf;
 	unsigned int roomId;
-	LoggedUser Owner;
+	LoggedUser Member;
 };
 

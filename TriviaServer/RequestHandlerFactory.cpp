@@ -8,14 +8,14 @@ RequestHandlerFactory::RequestHandlerFactory()
 	this->_statisticsManager = new StatisticsManager();
 }
 
-RequestHandlerFactory::~RequestHandlerFactory() {}
-//{
-//	delete this->_statisticsManager;
-//	delete this->_roomManager;
-//	delete this->loginMeneger;
-//	this->dataBace->close();
-//	delete this->dataBace;
-//}
+RequestHandlerFactory::~RequestHandlerFactory() 
+{
+	::operator delete(this->_statisticsManager);
+	::operator delete(this->_roomManager);
+	::operator delete(this->loginMeneger);
+	this->dataBace->close();
+	::operator delete(this->dataBace);
+}
 
 RoomManager& RequestHandlerFactory::getRoomManager() const
 {
@@ -37,9 +37,14 @@ LoginManager& RequestHandlerFactory::getLoginMeneger()
 	return *loginMeneger;
 }
 
-RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(unsigned int roomId)
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(unsigned int roomId, LoggedUser loggedUser)
 {
-	return new RoomAdminRequestHandler(*this, roomId);
+	return new RoomAdminRequestHandler(*this, roomId, loggedUser);
+}
+
+RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(unsigned int roomId, LoggedUser loggedUser)
+{
+	return new RoomMemberRequestHandler(*this, roomId, loggedUser);
 }
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser loggedUser)
