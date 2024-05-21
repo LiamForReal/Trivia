@@ -14,7 +14,7 @@ class RoomManager
 		unsigned int getRoomState(const unsigned int& id);
 		std::vector<RoomData> getRooms();
 		Room& getRoom(const unsigned int& id);
-		bool isLegalRoom(const unsigned int& id);
+		bool isRoomExist(const unsigned int& id);
 	private:
 		std::map<unsigned int, Room> m_rooms;
 };

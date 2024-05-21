@@ -106,7 +106,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     try
     {
         room = _RHF.getRoomManager().getRoom(gpr.roomId);
-        if (_RHF.getRoomManager().isLegalRoom(gpr.roomId))
+        if (_RHF.getRoomManager().isRoomExist(gpr.roomId))
             status = GET_PLAYERS_IN_ROOM_STATUS;
         else status = GET_PLAYERS_IN_ROOM_ERROR;
     }
@@ -161,7 +161,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
     try
     {
-        if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && (INACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
+        if (_RHF.getRoomManager().isRoomExist(jrr.roomId) && (INACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
         {
             std::cout << "adding user...";
             _RHF.getRoomManager().getRoom(jrr.roomId).addUser(_user);

@@ -12,6 +12,7 @@ bool RoomAdminRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
 	return requestInfo.id == CLOSE_ROOM_RC || requestInfo.id == START_GAME_RC || requestInfo.id == GET_ROOM_STATE_RC;
 }
+
 RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	RequestResult rr = RequestResult();
@@ -22,13 +23,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		rr.newHandler = _rhf.createMenuRequestHandler(Owner);
 		try
 		{
-			vector<string> usersInRoom = _rhf.getRoomManager().getRoom(roomId).getAllUsers();
-			for (int i = 0; i < usersInRoom.size(); i++)
-			{
-				_rhf.getRoomManager().getRoom(roomId).removeUser(usersInRoom[i]);
-				//TODO
-			}
-			//_rhf.getRoomManager().deleteRoom(roomId);
+			_rhf.getRoomManager().deleteRoom(roomId);
 		}
 		catch (std::runtime_error& e)
 		{
@@ -37,11 +32,14 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 			rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
 		}
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(crr);
-		rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
 	}
 	else if (requestInfo.id == START_GAME_RC)
 	{
-		//TODO - discuss on this
+		StartGameResponse sgr = StartGameResponse();
+		_rhf.getRoomManager().getRoom(roomId).setRoomStatus(1);
+		sgr.status = START_GAME_STATUS;
+		rr.buffer = JsonResponsePacketSerializer::serializeResponse(sgr);
+		rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
 	}
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
 	{

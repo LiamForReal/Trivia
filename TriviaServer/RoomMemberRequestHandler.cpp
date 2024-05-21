@@ -34,8 +34,22 @@ RequestResult RoomMemberRequestHandler::handleRequest(const RequestInfo& request
 	}
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
 	{
-
+		GetRoomStateResponse grsr = GetRoomStateResponse();
+		if (_rhf.getRoomManager().isRoomExist(roomId))
+		{
+			if (_rhf.getRoomManager().getRoom(roomId).getMetadata().isActive == 1)
+				grsr.status = GET_ROOM_STATE_SERVER_STATUS;
+			else grsr.status = GET_ROOM_STATE_SERVER_ERROR;
+			rr.buffer = JsonResponsePacketSerializer::serializeResponse(grsr);
+			rr.newHandler = _rhf.createRoomMemberRequestHandler(roomId, Member);
+		}
+		else
+		{
+			grsr.status = GET_ROOM_STATE_ROOM_ERROR;
+			rr.buffer = JsonResponsePacketSerializer::serializeResponse(grsr);
+			rr.newHandler = _rhf.createMenuRequestHandler(Member);
+		}
 	}
-	else throw std::runtime_error("invalid request id [login request handler]");
+	else throw std::runtime_error("invalid request id [room Member handler]");
 	return rr;
 }
