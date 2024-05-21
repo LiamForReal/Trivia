@@ -20,6 +20,10 @@ namespace TriviaClient
             LEAVE_ROOM_RC = 77,
             GET_HIGH_SCORE_RC = 80,
             GET_PERSONAL_STATS_RC = 90,
+            CLOSE_ROOM_RC = 100,
+            START_GAME_RC = 110,
+            GET_ROOM_STATE_RC = 120,
+            LEAVE_ROOM_STATE_RC = 130,
         }
 
         public enum Status
@@ -33,7 +37,11 @@ namespace TriviaClient
             CREATE_ROOM_STATUS = 71,
             LEAVE_ROOM_STATUS = 78,
             GET_HIGH_SCORE_STATUS = 81,
-            GET_PERSONAL_STATS_STATUS = 91
+            GET_PERSONAL_STATS_STATUS = 91,
+            CLOSE_ROOM_STATUS = 101,
+            START_GAME_STATUS = 111,
+            GET_ROOM_STATE_STATUS = 121,
+            LEAVE_ROOM_STATE_STATUS = 131,
         }
 
         public enum Errors
@@ -49,7 +57,11 @@ namespace TriviaClient
             LEAVE_ROOM_ERROR = 79,
             GET_HIGH_SCORE_ERROR = 85,
             THERE_IS_NO_SCORES = 86,
-            GET_PERSONAL_STATS_ERROR = 95
+            GET_PERSONAL_STATS_ERROR = 95,
+            CLOSE_ROOM_ERROR = 105,
+            START_GAME_ERROR = 115,
+            GET_ROOM_STATE_ERROR = 125,
+            LEAVE_ROOM_STATE_ERROR = 135,
         }
     }
 }
