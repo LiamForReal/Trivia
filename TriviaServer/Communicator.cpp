@@ -11,10 +11,18 @@ std::mutex mtx;
 
 Communicator::Communicator()
 {
-    this->rhf = RequestHandlerFactory();
+    this->rhf = new RequestHandlerFactory();
 }
 
-Communicator::~Communicator() {}
+Communicator::~Communicator() 
+{
+    for (auto it = _handlers.begin(); it != _handlers.end(); ++it)
+    {
+        delete it->second;
+        _handlers.erase(it);
+    }
+    delete rhf;
+}
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
@@ -23,14 +31,14 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     RequestResult rr = RequestResult();
     LoggedUser loggedUser = LoggedUser();
     mtx.lock();
-    _handlers[clientSocket] = rhf.creatLoginRequestHandler();
+    _handlers[clientSocket] = rhf->creatLoginRequestHandler();
     mtx.unlock(); 
     rr.newHandler = _handlers[clientSocket];
 
     try
     {
         mtx.lock();
-        size = rhf.getLoginMeneger().getLoggedUsers().size();
+        size = rhf->getLoginMeneger().getLoggedUsers().size();
         mtx.unlock();
         while (true)
         {
@@ -51,7 +59,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         Helper::sendVector(clientSocket, std::ref(rr.buffer));
                         std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
                     }
-                } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
+                } while (rhf->getLoginMeneger().getLoggedUsers().size() == size);
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
                 std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
@@ -63,10 +71,22 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 {
                     std::cout << "MENU REQUEST HANDLER\n\n";
                     ri = buildRI(clientSocket, statusCode);
-                    mtx.lock();
-                    rr = _handlers[clientSocket]->handleRequest(ri);
-                    mtx.unlock();
-                    Helper::sendVector(clientSocket, rr.buffer);
+                    try
+                    {
+                        mtx.lock();
+                        rr = _handlers[clientSocket]->handleRequest(ri);
+                        mtx.unlock();
+                        Helper::sendVector(clientSocket, rr.buffer);
+                    }
+                    catch (std::runtime_error& e)
+                    {
+                        if (ri.id == GET_PLAYERS_IN_ROOM_RC)
+                        {
+                            Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
+                        }
+                        else throw e;
+                    }
+                   
                     std::cout << "after sending";
                     if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
                     {
@@ -74,6 +94,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         _handlers[clientSocket] = rr.newHandler;
                         loggedUser.setUserName("");
                     }
+                    //_handlers[clientSocket] = rr.newHandler; how to change
                 }
             } while (rr.newHandler->isRequestRelevant(ri));
         }

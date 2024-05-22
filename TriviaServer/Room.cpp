@@ -44,6 +44,11 @@ std::vector<std::string> Room::getAllUsers()
 	return vec;
 }
 
+void Room::setRoomStatus(const unsigned int newStatus)
+{
+	this->m_metadata.isActive = newStatus;
+}
+
 RoomData Room::getMetadata() const
 {
 	RoomData deepcopied = this->m_metadata;

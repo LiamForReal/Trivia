@@ -17,3 +17,4 @@ using std::map;
 #include "Requests.hpp"
 #include "Responses.hpp"
 #include "RoomData.hpp"
+#include "Helper.h"
