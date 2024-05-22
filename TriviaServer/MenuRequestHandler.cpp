@@ -61,7 +61,6 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(lr);
     rr.newHandler = _RHF.creatLoginRequestHandler();
     this->_user.setUserName("");
-    std::cout << "im here3\n";
     return rr;
 }
 

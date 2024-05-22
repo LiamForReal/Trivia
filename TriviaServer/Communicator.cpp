@@ -11,10 +11,18 @@ std::mutex mtx;
 
 Communicator::Communicator()
 {
-    this->rhf = RequestHandlerFactory();
+    this->rhf = new RequestHandlerFactory();
 }
 
-Communicator::~Communicator() {}
+Communicator::~Communicator() 
+{
+    for (auto it = _handlers.begin(); it != _handlers.end(); ++it)
+    {
+        delete it->second;
+        _handlers.erase(it);
+    }
+    delete rhf;
+}
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
@@ -23,14 +31,14 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     RequestResult rr = RequestResult();
     LoggedUser loggedUser = LoggedUser();
     mtx.lock();
-    _handlers[clientSocket] = rhf.creatLoginRequestHandler();
+    _handlers[clientSocket] = rhf->creatLoginRequestHandler();
     mtx.unlock(); 
     rr.newHandler = _handlers[clientSocket];
 
     try
     {
         mtx.lock();
-        size = rhf.getLoginMeneger().getLoggedUsers().size();
+        size = rhf->getLoginMeneger().getLoggedUsers().size();
         mtx.unlock();
         while (true)
         {
@@ -51,7 +59,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         Helper::sendVector(clientSocket, std::ref(rr.buffer));
                         std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
                     }
-                } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
+                } while (rhf->getLoginMeneger().getLoggedUsers().size() == size);
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
                 std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
@@ -74,7 +82,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     {
                         if (ri.id == GET_PLAYERS_IN_ROOM_RC)
                         {
-                            Helper::sendVector(clientSocket, this->rhf.createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
+                            Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
                         }
                         else throw e;
                     }

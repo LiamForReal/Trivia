@@ -15,7 +15,7 @@ class RequestHandlerFactory
 {
 public:
 	RequestHandlerFactory();
-	virtual ~RequestHandlerFactory();
+	~RequestHandlerFactory();
 	LoginRequestHandler* creatLoginRequestHandler();
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(unsigned int roomId, LoggedUser loggedUser);
 	RoomMemberRequestHandler* createRoomMemberRequestHandler(unsigned int roomId, LoggedUser loggedUser);
