@@ -44,7 +44,7 @@ namespace TriviaClient
             this.refreshBackgroundWorker.RunWorkerAsync();
             this.isOwner = isOwner;
 
-            if (isOwner )
+            if (isOwner)
             {
                 this.LeaveRoomButton.IsEnabled = false;
                 this.LeaveRoomButton.Visibility = Visibility.Collapsed;
@@ -57,9 +57,16 @@ namespace TriviaClient
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            mainWindow.Show();
-            this.refreshBackgroundWorker.CancelAsync();
+            LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
+            leaveRoomRequest.SendToServer(this.mainWindow.clientStream);
+            LeaveRoomRequest.LeaveRoomResponse leaveRoomResponse = leaveRoomRequest.GetFromServer(this.mainWindow.clientStream);
+
+            if ((uint)Cods.Status.LEAVE_ROOM_STATUS == leaveRoomResponse.status)
+            {
+                this.Close();
+                mainWindow.Show();
+                this.refreshBackgroundWorker.CancelAsync();
+            }
         }
 
         private void RefreshPlayersInRoom()

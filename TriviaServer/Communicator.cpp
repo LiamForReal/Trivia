@@ -77,6 +77,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         rr = _handlers[clientSocket]->handleRequest(ri);
                         mtx.unlock();
                         Helper::sendVector(clientSocket, rr.buffer);
+                        // _handlers[clientSocket] = rr.newHandler; // dont let liam code causes error
                     }
                     catch (std::runtime_error& e)
                     {
@@ -91,12 +92,11 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
                     {
                         std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
-                        _handlers[clientSocket] = rr.newHandler;
+                        _handlers[clientSocket] = rhf->creatLoginRequestHandler();
                         loggedUser.setUserName("");
                     }
-                    //_handlers[clientSocket] = rr.newHandler; how to change
                 }
-            } while (rr.newHandler->isRequestRelevant(ri));
+            } while (rr.newHandler->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC);
         }
 
     }
@@ -130,7 +130,7 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
     std::cout << "DEBUG: Status code: " << statusCode << std::endl;
     ri.buffer.insert(ri.buffer.begin(), STATUS_CODE_BYTES_LENGTH, static_cast<unsigned char>(statusCode));
 
-    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || statusCode == GET_PERSONAL_STATS_RC)
+    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || statusCode == GET_PERSONAL_STATS_RC || statusCode == LEAVE_ROOM_RC || statusCode == START_GAME_RC || statusCode == CLOSE_ROOM_RC || statusCode == GET_ROOM_STATE_RC)
         return ri;
 
     clientMsgLength = Helper::getLengthPartFromSocket(clientSocket);
