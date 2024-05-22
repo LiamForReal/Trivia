@@ -52,8 +52,34 @@
                 </ListBox>
             </StackPanel>
 
+            <!-- Buttons For User -->
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="5" Orientation="Vertical">
                 <Button Name="LeaveRoomButton" Content="Leave Room" Width="100" Click="LeaveRoomButton_Click" Margin="5"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="15"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
+            </StackPanel>
+
+            <!-- Buttons For Owner -->
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="5" Orientation="Vertical">
+                <Button Name="StartGameButton" Content="Start Game" Width="100" Click="StartGameButton_Click" Margin="5" Visibility="Collapsed" IsEnabled="False"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="15"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                />
+
+                <Button Name="CloseRoomButton" Content="Close Room" Width="100" Click="CloseRoomButton_Click" Margin="5" Visibility="Collapsed" IsEnabled="False"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"

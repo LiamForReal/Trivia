@@ -76,7 +76,7 @@ namespace TriviaClient
                 {
                     this.Hide();
                     this.refreshBackgroundWorker.CancelAsync();
-                    this.connectedRoom = new ConnectedRoom(this.mainWindow);
+                    this.connectedRoom = new ConnectedRoom(this.mainWindow, false);
                     this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
                     this.connectedRoom.Show();
                 } else MessageBox.Show("cant join room");

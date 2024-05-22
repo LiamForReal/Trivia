@@ -41,7 +41,7 @@ namespace TriviaClient
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            this.connectedRoom = new ConnectedRoom(mainWindow);
+            this.connectedRoom = new ConnectedRoom(mainWindow, true);
             this.connectedRoom.room = this;    
             this.connectedRoom.mainWindow = this.mainWindow;
             this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
