@@ -39,7 +39,11 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
     case GET_PERSONAL_STATS_RC:
         return getPersonalStats(ri);
         break;
+    default:
+        throw std::runtime_error("invalid request id [menu request handler]");
+        break;
     }
+    return RequestResult();
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo ri)
@@ -57,7 +61,6 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(lr);
     rr.newHandler = _RHF.creatLoginRequestHandler();
     this->_user.setUserName("");
-    std::cout << "im here3\n";
     return rr;
 }
 
@@ -102,7 +105,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo ri) //go over
     try
     {
         room = _RHF.getRoomManager().getRoom(gpr.roomId);
-        if (_RHF.getRoomManager().isLegalRoom(gpr.roomId))
+        if (_RHF.getRoomManager().isRoomExist(gpr.roomId))
             status = GET_PLAYERS_IN_ROOM_STATUS;
         else status = GET_PLAYERS_IN_ROOM_ERROR;
     }
@@ -154,13 +157,15 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     rr.buffer = std::vector<unsigned char>();
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
+    
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
     try
     {
-        if (_RHF.getRoomManager().isLegalRoom(jrr.roomId) && (INACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
+        if (_RHF.getRoomManager().isRoomExist(jrr.roomId) && (INACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
         {
-            std::cout << "adding user...";
             _RHF.getRoomManager().getRoom(jrr.roomId).addUser(_user);
+            std::cout << "CREATE ROOM MEMEBER HANDLER\n\n";
+            rr.newHandler = _RHF.createRoomMemberRequestHandler(jrr.roomId, _user);
             status = JOIN_ROOM_STATUS;
         } 
         else status = JOIN_ROOM_ERROR;
@@ -169,13 +174,12 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     {
         std::cout << e.what() << std::endl;
         status = JOIN_ROOM_ERROR;
+        rr.newHandler = _RHF.createMenuRequestHandler(_user);
     }
     JoinRoomResponse jrre;
     jrre.status = status;
     buffer = JsonResponsePacketSerializer::serializeResponse(jrre);
     std::copy(buffer.begin(), buffer.end(), std::back_inserter(rr.buffer));
-
-    rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
 
@@ -199,8 +203,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         if (crre.status == CREATE_ROOM_STATUS)
         {
             _RHF.getRoomManager().createRoom(_user, roomData);
-            std::cout << "befor exception!!\n";
-            _RHF.getRoomManager().getRoom(roomData.id).addUser(_user);
+            std::cout << "CREATE ROOM ADMIN HANDLER\n\n";
+            rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);
         }
             
     }
@@ -208,8 +212,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     {
         std::cout << e.what() << std::endl;
         crre.status = CREATE_ROOM_ERROR;
+        rr.newHandler = _RHF.createMenuRequestHandler(_user);
     }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
-    rr.newHandler = _RHF.createMenuRequestHandler(_user);
     return rr;
 }
