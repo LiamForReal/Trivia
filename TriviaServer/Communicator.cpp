@@ -53,9 +53,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         ri = buildRI(clientSocket, statusCode);
                         std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
                         rr = rr.newHandler->handleRequest(ri);
-                        if (rr.newHandler == nullptr)
-                            rr.newHandler = _handlers[clientSocket];
-                        else _handlers[clientSocket] = rr.newHandler;
+                        _handlers[clientSocket] = rr.newHandler;
                         Helper::sendVector(clientSocket, std::ref(rr.buffer));
                         std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
                     }
@@ -63,7 +61,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
                 std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
-            
             do
             {
                 statusCode = Helper::socketHasData(clientSocket);
@@ -73,6 +70,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     ri = buildRI(clientSocket, statusCode);
                     try
                     {
+                        _handlers[clientSocket] = rr.newHandler;
                         mtx.lock();
                         rr = _handlers[clientSocket]->handleRequest(ri);
                         mtx.unlock();
@@ -84,6 +82,10 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         {
                             Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
                         }
+                        else if (ri.id == GET_ROOMS_RC)
+                        {
+                            Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getRooms(ri).buffer);
+                        }
                         else throw e;
                     }
                    
@@ -91,12 +93,12 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
                     {
                         std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
-                        _handlers[clientSocket] = rr.newHandler;
+                        _handlers[clientSocket] = rhf->creatLoginRequestHandler();
                         loggedUser.setUserName("");
                     }
-                    //_handlers[clientSocket] = rr.newHandler; how to change
                 }
-            } while (rr.newHandler->isRequestRelevant(ri));
+            } while (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC);
+
         }
 
     }
@@ -130,7 +132,9 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
     std::cout << "DEBUG: Status code: " << statusCode << std::endl;
     ri.buffer.insert(ri.buffer.begin(), STATUS_CODE_BYTES_LENGTH, static_cast<unsigned char>(statusCode));
 
-    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || statusCode == GET_PERSONAL_STATS_RC)
+    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || 
+        statusCode == GET_PERSONAL_STATS_RC || statusCode == LEAVE_ROOM_RC || statusCode == CLOSE_ROOM_RC 
+        || statusCode == GET_ROOM_STATE_RC || statusCode == START_GAME_RC)
         return ri;
 
     clientMsgLength = Helper::getLengthPartFromSocket(clientSocket);

@@ -33,6 +33,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		SignupResponse sresponse;
 		sresponse.status = status;
 		this->rr.buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
+		this->rr.newHandler = rhf.creatLoginRequestHandler();
 	}
 	else throw std::runtime_error("invalid request id [login request handler]");
 	return this->rr;
