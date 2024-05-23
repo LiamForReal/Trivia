@@ -70,7 +70,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                     ri = buildRI(clientSocket, statusCode);
                     try
                     {
-                        _handlers[clientSocket] = rr.newHandler;
+                        //_handlers[clientSocket] = rr.newHandler;
                         mtx.lock();
                         rr = _handlers[clientSocket]->handleRequest(ri);
                         mtx.unlock();
@@ -97,7 +97,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         loggedUser.setUserName("");
                     }
                 }
-            } while (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC);
+            } while (rr.newHandler->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC);
 
         }
 
