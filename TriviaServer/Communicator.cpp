@@ -71,32 +71,38 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 {
                     std::cout << "MENU REQUEST HANDLER\n\n";
                     ri = buildRI(clientSocket, statusCode);
-                    try
+                    _handlers[clientSocket] = rr.newHandler;
+                    if (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC)
                     {
-                        mtx.lock();
-                        rr = _handlers[clientSocket]->handleRequest(ri);
-                        mtx.unlock();
-                        Helper::sendVector(clientSocket, rr.buffer);
-                        // _handlers[clientSocket] = rr.newHandler; // dont let liam code causes error
-                    }
-                    catch (std::runtime_error& e)
-                    {
-                        if (ri.id == GET_PLAYERS_IN_ROOM_RC)
+                        try
                         {
-                            Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
+                            mtx.lock();
+                            rr = _handlers[clientSocket]->handleRequest(ri);
+                            mtx.unlock();
+                            Helper::sendVector(clientSocket, rr.buffer);
                         }
-                        else throw e;
-                    }
-                   
-                    std::cout << "after sending";
-                    if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
-                    {
-                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
-                        _handlers[clientSocket] = rhf->creatLoginRequestHandler();
-                        loggedUser.setUserName("");
+                        catch (std::runtime_error& e)
+                        {
+                            if (ri.id == GET_PLAYERS_IN_ROOM_RC)
+                            {
+                                Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
+                            }
+                            else if (ri.id == GET_ROOMS_RC)
+                            {
+                                Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getRooms(ri).buffer);
+                            }
+                            else throw e;
+                        }
+
+                        if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
+                        {
+                            std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
+                            _handlers[clientSocket] = rhf->creatLoginRequestHandler();
+                            loggedUser.setUserName("");
+                        }
                     }
                 }
-            } while (rr.newHandler->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC);
+            } while (loggedUser.getUserName() != "");
         }
 
     }
