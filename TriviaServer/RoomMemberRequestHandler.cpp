@@ -37,12 +37,12 @@ RequestResult RoomMemberRequestHandler::handleRequest(const RequestInfo& request
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
 	{
 		GetRoomStateResponse grsr = GetRoomStateResponse();
-		grsr.players = std::vector<std::string>();
-		std::vector<std::string> usersInRoom = _rhf.getRoomManager().getRoom(roomId).getAllUsers();
-		std::copy(usersInRoom.begin(), usersInRoom.end(), std::back_inserter(grsr.players));
-
+		grsr.players = std::vector<std::string>();	
+		std::cout << "GET_ROOM_STATE_RC: " << Member.getUserName();
 		if (_rhf.getRoomManager().isRoomExist(roomId))
 		{
+			std::vector<std::string> usersInRoom = _rhf.getRoomManager().getRoom(roomId).getAllUsers();
+			std::copy(usersInRoom.begin(), usersInRoom.end(), std::back_inserter(grsr.players));
 			if (_rhf.getRoomManager().getRoom(roomId).getMetadata().isActive == 1)
 				grsr.status = GET_ROOM_STATE_SERVER_STATUS;
 			else grsr.status = GET_ROOM_STATE_SERVER_ERROR;

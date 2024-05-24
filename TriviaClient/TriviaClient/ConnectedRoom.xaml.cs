@@ -84,22 +84,23 @@ namespace TriviaClient
             getRoomStateRequest.SendToServer(this.mainWindow.clientStream);
             GetRoomStateRequest.GetRoomStateResponse getRoomStateResponse = getRoomStateRequest.GetFromServer(this.mainWindow.clientStream);
 
-            // room is closed
             if ((uint)Cods.Errors.GET_ROOM_STATE_ROOM_ERROR == getRoomStateResponse.status)
             {
-                this.Close();
-                this.mainWindow.Show();
                 this.getRoomStateBackgroundWorker.CancelAsync();
+                this.mainWindow.Show();
+                this.Close();
             }
             else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status)
             {
                 // TODO: add game play logic
             }
-
-            this.PlayersListBox.Items.Clear();
-            foreach (string player in getRoomStateResponse.players)
+            else
             {
-                this.PlayersListBox.Items.Add(player);
+                this.PlayersListBox.Items.Clear();
+                foreach (string player in getRoomStateResponse.players)
+                {
+                    this.PlayersListBox.Items.Add(player);
+                }
             }
         }
 
@@ -148,7 +149,6 @@ namespace TriviaClient
             CloseRoomRequest closeRoomRequest = new CloseRoomRequest();
             closeRoomRequest.SendToServer(this.mainWindow.clientStream);
             CloseRoomRequest.CloseRoomResponse closeRoomResponse = closeRoomRequest.GetFromServer(this.mainWindow.clientStream);
-            MessageBox.Show(closeRoomResponse.status.ToString());
 
             if ((uint)(Cods.Status.CLOSE_ROOM_STATUS) == closeRoomResponse.status)
             {
