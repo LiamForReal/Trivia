@@ -13,7 +13,7 @@ namespace TriviaClient
         {
 
             List<byte> list = new List<byte>();
-            list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
+            list.Add((byte)Cods.ResponseCode.CLOSE_ROOM_RC);
             return list;
         }
 

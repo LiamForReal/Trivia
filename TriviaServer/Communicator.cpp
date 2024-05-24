@@ -64,8 +64,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 {
                     std::cout << "MENU REQUEST HANDLER " << loggedUser.getUserName() << "\n\n";
                     ri = buildRI(clientSocket, statusCode);
-                    _handlers[clientSocket] = rr.newHandler;
-                    if (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC)
+                    // _handlers[clientSocket] = rr.newHandler;
+                    if (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_ROOMS_RC)
                     {
                         try
                         {
@@ -74,11 +74,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         }
                         catch (std::runtime_error& e)
                         {
-                            if (ri.id == GET_PLAYERS_IN_ROOM_RC)
-                            {
-                                Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getPlayersInRoom(ri).buffer);
-                            }
-                            else if (ri.id == GET_ROOMS_RC)
+                            if (ri.id == GET_ROOMS_RC)
                             {
                                 Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getRooms(ri).buffer);
                             }
@@ -92,6 +88,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                             loggedUser.setUserName("");
                         }
                     }
+
+                    _handlers[clientSocket] = rr.newHandler;
                 }
             } while (loggedUser.getUserName() != "");
         }

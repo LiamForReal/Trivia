@@ -46,6 +46,9 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
 	{
 		GetRoomStateResponse grsr = GetRoomStateResponse(); //TO CHANGE
+		grsr.players = std::vector<std::string>();
+		std::vector<std::string> usersInRoom = _rhf.getRoomManager().getRoom(roomId).getAllUsers();
+		std::copy(usersInRoom.begin(), usersInRoom.end(), std::back_inserter(grsr.players));
 		if (_rhf.getRoomManager().getRoom(roomId).getMetadata().isActive == 1)
 			grsr.status = GET_ROOM_STATE_SERVER_STATUS;
 		else grsr.status = GET_ROOM_STATE_SERVER_ERROR;
