@@ -34,11 +34,11 @@ namespace TriviaClient
         {
             public uint status;
             public bool hasGameBegun;
-            public string[] players;
+            public List<string> players;
             public uint questionCount;
             public uint answerTimeout;
 
-            public GetRoomStateResponse(uint status, bool hasGameBegun, string[] players, uint questionCount, uint answerTimeout)
+            public GetRoomStateResponse(uint status, bool hasGameBegun, List<string> players, uint questionCount, uint answerTimeout)
             {
                 this.status = status;
                 this.hasGameBegun = hasGameBegun;

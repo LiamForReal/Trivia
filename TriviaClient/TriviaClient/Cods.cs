@@ -57,8 +57,10 @@ namespace TriviaClient
             GET_PERSONAL_STATS_ERROR = 95,
             CLOSE_ROOM_ERROR = 105,
             START_GAME_ERROR = 115,
-            GET_ROOM_STATE_ERROR = 125,
+            GET_ROOM_STATE_SERVER_ERROR = 125,
+            GET_ROOM_STATE_ROOM_ERROR = 126,
             LEAVE_ROOM_ERROR = 135,
         }
     }
 }
+
