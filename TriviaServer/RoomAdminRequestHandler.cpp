@@ -50,6 +50,6 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(grsr);
 		rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
 	}
-	else  throw std::runtime_error("invalid request id [Room admin request handler]");
+	else throw std::runtime_error("invalid request id [Room admin request handler]");
 	return rr;
 }
