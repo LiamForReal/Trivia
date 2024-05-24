@@ -51,6 +51,7 @@ RequestResult RoomMemberRequestHandler::handleRequest(const RequestInfo& request
 			rr.buffer = JsonResponsePacketSerializer::serializeResponse(grsr);
 			rr.newHandler = _rhf.createMenuRequestHandler(Member);
 		}
+		std::cout << "DEBUG: response code " << grsr.status << std::endl;
 	}
 	else throw std::runtime_error("invalid request id [room Member handler]");
 	return rr;

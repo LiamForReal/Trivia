@@ -31,6 +31,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 			crr.status = CLOSE_ROOM_ERROR;
 			rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
 		}
+		std::cout << "DEBUG: response code " << crr.status << std::endl;
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(crr);
 	}
 	else if (requestInfo.id == START_GAME_RC)
@@ -39,6 +40,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		_rhf.getRoomManager().getRoom(roomId).setRoomStatus(1);
 		sgr.status = START_GAME_STATUS;
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(sgr);
+		std::cout << "DEBUG: response code " << sgr.status << std::endl;
 		rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
 	}
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
