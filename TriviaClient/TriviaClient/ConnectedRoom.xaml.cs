@@ -63,9 +63,9 @@ namespace TriviaClient
 
             if ((uint)Cods.Status.LEAVE_ROOM_STATUS == leaveRoomResponse.status)
             {
+                this.refreshBackgroundWorker.CancelAsync();
                 this.Close();
                 mainWindow.Show();
-                this.refreshBackgroundWorker.CancelAsync();
             }
         }
 

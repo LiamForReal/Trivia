@@ -20,16 +20,18 @@ RequestResult RoomMemberRequestHandler::handleRequest(const RequestInfo& request
 	{
 		LeaveRoomResponse lrr = LeaveRoomResponse();
 		lrr.status = LEAVE_ROOM_STATUS;
+		rr.newHandler = _rhf.createMenuRequestHandler(Member);
 		try
 		{
 			_rhf.getRoomManager().getRoom(roomId).removeUser(Member);
-			rr.newHandler = _rhf.createRoomMemberRequestHandler(roomId, Member);
 		}
 		catch (std::runtime_error& e)
 		{
 			lrr.status = LEAVE_ROOM_ERROR;
+			rr.newHandler = _rhf.createRoomMemberRequestHandler(roomId, Member);
 			std::cout << e.what() << std::endl;
 		}
+		std::cout << "DEBUG: response code " << lrr.status << std::endl;
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(lrr);
 	}
 	else if (requestInfo.id == GET_ROOM_STATE_RC)

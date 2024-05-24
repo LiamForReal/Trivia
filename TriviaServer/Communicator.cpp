@@ -56,7 +56,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
                 std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
-            std::cout << "ready to menu\n";
+
             do
             {
                 statusCode = Helper::socketHasData(clientSocket);
