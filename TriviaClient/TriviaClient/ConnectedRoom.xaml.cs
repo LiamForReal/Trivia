@@ -25,10 +25,11 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public CreateRoom room;
+        public bool isOwner;
 
         private BackgroundWorker refreshBackgroundWorker = new BackgroundWorker();
 
-        public ConnectedRoom(MainWindow main)
+        public ConnectedRoom(MainWindow main, bool isOwner)
         {
             this.mainWindow = main;
             InitializeComponent();
@@ -41,13 +42,31 @@ namespace TriviaClient
             this.refreshBackgroundWorker.RunWorkerCompleted += this.RefreshPlayersInRoomLoop_RunWorkerCompleted;
 
             this.refreshBackgroundWorker.RunWorkerAsync();
+            this.isOwner = isOwner;
+
+            if (isOwner)
+            {
+                this.LeaveRoomButton.IsEnabled = false;
+                this.LeaveRoomButton.Visibility = Visibility.Collapsed;
+                this.StartGameButton.IsEnabled = true;
+                this.StartGameButton.Visibility = Visibility.Visible;
+                this.CloseRoomButton.IsEnabled = true;
+                this.CloseRoomButton.Visibility = Visibility.Visible;
+            }
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            mainWindow.Show();
-            this.refreshBackgroundWorker.CancelAsync();
+            LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
+            leaveRoomRequest.SendToServer(this.mainWindow.clientStream);
+            LeaveRoomRequest.LeaveRoomResponse leaveRoomResponse = leaveRoomRequest.GetFromServer(this.mainWindow.clientStream);
+
+            if ((uint)Cods.Status.LEAVE_ROOM_STATUS == leaveRoomResponse.status)
+            {
+                this.Close();
+                mainWindow.Show();
+                this.refreshBackgroundWorker.CancelAsync();
+            }
         }
 
         private void RefreshPlayersInRoom()
@@ -114,6 +133,16 @@ namespace TriviaClient
             {
                 MessageBox.Show("BackgroundWorker ended successfully");
             }
+        }
+
+        private void StartGameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CloseRoomButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

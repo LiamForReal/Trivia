@@ -203,8 +203,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         if (crre.status == CREATE_ROOM_STATUS)
         {
             _RHF.getRoomManager().createRoom(_user, roomData);
-            std::cout << "CREATE ROOM ADMIN HANDLER\n\n";
             rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);
+            std::cout << "CREATE ROOM ADMIN HANDLER\n\n";
         }
             
     }

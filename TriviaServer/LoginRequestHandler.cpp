@@ -36,5 +36,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		this->rr.newHandler = rhf.creatLoginRequestHandler();
 	}
 	else throw std::runtime_error("invalid request id [login request handler]");
+	if (this->rr.newHandler == nullptr)
+		this->rr.newHandler = rhf.creatLoginRequestHandler();
 	return this->rr;
 }
