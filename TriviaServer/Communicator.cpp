@@ -7,7 +7,7 @@
 #include "MenuRequestHandler.h"
 #include <mutex>
 
-std::mutex mtx;
+//std::mutex mtx; FIND WAY TO COMBINE IT
 
 Communicator::Communicator()
 {
@@ -30,16 +30,11 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     RequestInfo ri = RequestInfo();
     RequestResult rr = RequestResult();
     LoggedUser loggedUser = LoggedUser();
-    mtx.lock();
     _handlers[clientSocket] = rhf->creatLoginRequestHandler();
-    mtx.unlock(); 
     rr.newHandler = _handlers[clientSocket];
-
     try
     {
-        mtx.lock();
         size = rhf->getLoginMeneger().getLoggedUsers().size();
-        mtx.unlock();
         while (true)
         {
             if (loggedUser.getUserName() == "")
@@ -53,9 +48,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         ri = buildRI(clientSocket, statusCode);
                         std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
                         rr = rr.newHandler->handleRequest(ri);
-                        if (rr.newHandler == nullptr)
-                            rr.newHandler = _handlers[clientSocket];
-                        else _handlers[clientSocket] = rr.newHandler;
+                        _handlers[clientSocket] = rr.newHandler;
                         Helper::sendVector(clientSocket, std::ref(rr.buffer));
                         std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
                     }
@@ -63,22 +56,20 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
                 std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
-            
+            std::cout << "ready to menu\n";
             do
             {
                 statusCode = Helper::socketHasData(clientSocket);
                 if (statusCode != 0 && statusCode != -1)
                 {
-                    std::cout << "MENU REQUEST HANDLER\n\n";
+                    std::cout << "MENU REQUEST HANDLER " << loggedUser.getUserName() << "\n\n";
                     ri = buildRI(clientSocket, statusCode);
                     _handlers[clientSocket] = rr.newHandler;
                     if (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_PLAYERS_IN_ROOM_RC || ri.id == GET_ROOMS_RC)
                     {
                         try
                         {
-                            mtx.lock();
                             rr = _handlers[clientSocket]->handleRequest(ri);
-                            mtx.unlock();
                             Helper::sendVector(clientSocket, rr.buffer);
                         }
                         catch (std::runtime_error& e)
