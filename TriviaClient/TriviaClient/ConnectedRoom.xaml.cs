@@ -26,6 +26,7 @@ namespace TriviaClient
         public MainWindow mainWindow;
         public CreateRoom room;
         public bool isOwner;
+        public GameScreen gameScreen;
 
         private BackgroundWorker getRoomStateBackgroundWorker;
 
@@ -93,7 +94,8 @@ namespace TriviaClient
             else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status && !isOwner)
             {
                 this.getRoomStateBackgroundWorker.CancelAsync();
-                //this.gameScreen.show();
+                this.gameScreen = new GameScreen();
+                this.gameScreen.Show();
                 this.Close();
             }
             else
@@ -147,7 +149,8 @@ namespace TriviaClient
             if (Cods.Status.START_GAME_STATUS == (Cods.Status)responed.status)
             {
                 this.Hide();
-                //this.gameScreen.show();
+                this.gameScreen = new GameScreen();
+                this.gameScreen.Show();
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }
