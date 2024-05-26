@@ -55,7 +55,7 @@ namespace TriviaClient
                 this.CloseRoomButton.IsEnabled = true;
                 this.CloseRoomButton.Visibility = Visibility.Visible;
             }
-            
+
             this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }
 
