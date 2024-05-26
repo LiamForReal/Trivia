@@ -65,9 +65,9 @@ namespace TriviaClient
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
-            
-            Cods.Status res = (Cods.Status)(createRoomRequest.GetFromServer(mainWindow.clientStream).status);
-            if (res == Cods.Status.CREATE_ROOM_STATUS)
+
+            CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);
+            if ((uint)Cods.Status.CREATE_ROOM_STATUS == createRoomResponse.status)
             {
                 try
                 {

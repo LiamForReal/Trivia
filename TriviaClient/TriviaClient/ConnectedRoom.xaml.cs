@@ -132,11 +132,11 @@ namespace TriviaClient
         {
             if (e.Cancelled)
             {
-                MessageBox.Show("BackgroundWorker cancelled");
+                // MessageBox.Show("BackgroundWorker cancelled");
             }
             else
             {
-                MessageBox.Show("BackgroundWorker ended successfully");
+                // MessageBox.Show("BackgroundWorker ended successfully");
             }
         }
 
