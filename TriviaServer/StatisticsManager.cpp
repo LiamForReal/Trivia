@@ -60,7 +60,7 @@ vector<string> StatisticsManager::getHighScore()
 vector<string> StatisticsManager::getUserStatistics(string username) const
 {
 	vector<string> userStatistics; //user statistics: number of games | number of correct answers | number of wrong answers | avrage time for answer
-	double correctAnswers = 0.0;
+	int correctAnswers = 0.0;
 	userStatistics.push_back(std::to_string(_db->getNumOfPlayerGames(username)));
 	correctAnswers = _db->getNumOfCorrectAnswers(username);
 	userStatistics.push_back(std::to_string(correctAnswers));

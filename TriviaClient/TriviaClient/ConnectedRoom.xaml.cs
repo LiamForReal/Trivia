@@ -84,15 +84,17 @@ namespace TriviaClient
             getRoomStateRequest.SendToServer(this.mainWindow.clientStream);
             GetRoomStateRequest.GetRoomStateResponse getRoomStateResponse = getRoomStateRequest.GetFromServer(this.mainWindow.clientStream);
 
-            if ((uint)Cods.Errors.GET_ROOM_STATE_ROOM_ERROR == getRoomStateResponse.status)
+            if ((uint)Cods.Errors.GET_ROOM_STATE_ROOM_ERROR == getRoomStateResponse.status && !isOwner)
             {
                 this.getRoomStateBackgroundWorker.CancelAsync();
                 this.mainWindow.Show();
                 this.Close();
             }
-            else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status)
+            else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status && !isOwner)
             {
-                // TODO: add game play logic
+                this.getRoomStateBackgroundWorker.CancelAsync();
+                //this.gameScreen.show();
+                this.Close();
             }
             else
             {
@@ -138,10 +140,18 @@ namespace TriviaClient
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO logic
+            this.getRoomStateBackgroundWorker.CancelAsync();
+            StartGameRequest sgr = new StartGameRequest();
+            sgr.SendToServer(this.mainWindow.clientStream);
+            StartGameRequest.StartGameResponse responed = sgr.GetFromServer(this.mainWindow.clientStream);
+            if (Cods.Status.START_GAME_STATUS == (Cods.Status)responed.status)
+            {
+                this.Hide();
+                //this.gameScreen.show();
+            }
+            else this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }
 
-        // work in progress
         private void CloseRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.getRoomStateBackgroundWorker.CancelAsync();
