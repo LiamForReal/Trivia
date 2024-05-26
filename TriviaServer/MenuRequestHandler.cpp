@@ -187,6 +187,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 {
     CreateRoomResponse crre = CreateRoomResponse();
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
+    rr.newHandler = _RHF.createMenuRequestHandler(_user);
     try
     {
         RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
@@ -196,8 +197,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         {
             if (it->id == roomData.id || it->name == roomData.name)
             {
-                crre.status = CREATE_ROOM_ERROR;
+                throw std::runtime_error("room already exist");
             }
+            std::cout << it->name << " = " << roomData.name;
         }
 
         if (crre.status == CREATE_ROOM_STATUS)
@@ -212,7 +214,6 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     {
         std::cout << e.what() << std::endl;
         crre.status = CREATE_ROOM_ERROR;
-        rr.newHandler = _RHF.createMenuRequestHandler(_user);
     }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
     return rr;

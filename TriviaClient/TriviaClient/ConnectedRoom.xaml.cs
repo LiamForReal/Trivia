@@ -142,7 +142,7 @@ namespace TriviaClient
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
             this.getRoomStateBackgroundWorker.CancelAsync();
-            this.GameScreen = new GameScreen();
+            this.GameScreen = new GameScreen(this);
             StartGameRequest sgr = new StartGameRequest();
             sgr.SendToServer(this.mainWindow.clientStream);
             StartGameRequest.StartGameResponse responed = sgr.GetFromServer(this.mainWindow.clientStream);

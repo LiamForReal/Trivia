@@ -42,11 +42,11 @@ namespace TriviaClient
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             this.connectedRoom = new ConnectedRoom(mainWindow, true);
-            this.connectedRoom.room = this;    
+            this.connectedRoom.room = this;
             this.connectedRoom.mainWindow = this.mainWindow;
             this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
 
-            if (this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
+            if (this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == ""
                 || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "")
 
             {
@@ -60,14 +60,16 @@ namespace TriviaClient
                 createRoomRequest.answerTimeout = uint.Parse(this.TimeForQuestionTextBox.Text);
                 createRoomRequest.questionsCount = uint.Parse(this.NumberOfQuestionsTextBox.Text);
                 createRoomRequest.SendToServer(mainWindow.clientStream);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
-            
-            Cods.Status res = (Cods.Status)(createRoomRequest.GetFromServer(mainWindow.clientStream).status);
-            if (res == Cods.Status.CREATE_ROOM_STATUS)
+
+            CreateRoomRequest.CreateRoomResponse roomResponse = createRoomRequest.GetFromServer(mainWindow.clientStream);
+
+            if (roomResponse.status == (uint)Cods.Status.CREATE_ROOM_STATUS)
             {
                 try
                 {
@@ -79,11 +81,12 @@ namespace TriviaClient
                     MessageBox.Show(ex.ToString());
                     return;
                 }
-                
+
                 this.Close();
                 connectedRoom.Show();
             }
             else MessageBox.Show("[CreateRoom] error");
         }
+          
     }
 }
