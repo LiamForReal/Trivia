@@ -187,6 +187,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 {
     CreateRoomResponse crre = CreateRoomResponse();
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
+    rr.newHandler = _RHF.createMenuRequestHandler(_user);
+
     try
     {
         RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
