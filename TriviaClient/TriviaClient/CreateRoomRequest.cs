@@ -17,6 +17,14 @@ namespace TriviaClient
         public uint questionsCount;
         public uint answerTimeout;
 
+        public CreateRoomRequest()
+        {
+            this.roomName = "";
+            this.maxUsers = 0;
+            this.questionsCount = 0;
+            this.answerTimeout = 0;
+        }
+
         public CreateRoomRequest(string roomName, uint maxUsers, uint questionsCount, uint answerTimeout)
         {
             this.roomName = roomName;

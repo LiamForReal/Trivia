@@ -21,7 +21,6 @@ namespace TriviaClient
     public partial class CreateRoom : Window
     {
         public MainWindow mainWindow;
-        private CreateRoomRequest createRoomRequest;
         private List<CreateRoomRequest.RoomData> rooms;
         public ConnectedRoom connectedRoom;
 
@@ -29,7 +28,6 @@ namespace TriviaClient
         {
             mainWindow = main;
             rooms = new List<CreateRoomRequest.RoomData>();
-            createRoomRequest = new CreateRoomRequest("", 0, 0, 0);
             InitializeComponent();
         }
 
@@ -55,35 +53,37 @@ namespace TriviaClient
             }
             try
             {
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest();
                 createRoomRequest.roomName = this.RoomNameTextBox.Text;
                 createRoomRequest.maxUsers = uint.Parse(this.NumberOfPlayersTextBox.Text);
                 createRoomRequest.answerTimeout = uint.Parse(this.TimeForQuestionTextBox.Text);
                 createRoomRequest.questionsCount = uint.Parse(this.NumberOfQuestionsTextBox.Text);
-                createRoomRequest.SendToServer(mainWindow.clientStream);
-            }catch(Exception ex)
+                createRoomRequest.SendToServer(this.mainWindow.clientStream);
+
+                CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);
+                if ((uint)Cods.Status.CREATE_ROOM_STATUS == createRoomResponse.status)
+                {
+                    try
+                    {
+                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, (uint)this.rooms.Count());
+                        rooms.Add(roomData);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                        return;
+                    }
+
+                    this.Close();
+                    connectedRoom.Show();
+                }
+                else MessageBox.Show("[CreateRoom] error");
+            }
+            catch(Exception ex)
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;
             }
-
-            CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);
-            if ((uint)Cods.Status.CREATE_ROOM_STATUS == createRoomResponse.status)
-            {
-                try
-                {
-                    CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, (uint)this.rooms.Count());
-                    rooms.Add(roomData);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                    return;
-                }
-                
-                this.Close();
-                connectedRoom.Show();
-            }
-            else MessageBox.Show("[CreateRoom] error");
         }
     }
 }

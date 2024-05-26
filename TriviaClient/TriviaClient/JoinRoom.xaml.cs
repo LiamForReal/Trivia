@@ -113,7 +113,7 @@ namespace TriviaClient
                 this.RoomsListBox.Items.Clear();
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    this.RoomListBox.Items.Add(rd.name);
+                    this.RoomsListBox.Items.Add(rd.name);
                 }
 
                 if (this.RoomsListBox.SelectedItem != null)
