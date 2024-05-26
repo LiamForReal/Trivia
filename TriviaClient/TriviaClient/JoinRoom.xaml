@@ -9,8 +9,8 @@
     <Window.Background>
         <ImageBrush ImageSource="/Resources/join_room_background.png"/>
     </Window.Background>
-    
-    <GroupBox BorderThickness="3" BorderBrush="Black" Margin="10" Foreground="Black">
+
+    <GroupBox BorderThickness="2" BorderBrush="White" Margin="10" Foreground="Black">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
                 Join Room
