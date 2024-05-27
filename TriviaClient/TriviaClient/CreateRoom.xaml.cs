@@ -75,7 +75,7 @@ namespace TriviaClient
                     this.connectedRoom.room = this;
                     this.connectedRoom.mainWindow = this.mainWindow;
                     this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
-                    connectedRoom.Show();
+                    this.connectedRoom.Show();
                 }
                 else MessageBox.Show("[CreateRoom] error");
             }
