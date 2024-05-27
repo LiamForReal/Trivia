@@ -142,3 +142,21 @@ typedef struct GetGameResultsResponse
 	unsigned int status;
 	std::vector<PlayerResults> results;
 } GetGameResultsResponse;
+
+typedef struct SubmitAnswerResponse
+{
+	unsigned int status;
+	unsigned int correctAnswerId;
+} SubmitAnswerResponse;
+
+typedef struct GetQuestionResponse
+{
+	unsigned int status;
+	std::string question;
+	std::map<unsigned int, std::string> answers;
+} GetQuestionResponse;
+
+typedef struct LeaveGameResponse
+{
+	unsigned int status;
+} LeaveGameResponse;
