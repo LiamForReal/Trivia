@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "RoomData.hpp"
+#include "PlayerResults.hpp"
 
 typedef enum ResponseCode
 {
@@ -135,3 +136,9 @@ typedef struct LeaveRoomResponse
 {
 	unsigned int status;
 } LeaveRoomResponse;
+
+typedef struct GetGameResultsResponse
+{
+	unsigned int status;
+	std::vector<PlayerResults> results;
+} GetGameResultsResponse;
