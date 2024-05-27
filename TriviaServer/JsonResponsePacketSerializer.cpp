@@ -438,7 +438,28 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& getQuestionResponse)
 {
-	return std::vector<unsigned char>();
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
+	// Add Response Code
+	vec[0] = ((unsigned char)(getQuestionResponse.status));
+
+	unsigned int len = 0;
+
+	json srJson = {
+		{"status", getQuestionResponse.status},
+		{"question", getQuestionResponse.question},
+		{"answers", json(getQuestionResponse.answers)}
+	};
+
+	std::string srJsonStr = srJson.dump();
+
+	// Insert Message Length Into Vector
+	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
+
+	// Insert Message Into Vector
+	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+
+	return vec;
 }
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& leaveGameResponse)
