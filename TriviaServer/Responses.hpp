@@ -14,6 +14,10 @@ typedef enum ResponseCode
 	CREATE_ROOM_RC = 70,
 	GET_HIGH_SCORE_RC = 80,
 	GET_PERSONAL_STATS_RC = 90,
+	CLOSE_ROOM_RC = 100,
+	START_GAME_RC = 110,
+	GET_ROOM_STATE_RC = 120,
+	LEAVE_ROOM_RC = 130,
 	ERROR_RC = 255,
 } ResponseCode;
 
@@ -27,7 +31,11 @@ typedef enum Status
 	JOIN_ROOM_STATUS = 61,
 	CREATE_ROOM_STATUS = 71,
 	GET_HIGH_SCORE_STATUS = 81,
-	GET_PERSONAL_STATS_STATUS = 91
+	GET_PERSONAL_STATS_STATUS = 91,
+	CLOSE_ROOM_STATUS = 101,
+	START_GAME_STATUS = 111,
+	GET_ROOM_STATE_SERVER_STATUS = 121,
+	LEAVE_ROOM_STATUS = 131,
 } Status;
 
 typedef enum Errors
@@ -42,7 +50,12 @@ typedef enum Errors
 	CREATE_ROOM_ERROR = 75,
 	GET_HIGH_SCORE_ERROR = 85,
 	THERE_IS_NO_SCORES = 86,
-	GET_PERSONAL_STATS_ERROR = 95
+	GET_PERSONAL_STATS_ERROR = 95,
+	CLOSE_ROOM_ERROR = 105,
+	START_GAME_ERROR = 115,
+	GET_ROOM_STATE_SERVER_ERROR = 125,
+	GET_ROOM_STATE_ROOM_ERROR = 126,
+	LEAVE_ROOM_ERROR = 135,
 } Errors;
 
 typedef struct ErrorResponse
@@ -98,3 +111,27 @@ typedef struct GetPersonalStatsResponse
 	unsigned int status;
 	std::vector<std::string> statistics;
 } GetPersonalStatsResponse;
+
+typedef struct CloseRoomResponse
+{
+	unsigned int status;
+} CloseRoomResponse;
+
+typedef struct StartGameResponse
+{
+	unsigned int status;
+} StartGameResponse;
+
+typedef struct GetRoomStateResponse
+{
+	unsigned int status;
+	bool hasGameBegun;
+	std::vector<std::string> players;
+	unsigned int questionCount;
+	unsigned int answerTimeout;
+} GetRoomStateResponse;
+
+typedef struct LeaveRoomResponse
+{
+	unsigned int status;
+} LeaveRoomResponse;

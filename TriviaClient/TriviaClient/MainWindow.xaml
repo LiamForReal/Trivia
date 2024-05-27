@@ -16,7 +16,7 @@
         <ImageBrush ImageSource="/Resources/background.jpg"/>
     </Window.Background>
 
-    <GroupBox BorderThickness="1" BorderBrush="White" Margin="10" Foreground="White">
+    <GroupBox BorderThickness="2" BorderBrush="White" Margin="10" Foreground="White">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
                 Trivia Menu

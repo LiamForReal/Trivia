@@ -40,13 +40,18 @@ typedef struct RoomData
 
 	RoomData& operator=(const RoomData& other)
 	{
+		if (nullptr == &other || this == &other)
+		{
+			return *this;
+		}
+
 		this->id = other.id;
 		this->name = other.name;
 		this->maxPlayers = other.maxPlayers;
 		this->numOfQuestionsInGame = other.numOfQuestionsInGame;
 		this->timePerQuestion = other.timePerQuestion;
 		this->isActive = other.isActive;
-		
+
 		return *this;
 	}
 

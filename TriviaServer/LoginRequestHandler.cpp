@@ -23,7 +23,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		status = rhf.getLoginMeneger().login(lr.username, lr.password);
 		lresponse.status = status;
 		this->rr.buffer = JsonResponsePacketSerializer::serializeResponse(lresponse);
-		if(status == LOGIN_STATUS)
+		if (status == LOGIN_STATUS)
 			this->rr.newHandler = rhf.createMenuRequestHandler(LoggedUser(lr.username));
 	}
 	else if (SIGNUP_RC == requestInfo.id)
@@ -33,7 +33,10 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		SignupResponse sresponse;
 		sresponse.status = status;
 		this->rr.buffer = JsonResponsePacketSerializer::serializeResponse(sresponse);
+		this->rr.newHandler = rhf.creatLoginRequestHandler();
 	}
-	//this->rr.newHandler = rhf.creatLoginRequestHandler();
+	else throw std::runtime_error("invalid request id [login request handler]");
+	if (this->rr.newHandler == nullptr)
+		this->rr.newHandler = rhf.creatLoginRequestHandler();
 	return this->rr;
 }

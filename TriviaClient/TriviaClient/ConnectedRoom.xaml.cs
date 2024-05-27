@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -25,94 +25,152 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public CreateRoom room;
+        public bool isOwner;
+        public GameScreen gameScreen;
 
-        private BackgroundWorker refreshBackgroundWorker = new BackgroundWorker();
+        private BackgroundWorker getRoomStateBackgroundWorker;
 
-        public ConnectedRoom(MainWindow main)
+        public ConnectedRoom(MainWindow main, bool isOwner)
         {
             this.mainWindow = main;
             InitializeComponent();
 
-            this.refreshBackgroundWorker.WorkerSupportsCancellation = true;
-            this.refreshBackgroundWorker.WorkerReportsProgress = true;
 
-            this.refreshBackgroundWorker.DoWork += this.RefreshPlayersInRoomLoop_DoWork;
-            this.refreshBackgroundWorker.ProgressChanged += this.RefreshPlayersInRoomLoop_ProgressChanged;
-            this.refreshBackgroundWorker.RunWorkerCompleted += this.RefreshPlayersInRoomLoop_RunWorkerCompleted;
+            this.getRoomStateBackgroundWorker = new BackgroundWorker();
 
-            this.refreshBackgroundWorker.RunWorkerAsync();
+            this.getRoomStateBackgroundWorker.WorkerSupportsCancellation = true;
+            this.getRoomStateBackgroundWorker.WorkerReportsProgress = true;
+
+            this.getRoomStateBackgroundWorker.DoWork += this.GetRoomStateLoop_DoWork;
+            this.getRoomStateBackgroundWorker.ProgressChanged += this.GetRoomStateLoop_ProgressChanged;
+            this.getRoomStateBackgroundWorker.RunWorkerCompleted += this.GetRoomStateLoop_RunWorkerCompleted;
+
+            this.isOwner = isOwner;
+
+            if (isOwner)
+            {
+                this.LeaveRoomButton.IsEnabled = false;
+                this.LeaveRoomButton.Visibility = Visibility.Collapsed;
+                this.StartGameButton.IsEnabled = true;
+                this.StartGameButton.Visibility = Visibility.Visible;
+                this.CloseRoomButton.IsEnabled = true;
+                this.CloseRoomButton.Visibility = Visibility.Visible;
+            }
+
+            this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            mainWindow.Show();
-            this.refreshBackgroundWorker.CancelAsync();
+            this.getRoomStateBackgroundWorker.CancelAsync();
+
+            LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
+            leaveRoomRequest.SendToServer(this.mainWindow.clientStream);
+            LeaveRoomRequest.LeaveRoomResponse leaveRoomResponse = leaveRoomRequest.GetFromServer(this.mainWindow.clientStream);
+
+            if ((uint)Cods.Status.LEAVE_ROOM_STATUS == leaveRoomResponse.status)
+            {
+                this.Close();
+                mainWindow.Show();
+            }
+            else
+            {
+                this.getRoomStateBackgroundWorker.RunWorkerAsync();
+            }
         }
 
-        private void RefreshPlayersInRoom()
+        private void GetRoomState()
         {
-            uint roomId = 0;
+            GetRoomStateRequest getRoomStateRequest = new GetRoomStateRequest();
+            getRoomStateRequest.SendToServer(this.mainWindow.clientStream);
+            GetRoomStateRequest.GetRoomStateResponse getRoomStateResponse = getRoomStateRequest.GetFromServer(this.mainWindow.clientStream);
 
-            GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
-            getRoomsRequest.SendToServer(this.mainWindow.clientStream);
-            GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.mainWindow.clientStream);
-
-            if (this.ConnectedRoomNameLabel.Content != null && (uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
+            if ((uint)Cods.Errors.GET_ROOM_STATE_ROOM_ERROR == getRoomStateResponse.status && !isOwner)
             {
-                foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
+                this.getRoomStateBackgroundWorker.CancelAsync();
+                this.mainWindow.Show();
+                this.Close();
+            }
+            else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status && !isOwner)
+            {
+                this.getRoomStateBackgroundWorker.CancelAsync();
+                this.gameScreen = new GameScreen(this);
+                this.gameScreen.Show();
+                this.Close();
+            }
+            else
+            {
+                this.PlayersListBox.Items.Clear();
+                foreach (string player in getRoomStateResponse.players)
                 {
-                    if (rd.name == this.ConnectedRoomNameLabel.Content.ToString())
-                    {
-                        roomId = rd.id;
-                        break;
-                    }
-                }
-
-                GetPlayersInRoomRequest getPlayersInRoomRequest = new GetPlayersInRoomRequest(roomId);
-                getPlayersInRoomRequest.SendToServer(this.mainWindow.clientStream);
-                GetPlayersInRoomRequest.GetPlayersInRoomResponse getPlayersInRoomResponse = getPlayersInRoomRequest.GetFromServer(this.mainWindow.clientStream);
-
-                if ((uint)(Cods.Status.GET_PLAYERS_IN_ROOM_STATUS) == getPlayersInRoomResponse.status)
-                {
-                    this.PlayersListBox.Items.Clear();
-                    foreach (string player in getPlayersInRoomResponse.players)
-                    {
-                        this.PlayersListBox.Items.Add(player);
-                    }
+                    this.PlayersListBox.Items.Add(player);
                 }
             }
         }
 
-        private void RefreshPlayersInRoomLoop_DoWork(object sender, DoWorkEventArgs e)
+        private void GetRoomStateLoop_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
             {
-                if (this.refreshBackgroundWorker.CancellationPending)
+                if (this.getRoomStateBackgroundWorker.CancellationPending)
                 {
                     e.Cancel = true;
                     break;
                 }
 
-                this.refreshBackgroundWorker.ReportProgress(0);
+                this.getRoomStateBackgroundWorker.ReportProgress(0);
                 Thread.Sleep(3000);
             }
         }
 
-        private void RefreshPlayersInRoomLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void GetRoomStateLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            RefreshPlayersInRoom();
+            this.GetRoomState();
         }
 
-        private void RefreshPlayersInRoomLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void GetRoomStateLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled)
             {
-                MessageBox.Show("BackgroundWorker canceled");
+                // MessageBox.Show("BackgroundWorker cancelled");
             }
             else
             {
-                MessageBox.Show("BackgroundWorker ended successfully");
+                // MessageBox.Show("BackgroundWorker ended successfully");
+            }
+        }
+
+        private void StartGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.getRoomStateBackgroundWorker.CancelAsync();
+            StartGameRequest sgr = new StartGameRequest();
+            sgr.SendToServer(this.mainWindow.clientStream);
+            StartGameRequest.StartGameResponse responed = sgr.GetFromServer(this.mainWindow.clientStream);
+            if (Cods.Status.START_GAME_STATUS == (Cods.Status)responed.status)
+            {
+                this.Hide();
+                this.gameScreen = new GameScreen(this);
+                this.gameScreen.Show();
+            }
+            else this.getRoomStateBackgroundWorker.RunWorkerAsync();
+        }
+
+        private void CloseRoomButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.getRoomStateBackgroundWorker.CancelAsync();
+
+            CloseRoomRequest closeRoomRequest = new CloseRoomRequest();
+            closeRoomRequest.SendToServer(this.mainWindow.clientStream);
+            CloseRoomRequest.CloseRoomResponse closeRoomResponse = closeRoomRequest.GetFromServer(this.mainWindow.clientStream);
+
+            if ((uint)(Cods.Status.CLOSE_ROOM_STATUS) == closeRoomResponse.status)
+            {
+                this.Close();
+                this.mainWindow.Show();
+            }
+            else
+            {
+                this.getRoomStateBackgroundWorker.RunWorkerAsync();
             }
         }
     }

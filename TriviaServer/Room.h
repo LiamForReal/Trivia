@@ -12,6 +12,7 @@ class Room
 		void removeUser(const LoggedUser& user);
 		std::vector<std::string> getAllUsers();
 		RoomData getMetadata() const;
+		void setRoomStatus(const unsigned int newStatus);
 		bool operator==(const Room& other) const;
 
 	private:

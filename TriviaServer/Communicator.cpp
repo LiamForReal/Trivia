@@ -7,14 +7,22 @@
 #include "MenuRequestHandler.h"
 #include <mutex>
 
-std::mutex mtx;
+//std::mutex mtx; FIND WAY TO COMBINE IT
 
 Communicator::Communicator()
 {
-    this->rhf = RequestHandlerFactory();
+    this->rhf = new RequestHandlerFactory();
 }
 
-Communicator::~Communicator() {}
+Communicator::~Communicator()
+{
+    for (auto it = _handlers.begin(); it != _handlers.end(); ++it)
+    {
+        delete it->second;
+        _handlers.erase(it);
+    }
+    delete rhf;
+}
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
@@ -22,16 +30,13 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     RequestInfo ri = RequestInfo();
     RequestResult rr = RequestResult();
     LoggedUser loggedUser = LoggedUser();
-    mtx.lock();
-    _handlers[clientSocket] = rhf.creatLoginRequestHandler();
-    mtx.unlock(); 
+    _handlers[clientSocket] = rhf->creatLoginRequestHandler();
     rr.newHandler = _handlers[clientSocket];
+    rr.buffer = std::vector<unsigned char>();
 
     try
     {
-        mtx.lock();
-        size = rhf.getLoginMeneger().getLoggedUsers().size();
-        mtx.unlock();
+        size = rhf->getLoginMeneger().getLoggedUsers().size();
         while (true)
         {
             if (loggedUser.getUserName() == "")
@@ -45,37 +50,59 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         ri = buildRI(clientSocket, statusCode);
                         std::cout << "DEBUG REQUEST CODE: " << ri.id << std::endl;
                         rr = rr.newHandler->handleRequest(ri);
-                        if (rr.newHandler == nullptr)
-                            rr.newHandler = _handlers[clientSocket];
-                        else _handlers[clientSocket] = rr.newHandler;
+                        _handlers[clientSocket] = rr.newHandler;
                         Helper::sendVector(clientSocket, std::ref(rr.buffer));
                         std::cout << "DEBUG RESPONSE CODE: " << (unsigned int)rr.buffer[0] << std::endl;
                     }
-                } while (rhf.getLoginMeneger().getLoggedUsers().size() == size);
+                } while (rhf->getLoginMeneger().getLoggedUsers().size() == size);
                 loggedUser = LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(ri.buffer).username);
                 std::cout << "DEBUG: user login: " << loggedUser.getUserName() << std::endl;
             }
-            
+
             do
             {
                 statusCode = Helper::socketHasData(clientSocket);
                 if (statusCode != 0 && statusCode != -1)
                 {
-                    std::cout << "MENU REQUEST HANDLER\n\n";
+                    std::cout << "MENU REQUEST HANDLER " << loggedUser.getUserName() << "\n\n";
                     ri = buildRI(clientSocket, statusCode);
-                    mtx.lock();
-                    rr = _handlers[clientSocket]->handleRequest(ri);
-                    mtx.unlock();
-                    Helper::sendVector(clientSocket, rr.buffer);
-                    std::cout << "after sending";
-                    if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
+
+                    try
                     {
-                        std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
-                        _handlers[clientSocket] = rr.newHandler;
-                        loggedUser.setUserName("");
+                        std::cout << _handlers[clientSocket]->isRequestRelevant(ri) << std::endl;
                     }
+                    catch (std::runtime_error& e)
+                    {
+                        std::cout << e.what() << std::endl;
+                    }
+
+                    if (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_ROOMS_RC)
+                    {
+                        try
+                        {
+                            rr = _handlers[clientSocket]->handleRequest(ri);
+                            Helper::sendVector(clientSocket, rr.buffer);
+                        }
+                        catch (std::runtime_error& e)
+                        {
+                            if (ri.id == GET_ROOMS_RC)
+                            {
+                                Helper::sendVector(clientSocket, this->rhf->createMenuRequestHandler(loggedUser)->getRooms(ri).buffer);
+                            }
+                            else throw e;
+                        }
+
+                        if ((unsigned int)rr.buffer[0] == LOGOUT_STATUS)
+                        {
+                            std::cout << "DEBUG: user logout: " << loggedUser.getUserName();
+                            _handlers[clientSocket] = rhf->creatLoginRequestHandler();
+                            loggedUser.setUserName("");
+                        }
+                    }
+
+                    _handlers[clientSocket] = rr.newHandler;
                 }
-            } while (rr.newHandler->isRequestRelevant(ri));
+            } while (loggedUser.getUserName() != "");
         }
 
     }
@@ -109,7 +136,7 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
     std::cout << "DEBUG: Status code: " << statusCode << std::endl;
     ri.buffer.insert(ri.buffer.begin(), STATUS_CODE_BYTES_LENGTH, static_cast<unsigned char>(statusCode));
 
-    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || statusCode == GET_PERSONAL_STATS_RC)
+    if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC || statusCode == GET_PERSONAL_STATS_RC || statusCode == LEAVE_ROOM_RC || statusCode == START_GAME_RC || statusCode == CLOSE_ROOM_RC || statusCode == GET_ROOM_STATE_RC)
         return ri;
 
     clientMsgLength = Helper::getLengthPartFromSocket(clientSocket);
@@ -126,7 +153,7 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
     for (i = 0; i < clientMsgLength; i++)
     {
         ri.buffer.push_back(static_cast<unsigned char>(clientMsg[i]));
-    }   
+    }
 
     std::cout << "DEBUG: The message is: " << clientMsg << std::endl;
 

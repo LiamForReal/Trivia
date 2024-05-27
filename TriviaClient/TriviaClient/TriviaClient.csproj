@@ -15,6 +15,7 @@
     <None Remove="Resources\best_scores_background.jpg" />
     <None Remove="Resources\connected_room_background.jpg" />
     <None Remove="Resources\create_room_background.jpg" />
+    <None Remove="Resources\game_screen_background.png" />
     <None Remove="Resources\hide_password.png" />
     <None Remove="Resources\join_room_background.png" />
     <None Remove="Resources\login_background.jpg" />
@@ -42,6 +43,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\create_room_background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\game_screen_background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\hide_password.png">

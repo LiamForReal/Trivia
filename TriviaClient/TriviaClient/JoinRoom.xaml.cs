@@ -71,12 +71,11 @@ namespace TriviaClient
                 jrr.roomId = roomId;
                 jrr.SendToServer(this.mainWindow.clientStream);
                 uint statusCode= (uint)jrr.GetFromServer(this.mainWindow.clientStream).status;
-                MessageBox.Show(statusCode.ToString());
                 if((Cods.Status)statusCode == Cods.Status.JOIN_ROOM_STATUS)
                 {
                     this.Hide();
                     this.refreshBackgroundWorker.CancelAsync();
-                    this.connectedRoom = new ConnectedRoom(this.mainWindow);
+                    this.connectedRoom = new ConnectedRoom(this.mainWindow, false);
                     this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
                     this.connectedRoom.Show();
                 } else MessageBox.Show("cant join room");
@@ -111,12 +110,10 @@ namespace TriviaClient
                     this.NoRoomsAvailable.Content = "";
                 }
 
+                this.RoomsListBox.Items.Clear();
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    if (!this.RoomsListBox.Items.Contains(rd.name))
-                    {
-                        this.RoomsListBox.Items.Add(rd.name);
-                    }
+                    this.RoomsListBox.Items.Add(rd.name);
                 }
 
                 if (this.RoomsListBox.SelectedItem != null)
@@ -154,11 +151,11 @@ namespace TriviaClient
         {
             if (e.Cancelled)
             {
-                MessageBox.Show("BackgroundWorker canceled");
+                // MessageBox.Show("BackgroundWorker canceled");
             }
             else
             {
-                MessageBox.Show("BackgroundWorker ended successfully");
+                // MessageBox.Show("BackgroundWorker ended successfully");
             }
         }
 

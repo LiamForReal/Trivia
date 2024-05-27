@@ -14,6 +14,6 @@ class Communicator
 
 	private:
 		std::map<SOCKET, IRequestHandler*> _handlers;
-		RequestHandlerFactory rhf;
+		RequestHandlerFactory* rhf;
 };
 

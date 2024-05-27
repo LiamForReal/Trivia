@@ -36,7 +36,7 @@ namespace TriviaClient
         {
             getHighScoreRequest.SendToServer(mainWindow.clientStream);
             GetHighScoreRequest.GetHighScoreResponse response = getHighScoreRequest.GetFromServer(mainWindow.clientStream);
-            if((Cods.Status)response.status == Cods.Status.GET_HIGH_SCORE_STATUS)
+            if(response.status == (uint)Cods.Status.GET_HIGH_SCORE_STATUS)
             {
                 this.Hide();
                 this.bestScores = new BestScores(this);
@@ -54,7 +54,7 @@ namespace TriviaClient
         {
             getPersonalStatsRequest.SendToServer(mainWindow.clientStream);
             GetPersonalStatsRequest.GetPersonalStatsResponse response = getPersonalStatsRequest.GetFromServer(mainWindow.clientStream);
-            if ((Cods.Status)response.status == Cods.Status.GET_PERSONAL_STATS_STATUS)
+            if ((uint)Cods.Status.GET_PERSONAL_STATS_STATUS == response.status)
             {
                 this.Hide();
                 this.personalStats = new PersonalStats(this);
