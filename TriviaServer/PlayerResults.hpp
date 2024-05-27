@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "json.hpp"
 
 typedef struct PlayerResults
 {
@@ -7,4 +8,37 @@ typedef struct PlayerResults
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
 	unsigned int averageAnswerTime;
+
+	PlayerResults()
+	{
+		this->username = "";
+		this->correctAnswerCount = 0;
+		this->wrongAnswerCount = 0;
+		this->averageAnswerTime = 0;
+	}
+
+	PlayerResults(const std::string& username, const unsigned int& correctAnswerCount, const unsigned int& wrongAnswerCount, const unsigned int& averageAnswerTime)
+	{
+		this->username = username;
+		this->correctAnswerCount = correctAnswerCount;
+		this->wrongAnswerCount = wrongAnswerCount;
+		this->averageAnswerTime = averageAnswerTime;
+	}
+
+	PlayerResults& operator=(const PlayerResults& other)
+	{
+		if (nullptr == &other || this == &other)
+		{
+			return *this;
+		}
+
+		this->username = other.username;
+		this->correctAnswerCount = other.correctAnswerCount;
+		this->wrongAnswerCount = other.wrongAnswerCount;
+		this->averageAnswerTime = other.averageAnswerTime;
+
+		return *this;
+	}
+
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PlayerResults, username, correctAnswerCount, wrongAnswerCount, averageAnswerTime);
 } PlayerResults;
