@@ -88,18 +88,18 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json lrJson = {
 		{"status", logoutResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string lrJsonStr = lrJson.dump();
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(lrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), lrJsonStr.begin(), lrJsonStr.end());
 
 	return vec;
 }
@@ -121,7 +121,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 		roomsDataVec.push_back(temp);
 	}
 
-	json srJson = {
+	json grrJson = {
 		{"status", getRoomsResponse.status},
 		{"rooms", json(roomsDataVec)},
 	};
@@ -129,16 +129,16 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	roomsDataVec.clear();
 	temp.clear();
 
-	std::string srJsonStr = srJson.dump();
+	std::string grrJsonStr = grrJson.dump();
 
-	std::cout << "[Json Structs and Vecs] DEBUG: " << srJsonStr << std::endl;
+	std::cout << "[Json Structs and Vecs] DEBUG: " << grrJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(grrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), grrJsonStr.begin(), grrJsonStr.end());
 
 	return vec;
 }
@@ -151,21 +151,21 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json gpirrJson = {
 		{"status", getPlayerInRoomResponse.status},
 		{"players", json(getPlayerInRoomResponse.players)},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string gpirrJsonStr = gpirrJson.dump();
 
-	std::cout << "[Json Strings and Vecs] DEBUG: " << srJsonStr << std::endl;
+	std::cout << "[Json Strings and Vecs] DEBUG: " << gpirrJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(gpirrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), gpirrJsonStr.begin(), gpirrJsonStr.end());
 
 	return vec;
 }
@@ -178,18 +178,18 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json jrrJson = {
 		{"status", joinRoomResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string jrrJsonStr = jrrJson.dump();
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(jrrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), jrrJsonStr.begin(), jrrJsonStr.end());
 
 	return vec;
 }
@@ -202,18 +202,18 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json crrJson = {
 		{"status", createRoomResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string crrJsonStr = crrJson.dump();
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(crrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), crrJsonStr.begin(), crrJsonStr.end());
 
 	return vec;
 }
@@ -226,21 +226,21 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json ghsrJson = {
 		{"statistics", json(getHighScoreResponse.statistics)},
 		{"status", getHighScoreResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string ghsrJsonStr = ghsrJson.dump();
 
-	std::cout << "[Json Strings and Vecs] DEBUG: " << srJsonStr << std::endl;
+	std::cout << "[Json Strings and Vecs] DEBUG: " << ghsrJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(ghsrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), ghsrJsonStr.begin(), ghsrJsonStr.end());
 
 	return vec;
 }
@@ -253,21 +253,21 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json gpsrJson = {
 		{"statistics", getPersonalStatsResponse.statistics},
 		{"status", getPersonalStatsResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string gpsrJsonStr = gpsrJson.dump();
 
-	std::cout << "[Json Strings] DEBUG: " << srJsonStr << std::endl;
+	std::cout << "[Json Strings] DEBUG: " << gpsrJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(gpsrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), gpsrJsonStr.begin(), gpsrJsonStr.end());
 
 	return vec;
 }
@@ -280,18 +280,18 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json crrJson = {
 		{"status", closeRoomResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string crrJsonStr = crrJson.dump();
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(crrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), crrJsonStr.begin(), crrJsonStr.end());
 
 	return vec;
 }
@@ -304,18 +304,18 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json sgrJson = {
 		{"status", startGameResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string sgrJsonStr = sgrJson.dump();
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(sgrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), sgrJsonStr.begin(), sgrJsonStr.end());
 
 	return vec;
 }
