@@ -23,8 +23,8 @@ public:
 	MenuRequestHandler* createMenuRequestHandler(LoggedUser loggedUser);
 	RoomManager& getRoomManager() const;
 	StatisticsManager& getStatisticsManager() const;
+
 private:
-	IDatabase* dataBace;
 	LoginManager* loginMeneger;
 	RoomManager* _roomManager;
 	StatisticsManager* _statisticsManager;

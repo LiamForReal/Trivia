@@ -2,7 +2,6 @@
 
 RequestHandlerFactory::RequestHandlerFactory() 
 {
-	this->dataBace = new SqliteDataBase();
 	this->loginMeneger = new LoginManager();
 	this->_roomManager = new RoomManager();
 	this->_statisticsManager = new StatisticsManager();
@@ -12,9 +11,7 @@ RequestHandlerFactory::~RequestHandlerFactory()
 {
 	delete this->_statisticsManager;
 	delete this->_roomManager;
-	delete(this->loginMeneger);
-	this->dataBace->close();
-	delete(this->dataBace);
+	delete this->loginMeneger;
 }
 
 RoomManager& RequestHandlerFactory::getRoomManager() const
