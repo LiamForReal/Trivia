@@ -444,20 +444,22 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json gqrJson = {
 		{"status", getQuestionResponse.status},
 		{"question", getQuestionResponse.question},
 		{"answers", json(getQuestionResponse.answers)}
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string gqrJsonStr = gqrJson.dump();
+
+	std::cout << "[Json Structs and Maps] DEBUG: " << gqrJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(gqrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), gqrJsonStr.begin(), gqrJsonStr.end());
 
 	return vec;
 }
@@ -470,18 +472,18 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	unsigned int len = 0;
 
-	json srJson = {
+	json lgrJson = {
 		{"status", leaveGameResponse.status},
 	};
 
-	std::string srJsonStr = srJson.dump();
+	std::string lgrJsonStr = lgrJson.dump();
 
 	// Insert Message Length Into Vector
-	len = (unsigned int)(srJsonStr.size()); // possible lose of data for 64 bits.
+	len = (unsigned int)(lgrJsonStr.size()); // possible lose of data for 64 bits.
 	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
 
 	// Insert Message Into Vector
-	vec.insert(vec.end(), srJsonStr.begin(), srJsonStr.end());
+	vec.insert(vec.end(), lgrJsonStr.begin(), lgrJsonStr.end());
 
 	return vec;
 }
