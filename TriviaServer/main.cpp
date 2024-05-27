@@ -19,10 +19,10 @@ void run_json_test_v4(void); // tests for Version 4.0.0
 
 int main()
 {
-	//run_server();
+	run_server();
 	//run_json_tests();
 	//run_json_test_v2();
-	run_json_test_v4();
+	//run_json_test_v4();
 }
 
 void run_server()
