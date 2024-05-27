@@ -159,6 +159,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     unsigned int status = 0;
     
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
+    rr.newHandler = _RHF.createMenuRequestHandler(_user);
     try
     {
         if (_RHF.getRoomManager().isRoomExist(jrr.roomId) && (INACTIVE_ROOM == _RHF.getRoomManager().getRoomState(jrr.roomId)))
@@ -174,7 +175,6 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     {
         std::cout << e.what() << std::endl;
         status = JOIN_ROOM_ERROR;
-        rr.newHandler = _RHF.createMenuRequestHandler(_user);
     }
     JoinRoomResponse jrre;
     jrre.status = status;
@@ -187,7 +187,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 {
     CreateRoomResponse crre = CreateRoomResponse();
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
+    rr.buffer = std::vector<unsigned char>();
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
+
     try
     {
         RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
@@ -197,9 +199,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         {
             if (it->id == roomData.id || it->name == roomData.name)
             {
-                throw std::runtime_error("room already exist");
+                crre.status = CREATE_ROOM_ERROR;
+                std::cout << "ROOM WITH SUCH NAME (" << it->name << ") ALREADY EXIST" << std::endl << std::endl;
             }
-            std::cout << it->name << " = " << roomData.name;
         }
 
         if (crre.status == CREATE_ROOM_STATUS)
@@ -214,7 +216,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     {
         std::cout << e.what() << std::endl;
         crre.status = CREATE_ROOM_ERROR;
+        rr.newHandler = _RHF.createMenuRequestHandler(_user);
     }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
+    std::cout << "CREATED ROOM!" << std::endl;
     return rr;
 }

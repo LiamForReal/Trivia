@@ -32,6 +32,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     LoggedUser loggedUser = LoggedUser();
     _handlers[clientSocket] = rhf->creatLoginRequestHandler();
     rr.newHandler = _handlers[clientSocket];
+    rr.buffer = std::vector<unsigned char>();
+
     try
     {
         size = rhf->getLoginMeneger().getLoggedUsers().size();
@@ -64,7 +66,16 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                 {
                     std::cout << "MENU REQUEST HANDLER " << loggedUser.getUserName() << "\n\n";
                     ri = buildRI(clientSocket, statusCode);
-                    // _handlers[clientSocket] = rr.newHandler;
+
+                    try
+                    {
+                        std::cout << _handlers[clientSocket]->isRequestRelevant(ri) << std::endl;
+                    }
+                    catch (std::runtime_error& e)
+                    {
+                        std::cout << e.what() << std::endl;
+                    }
+
                     if (_handlers[clientSocket]->isRequestRelevant(ri) || ri.id == GET_ROOMS_RC)
                     {
                         try

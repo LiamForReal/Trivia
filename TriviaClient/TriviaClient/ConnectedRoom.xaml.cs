@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -25,8 +25,8 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public CreateRoom room;
-        public GameScreen GameScreen;
         public bool isOwner;
+        public GameScreen gameScreen;
 
         private BackgroundWorker getRoomStateBackgroundWorker;
 
@@ -34,6 +34,7 @@ namespace TriviaClient
         {
             this.mainWindow = main;
             InitializeComponent();
+
 
             this.getRoomStateBackgroundWorker = new BackgroundWorker();
 
@@ -55,7 +56,7 @@ namespace TriviaClient
                 this.CloseRoomButton.IsEnabled = true;
                 this.CloseRoomButton.Visibility = Visibility.Visible;
             }
-            
+
             this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }
 
@@ -92,10 +93,10 @@ namespace TriviaClient
             }
             else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status && !isOwner)
             {
-                this.GameScreen = new GameScreen();
                 this.getRoomStateBackgroundWorker.CancelAsync();
-                this.GameScreen.Show();
-                this.Hide();
+                this.gameScreen = new GameScreen();
+                this.gameScreen.Show();
+                this.Close();
             }
             else
             {
@@ -131,26 +132,25 @@ namespace TriviaClient
         {
             if (e.Cancelled)
             {
-                MessageBox.Show("BackgroundWorker cancelled");
+                // MessageBox.Show("BackgroundWorker cancelled");
             }
             else
             {
-                MessageBox.Show("BackgroundWorker ended successfully");
+                // MessageBox.Show("BackgroundWorker ended successfully");
             }
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
             this.getRoomStateBackgroundWorker.CancelAsync();
-            this.GameScreen = new GameScreen(this);
             StartGameRequest sgr = new StartGameRequest();
             sgr.SendToServer(this.mainWindow.clientStream);
             StartGameRequest.StartGameResponse responed = sgr.GetFromServer(this.mainWindow.clientStream);
-            MessageBox.Show("here");
             if (Cods.Status.START_GAME_STATUS == (Cods.Status)responed.status)
             {
                 this.Hide();
-                this.GameScreen.Show();
+                this.gameScreen = new GameScreen();
+                this.gameScreen.Show();
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }

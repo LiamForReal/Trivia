@@ -110,12 +110,10 @@ namespace TriviaClient
                     this.NoRoomsAvailable.Content = "";
                 }
 
+                this.RoomsListBox.Items.Clear();
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    if (!this.RoomsListBox.Items.Contains(rd.name))
-                    {
-                        this.RoomsListBox.Items.Add(rd.name);
-                    }
+                    this.RoomsListBox.Items.Add(rd.name);
                 }
 
                 if (this.RoomsListBox.SelectedItem != null)
@@ -153,11 +151,11 @@ namespace TriviaClient
         {
             if (e.Cancelled)
             {
-                MessageBox.Show("BackgroundWorker canceled");
+                // MessageBox.Show("BackgroundWorker canceled");
             }
             else
             {
-                MessageBox.Show("BackgroundWorker ended successfully");
+                // MessageBox.Show("BackgroundWorker ended successfully");
             }
         }
 
