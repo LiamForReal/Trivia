@@ -39,11 +39,6 @@ namespace TriviaClient
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            this.connectedRoom = new ConnectedRoom(mainWindow, true);
-            this.connectedRoom.room = this;    
-            this.connectedRoom.mainWindow = this.mainWindow;
-            this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
-
             if (this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
                 || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "")
 
@@ -61,6 +56,7 @@ namespace TriviaClient
                 createRoomRequest.SendToServer(this.mainWindow.clientStream);
 
                 CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);
+                MessageBox.Show(createRoomResponse.status.ToString());
                 if ((uint)Cods.Status.CREATE_ROOM_STATUS == createRoomResponse.status)
                 {
                     try
@@ -75,6 +71,10 @@ namespace TriviaClient
                     }
 
                     this.Close();
+                    this.connectedRoom = new ConnectedRoom(mainWindow, true);
+                    this.connectedRoom.room = this;
+                    this.connectedRoom.mainWindow = this.mainWindow;
+                    this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
                     connectedRoom.Show();
                 }
                 else MessageBox.Show("[CreateRoom] error");

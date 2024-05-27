@@ -32,6 +32,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
     LoggedUser loggedUser = LoggedUser();
     _handlers[clientSocket] = rhf->creatLoginRequestHandler();
     rr.newHandler = _handlers[clientSocket];
+    rr.buffer = std::vector<unsigned char>();
+
     try
     {
         size = rhf->getLoginMeneger().getLoggedUsers().size();
