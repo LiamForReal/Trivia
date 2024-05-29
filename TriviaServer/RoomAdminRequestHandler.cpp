@@ -1,9 +1,8 @@
 #include "RoomAdminRequestHandler.h"
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(RequestHandlerFactory& rhf, unsigned int roomId, LoggedUser owner) : _rhf(rhf)
+RoomAdminRequestHandler::RoomAdminRequestHandler(RequestHandlerFactory& rhf, unsigned int roomId, LoggedUser owner) : _rhf(rhf), Owner(owner)
 {
 	this->roomId = roomId;
-	this->Owner = owner;
 }
 
 RoomAdminRequestHandler::~RoomAdminRequestHandler() {}
