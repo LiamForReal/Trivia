@@ -5,6 +5,7 @@ class RequestHandlerFactory;
 #include "includes.hpp"
 #include "defines.hpp"
 #include "PlayerResults.hpp"
+#include "QuestionStatistics.h"
 #include <random>
 
 class GameRequestHandler : virtual public IRequestHandler
@@ -19,5 +20,6 @@ private:
 	LoggedUser _user;
 	unsigned int _roomId;
 	unsigned int questionId;
+	vector<unsigned int> prevQuestions;
 };
 

@@ -1,11 +1,21 @@
 #include "Game.h"
 
+Game::Game(int id)
+{
+	this->avrageTimePerAnswer = 0.0f;
+	this->currentTrueAnswers = 0;
+	this->currentWrongAnswers = 0;
+	this->questionId = -1;
+	this->gameId = id;
+}
+
 Game::Game()
 {
 	this->avrageTimePerAnswer = 0.0f;
 	this->currentTrueAnswers = 0;
 	this->currentWrongAnswers = 0;
 	this->questionId = -1;
+	this->gameId = -1;
 }
 
 Game::~Game() {}
@@ -54,6 +64,16 @@ void Game::setWrongAns(const int wrongAns)
 void Game::setavrageTime(const float avrageTime)
 {
 	this->avrageTimePerAnswer = avrageTime;
+}
+
+void Game::setGameId(const int gameId)
+{
+	this->gameId = gameId;
+}
+
+int Game::getGameId() const
+{
+	return this->gameId;
 }
 
 bool Game::operator==(const Game& other) const

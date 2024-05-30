@@ -3,6 +3,7 @@
 GameRequestHandler::GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
 	_roomId = roomId;
+	prevQuestions = vector<unsigned int>();
 }
 GameRequestHandler::~GameRequestHandler() {}
 
@@ -42,7 +43,41 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	}
 	else if (requestInfo.id == SUBMIT_ANSWER_RC)
 	{
-
+		SubmitAnswerRequest sar = JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(requestInfo.buffer);
+		SubmitAnswerResponse sarr = SubmitAnswerResponse();
+		bool flag = false, isCorrect = false;
+		try
+		{
+			list<Question> questions = _rhf.getGameManager().getTriviaQuestions();
+			for (auto it = questions.begin(); it != questions.end(); it++)
+			{
+				if (it->getId() == questionId)
+				{
+					if (sar.answerId == CORRECT_ANSWER_ID)
+					{
+						sarr.status = SUBMIT_ANSWER_CORRECT;
+						isCorrect = true;
+					}
+					else sarr.status = SUBMIT_ANSWER_WRONG;
+					flag = true;
+					break;
+				}
+			}
+			if (!flag)
+				throw std::runtime_error("the question id not exist!");
+			else
+			{
+				QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect);
+				this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
+			}
+		}
+		catch (std::runtime_error& e)
+		{
+			sarr.status = SUBMIT_ANSWER_ERROR;
+			std::cout << e.what() << std::endl;
+		}
+		rr.newHandler = _rhf.createGameRequestHandler(_user, _roomId);
+		rr.buffer = JsonResponsePacketSerializer::serializeResponse(sarr);
 	}
 	else if (requestInfo.id == GET_QUESTION_RC)
 	{
@@ -63,7 +98,18 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 					break;
 				}
 			}
-			questionId = (std::rand() % (UPPER_BOND - LOWER_BOND + 1)) + LOWER_BOND;
+			prevQuestions.push_back(questionId);
+			while(true)
+			{
+				if (std::find(prevQuestions.begin(), prevQuestions.end(), questionId) != prevQuestions.end())
+					questionId = (std::rand() % (UPPER_BOND - LOWER_BOND + 1)) + LOWER_BOND;
+				else if (prevQuestions.size() == _rhf.getGameManager().getTriviaQuestions().size())
+				{
+					gqr.status = GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED;
+					break;
+				}
+				else break;
+			}
 		}
 		catch (std::runtime_error& e)
 		{

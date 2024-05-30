@@ -15,6 +15,7 @@ public:
 	bool isPasswordMatch(const string password) override;
 	void addNewUser(User& user) override;
 	void addNewQuestion(Question question) override;
+	void addNewQuestionStatistics(QuestionStatistics stats) override;
 	float getPlayerAverageAnswerTime(string username) override;
 	int getNumOfCorrectAnswers(string username) override;
 	int getNumOfTotalAnswers(string username) override;

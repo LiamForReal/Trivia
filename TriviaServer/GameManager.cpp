@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include <stdexcept>
 
+int GameManager::gameId = 0;
+
 GameManager::GameManager(LoggedUser user) : user(user)
 {
     db = new SqliteDataBase();
@@ -14,13 +16,19 @@ GameManager::~GameManager()
     delete this->db;
 }
 
+Game GameManager::getGame(LoggedUser user)
+{
+    return this->games[user];
+}
+
 Game GameManager::createGame(Room room)
 {
     for (const auto& it : room.getAllUsers())
     {
         if (it == user.getUserName() && this->games.find(user) == games.end())
         {
-            this->games[this->user] = Game();
+            this->games[this->user] = Game(gameId);
+            gameId++;
             return this->games[this->user];
         }
     }

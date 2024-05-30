@@ -6,6 +6,9 @@ RequestHandlerFactory::RequestHandlerFactory()
 	this->_roomManager = new RoomManager();
 	this->_gameManager = new GameManager(LoggedUser(""));
 	this->_statisticsManager = new StatisticsManager();
+	this->_db = new SqliteDataBase();
+	if (!this->_db->open())
+		throw std::runtime_error("Failed to open database!");
 }
 
 RequestHandlerFactory::~RequestHandlerFactory()
@@ -14,6 +17,7 @@ RequestHandlerFactory::~RequestHandlerFactory()
 	delete this->_roomManager;
 	delete this->_gameManager;
 	delete this->_statisticsManager;
+	delete this->_db;
 }
 
 RoomManager& RequestHandlerFactory::getRoomManager() const

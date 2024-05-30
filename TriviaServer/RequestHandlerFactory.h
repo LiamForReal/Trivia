@@ -13,6 +13,7 @@ class GameRequestHandler;
 #include "GameManager.h"
 #include "RoomManager.h"
 #include "includes.hpp"
+#include "SqliteDataBase.h"
 
 class RequestHandlerFactory
 {
@@ -30,6 +31,7 @@ public:
 	StatisticsManager& getStatisticsManager() const;
 	
 private:
+	IDatabase* _db;
 	LoginManager* _loginMeneger;
 	GameManager* _gameManager;
 	RoomManager* _roomManager;
