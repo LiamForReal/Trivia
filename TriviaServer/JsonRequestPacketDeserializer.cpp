@@ -176,7 +176,7 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerReques
 
 	try
 	{
-		sar.answerId = jsonData["answerId"];
+		sar.answer = jsonData["answer"];
 	}
 	catch (...)
 	{

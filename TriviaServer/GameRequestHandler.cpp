@@ -53,7 +53,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			{
 				if (it->getId() == questionId)
 				{
-					if (sar.answerId == CORRECT_ANSWER_ID)
+					if (sar.answer == it->getCA())
 					{
 						sarr.status = SUBMIT_ANSWER_CORRECT;
 						isCorrect = true;
@@ -67,7 +67,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 				throw std::runtime_error("the question id not exist!");
 			else
 			{
-				QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect);
+				QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
 				this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
 			}
 		}

@@ -57,11 +57,13 @@ int callbackQuestion(void* data, int argc, char** argv, char** azColName)
 int callbackQuestionStatistics(void* data, int argc, char** argv, char** azColName)
 {
 	list<QuestionStatistics>* questionsStatistics = (list<QuestionStatistics>*)data;
-	QuestionStatistics* questionStatistics = new QuestionStatistics("", NULL, false);
+	QuestionStatistics* questionStatistics = new QuestionStatistics("", 0.0, false, "");
 	for (int i = 0; i < argc; i++)
 	{
 		if (string(azColName[i]) == "USER_NAME")
 			questionStatistics->setUserName(argv[i]);
+		else if(string(azColName[i]) == "ANSWER")
+			questionStatistics->setAnswer(argv[i]);
 		else if (string(azColName[i]) == "IS_CORRECT")
 			questionStatistics->setIsCorrect(bool(std::stoi(argv[i])));
 		else if (string(azColName[i]) == "ANSWER_TIME")
@@ -139,7 +141,7 @@ bool SqliteDataBase::open()
 	{
 		users = sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);");
 		questions = sendSQLMsg("CREATE TABLE IF NOT EXISTS QUESTIONS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION TEXT NOT NULL, CORRECT_ANS TEXT NOT NULL, ANS2 TEXT NOT NULL, ANS3 TEXT NOT NULL, ANS4 TEXT NOT NULL);");
-		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER PRIMARY KEY NOT NULL, QUESTION_ID INT, USER_NAME TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER_TIME REAL NOT NULL, FOREIGN KEY(QUESTION_ID) REFERENCES QUESTIONS(ID));");
+		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER PRIMARY KEY NOT NULL, QUESTION_ID INT, USER_NAME TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER TEXT NOT NULL,ANSWER_TIME REAL NOT NULL, FOREIGN KEY(QUESTION_ID) REFERENCES QUESTIONS(ID));");
 		if(!users || !questions || !statistics)
 		{
 			std::cerr << "Error creating db!";
@@ -234,11 +236,12 @@ void SqliteDataBase::addNewQuestion(Question question)
 
 void SqliteDataBase::addNewQuestionStatistics(QuestionStatistics stats)
 {
-	std::string msg = "INSERT INTO STATISTICS (GAME_ID, QUESTION_ID, USER_NAME, IS_CORRECT, ANSWER_TIME) VALUES ("
+	std::string msg = "INSERT INTO STATISTICS (GAME_ID, QUESTION_ID, USER_NAME, IS_CORRECT, ANSWER,  ANSWER_TIME) VALUES ("
 		+ std::to_string(stats.getGameId()) + ", "
 		+ std::to_string(stats.getQuestionId()) + ", '"
 		+ stats.getUserName() + "', "
 		+ std::to_string(stats.getIsCorrect()) + ", "
+		+ stats.getAnswer() + "', "
 		+ std::to_string(stats.getAnswerTime()) + ");";
 	const char* sqlStatement = msg.c_str();
 	sendSQLMsg(sqlStatement);

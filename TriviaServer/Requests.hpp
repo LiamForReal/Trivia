@@ -34,5 +34,5 @@ typedef struct CreateRoomRequest
 
 typedef struct SubmitAnswerRequest
 {
-	unsigned int answerId;
+	std::string answer;
 } SubmitAnswerRequest;

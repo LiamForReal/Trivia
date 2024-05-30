@@ -5,12 +5,13 @@
 class QuestionStatistics
 {
 public:
-	QuestionStatistics(string username, float answerTime, bool isCorrect);
-	QuestionStatistics(string username, float answerTime, bool isCorrect, int questionId);
-	QuestionStatistics(Game game, string username, bool isCorrect);
+	QuestionStatistics(string username, float answerTime, bool isCorrect, string answe);
+	QuestionStatistics(Game game, string username, bool isCorrect, string answer);
 	~QuestionStatistics();
 
 	string getUserName() const;
+	string getAnswer() const;
+	void setAnswer(const string ans);
 	int getQuestionId() const;
 	bool getIsCorrect() const;
 	float getAnswerTime() const;
@@ -24,6 +25,7 @@ public:
 
 private:
 	string _username;
+	string answer;
 	int _gameId;
 	int _questionId;
 	bool _isCorrect;
