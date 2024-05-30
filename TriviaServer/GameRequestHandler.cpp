@@ -16,9 +16,9 @@ bool GameRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	RequestResult rr = RequestResult();
-	PlayerResults playerResults;
 	if (requestInfo.id == GET_GAME_RESULTS_RC)
 	{
+		PlayerResults playerResults;
 		GetGameResultsResponse ggr = GetGameResultsResponse();
 		ggr.status = GET_GAME_RESULTS_STATUS;
 		rr.newHandler = _rhf.createMenuRequestHandler(_user);
