@@ -19,12 +19,12 @@ namespace TriviaClient
     /// </summary>
     public partial class GameScreen : Window
     {
-        public ConnectedRoom _conectedRoom;
+        public ConnectedRoom _connectedRoom;
 
 
-        public GameScreen(ConnectedRoom conectedRoom)
+        public GameScreen(ConnectedRoom connectedRoom)
         {
-            _conectedRoom = conectedRoom;
+            _connectedRoom = connectedRoom;
             InitializeComponent();
         }
 
