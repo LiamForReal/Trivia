@@ -25,5 +25,7 @@ namespace TriviaClient
             _conectedRoom = conectedRoom;
             InitializeComponent();
         }
+
+
     }
 }

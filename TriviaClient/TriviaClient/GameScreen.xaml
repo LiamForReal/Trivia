@@ -32,9 +32,62 @@
             <StackPanel Grid.Row="0" Grid.Column="0">
                 <Label Content="Game Screen" Foreground="Aqua" HorizontalAlignment="Center" FontSize="32" FontWeight="ExtraBold" Margin="10,-5,10,0" />
             </StackPanel>
-                
 
-            </Grid>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <Label Name="QuestionLabel" Content="Question" Foreground="Aqua" HorizontalAlignment="Center" FontSize="28" FontWeight="ExtraBold" Margin="20" />
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button Name="Answer1" Content="Answer 1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer1_Click"
+                       Height="40"
+                       Background="RoyalBlue"
+                       Foreground="White"
+                       FontFamily="Arial"
+                       FontSize="18"
+                       FontWeight="DemiBold"                            
+                       Style="{DynamicResource RoundedButtonStyle}"
+                       Opacity="0.8"
+                    />
+
+                    <Button Name="Answer2" Content="Answer 2" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer2_Click"
+                       Height="40"
+                       Background="RoyalBlue"
+                       Foreground="White"
+                       FontFamily="Arial"
+                       FontSize="18"
+                       FontWeight="DemiBold"
+                       Style="{DynamicResource RoundedButtonStyle}"
+                       Opacity="0.8"
+                    />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button Name="Answer3" Content="Answer 3" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer3_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                    />
+
+                    <Button Name="Answer4" Content="Answer 4" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer4_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                    />
+                </StackPanel>
+
+            </StackPanel>
+
+
+        </Grid>
         </GroupBox>
 
     </Window>
