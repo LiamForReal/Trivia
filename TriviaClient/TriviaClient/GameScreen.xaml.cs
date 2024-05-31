@@ -20,6 +20,8 @@ namespace TriviaClient
     public partial class GameScreen : Window
     {
         public ConnectedRoom _conectedRoom;
+
+
         public GameScreen(ConnectedRoom conectedRoom)
         {
             _conectedRoom = conectedRoom;
