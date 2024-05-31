@@ -23,8 +23,11 @@ namespace TriviaClient
         public ConnectedRoom _connectedRoom;
         public BackgroundWorker updateTimeAndDataBackgroundWorker;
 
+        private uint questionsAmount;
+        private uint timePerQuestion;
 
-        public GameScreen(ConnectedRoom connectedRoom)
+
+        public GameScreen(ConnectedRoom connectedRoom, uint questionsAmount, uint timePerQuestion)
         {
             this.updateTimeAndDataBackgroundWorker = new BackgroundWorker();
 
@@ -38,6 +41,10 @@ namespace TriviaClient
             this.updateTimeAndDataBackgroundWorker.RunWorkerAsync();
 
             _connectedRoom = connectedRoom;
+
+            this.questionsAmount = questionsAmount;
+            this.timePerQuestion = timePerQuestion;
+
             InitializeComponent();
         }
 

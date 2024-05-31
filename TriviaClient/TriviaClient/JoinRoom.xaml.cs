@@ -77,7 +77,7 @@ namespace TriviaClient
                 {
                     this.Hide();
                     this.refreshBackgroundWorker.CancelAsync();
-                    this.connectedRoom = new ConnectedRoom(this.mainWindow, false);
+                    this.connectedRoom = new ConnectedRoom(this.mainWindow, false, connectedRoomData.numOfQuestionsInGame, connectedRoomData.timePerQuestion);
                     this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
                     this.connectedRoom.MaxPlayersLabel.Content = "Max players: " + connectedRoomData.maxPlayers;
                     this.connectedRoom.AmountOfQuestionsLabel.Content = "Amount of questions: " + connectedRoomData.numOfQuestionsInGame;
