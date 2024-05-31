@@ -2,19 +2,22 @@
 
 RequestHandlerFactory::RequestHandlerFactory() 
 {
-	this->dataBace = new SqliteDataBase();
-	this->loginMeneger = new LoginManager();
+	this->_loginMeneger = new LoginManager();
 	this->_roomManager = new RoomManager();
+	this->_gameManager = new GameManager(LoggedUser(""));
 	this->_statisticsManager = new StatisticsManager();
+	this->_db = new SqliteDataBase();
+	if (!this->_db->open())
+		throw std::runtime_error("Failed to open database!");
 }
 
 RequestHandlerFactory::~RequestHandlerFactory()
 {
-	delete this->_statisticsManager;
+	delete this->_loginMeneger;
 	delete this->_roomManager;
-	delete(this->loginMeneger);
-	this->dataBace->close();
-	delete(this->dataBace);
+	delete this->_gameManager;
+	delete this->_statisticsManager;
+	delete this->_db;
 }
 
 RoomManager& RequestHandlerFactory::getRoomManager() const
@@ -34,7 +37,7 @@ LoginRequestHandler* RequestHandlerFactory::creatLoginRequestHandler()
 
 LoginManager& RequestHandlerFactory::getLoginMeneger()
 {
-	return *loginMeneger;
+	return *_loginMeneger;
 }
 
 RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(unsigned int roomId, LoggedUser loggedUser)
@@ -50,4 +53,14 @@ RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser loggedUser)
 {
 	return new MenuRequestHandler(*this, loggedUser);
+}
+
+GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser loggedUser, unsigned roomId)
+{
+	return new GameRequestHandler(*this, loggedUser, roomId);
+}
+
+GameManager& RequestHandlerFactory::getGameManager() const
+{
+	return *_gameManager;
 }

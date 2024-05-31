@@ -420,8 +420,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	unsigned int len = 0;
 
 	json sarJson = {
-		{"status", submitAnswerResponse.status},
-		{"correctAnswerId", submitAnswerResponse.correctAnswerId}
+		{"status", submitAnswerResponse.status}
 	};
 
 	std::string sarJsonStr = sarJson.dump();

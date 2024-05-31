@@ -1,9 +1,8 @@
 #include "RoomMemberRequestHandler.h"
 
-RoomMemberRequestHandler::RoomMemberRequestHandler(RequestHandlerFactory& rhf, unsigned int roomId, LoggedUser member) : _rhf(rhf)
+RoomMemberRequestHandler::RoomMemberRequestHandler(RequestHandlerFactory& rhf, unsigned int roomId, LoggedUser member) : _rhf(rhf), Member(member)
 {
 	this->roomId = roomId;
-	this->Member = member;
 }
 
 RoomMemberRequestHandler::~RoomMemberRequestHandler() {}
@@ -44,10 +43,16 @@ RequestResult RoomMemberRequestHandler::handleRequest(const RequestInfo& request
 			std::vector<std::string> usersInRoom = _rhf.getRoomManager().getRoom(roomId).getAllUsers();
 			std::copy(usersInRoom.begin(), usersInRoom.end(), std::back_inserter(grsr.players));
 			if (_rhf.getRoomManager().getRoom(roomId).getMetadata().isActive == 1)
+			{
 				grsr.status = GET_ROOM_STATE_SERVER_STATUS;
-			else grsr.status = GET_ROOM_STATE_SERVER_ERROR;
+				rr.newHandler = _rhf.createGameRequestHandler(Member, roomId);
+			}
+			else
+			{
+				grsr.status = GET_ROOM_STATE_SERVER_ERROR;
+				rr.newHandler = _rhf.createRoomMemberRequestHandler(roomId, Member);
+			}
 			rr.buffer = JsonResponsePacketSerializer::serializeResponse(grsr);
-			rr.newHandler = _rhf.createRoomMemberRequestHandler(roomId, Member);
 		}
 		else
 		{

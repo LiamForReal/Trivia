@@ -15,6 +15,7 @@ public:
 	virtual bool isPasswordMatch(const string password) = 0;
 	virtual void addNewUser(User& user) = 0;
 	virtual void addNewQuestion(Question question) = 0;
+	virtual void addNewQuestionStatistics(QuestionStatistics stats) = 0;
 	virtual list<User> getUsers() = 0;
 	virtual list<Question> getQuestions() = 0;
 	virtual list<QuestionStatistics> getQuestionsStatistics() = 0;
