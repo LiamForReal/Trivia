@@ -75,6 +75,9 @@ namespace TriviaClient
                     this.connectedRoom.room = this;
                     this.connectedRoom.mainWindow = this.mainWindow;
                     this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;
+                    this.connectedRoom.MaxPlayersLabel.Content = "Max players: " + createRoomRequest.maxUsers;
+                    this.connectedRoom.AmountOfQuestionsLabel.Content = "Amount of questions: " + createRoomRequest.questionsCount;
+                    this.connectedRoom.TimePerQuestionLabel.Content = "Timer per question: " + createRoomRequest.answerTimeout;
                     this.connectedRoom.Show();
                 }
                 else MessageBox.Show("[CreateRoom] error");

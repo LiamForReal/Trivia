@@ -35,7 +35,6 @@ namespace TriviaClient
             this.mainWindow = main;
             InitializeComponent();
 
-
             this.getRoomStateBackgroundWorker = new BackgroundWorker();
 
             this.getRoomStateBackgroundWorker.WorkerSupportsCancellation = true;
