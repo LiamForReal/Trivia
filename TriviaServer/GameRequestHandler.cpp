@@ -1,11 +1,43 @@
 #include "GameRequestHandler.h"
 
+std::map<unsigned int, std::vector<Question>> GameRequestHandler::roomsQuestions;
+
 GameRequestHandler::GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
 	_roomId = roomId;
-	prevQuestions = vector<unsigned int>();
+	currentQuestion = 0;
+	randQuestionsToRoom();
 }
+
 GameRequestHandler::~GameRequestHandler() {}
+
+void GameRequestHandler::randQuestionsToRoom() 
+{
+	if (this->roomsQuestions[_roomId].size() > 0)
+		return;
+
+	std::srand(std::time(0));
+
+	std::vector<Question> questions;
+	unsigned int numOfQuestions = _rhf.getRoomManager().getRoom(_roomId).getMetadata().numOfQuestionsInGame;
+	std::list<Question> questionsList = _rhf.getGameManager().getTriviaQuestions();
+
+	if (questionsList.size() < numOfQuestions) {
+		throw std::runtime_error("Not enough questions available");
+	}
+
+	while (questions.size() < numOfQuestions) {
+		int randIndex = std::rand() % questionsList.size();
+
+		auto it = questionsList.begin();
+		std::advance(it, randIndex);
+
+		if (std::find(questions.begin(), questions.end(), *it) == questions.end()) {
+			questions.push_back(*it);
+		}
+	}
+	this->roomsQuestions[_roomId] = questions;
+}
 
 bool GameRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
@@ -39,37 +71,29 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			rr.newHandler = _rhf.createGameRequestHandler(_user, _roomId);
 			std::cout << e.what() << std::endl;
 		}
+		if (ggr.status == GET_GAME_RESULTS_STATUS)
+			if(this->roomsQuestions.find(_roomId) != this->roomsQuestions.end())
+				this->roomsQuestions.erase(_roomId);
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(ggr);
 	}
 	else if (requestInfo.id == SUBMIT_ANSWER_RC)
 	{
 		SubmitAnswerRequest sar = JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(requestInfo.buffer);
 		SubmitAnswerResponse sarr = SubmitAnswerResponse();
-		bool flag = false, isCorrect = false;
+		bool isCorrect = false;
 		try
 		{
-			list<Question> questions = _rhf.getGameManager().getTriviaQuestions();
-			for (auto it = questions.begin(); it != questions.end(); it++)
+			if (currentQuestion >= this->roomsQuestions[_roomId].size())
+				throw std::runtime_error("question out of vectors bounds");
+			if (sar.answer == this->roomsQuestions[_roomId][currentQuestion].getCA())
 			{
-				if (it->getId() == questionId)
-				{
-					if (sar.answer == it->getCA())
-					{
-						sarr.status = SUBMIT_ANSWER_CORRECT;
-						isCorrect = true;
-					}
-					else sarr.status = SUBMIT_ANSWER_WRONG;
-					flag = true;
-					break;
-				}
+				sarr.status = SUBMIT_ANSWER_CORRECT;
+				isCorrect = true;
 			}
-			if (!flag)
-				throw std::runtime_error("the question id not exist!");
-			else
-			{
-				QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
-				this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
-			}
+			else sarr.status = SUBMIT_ANSWER_WRONG;
+			QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
+			this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
+			currentQuestion++;
 		}
 		catch (std::runtime_error& e)
 		{
@@ -85,31 +109,16 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		gqr.status = GET_QUESTION_STATUS;
 		try
 		{
-			list<Question> questions = _rhf.getGameManager().getTriviaQuestions();
-			for (auto it = questions.begin(); it != questions.end(); it++)
+			if (currentQuestion >= this->roomsQuestions[_roomId].size())
 			{
-				if (it->getId() == questionId)
-				{
-					gqr.question = it->getQ();
-					gqr.answers[0] = it->getCA();
-					gqr.answers[1] = it->getWA1();
-					gqr.answers[2] = it->getWA2();
-					gqr.answers[3] = it->getWA3();
-					break;
-				}
+				gqr.status = GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED;
+				throw std::runtime_error("question out of vectors bounds");
 			}
-			prevQuestions.push_back(questionId);
-			while(true)
-			{
-				if (std::find(prevQuestions.begin(), prevQuestions.end(), questionId) != prevQuestions.end())
-					questionId = (std::rand() % (UPPER_BOND - LOWER_BOND + 1)) + LOWER_BOND;
-				else if (prevQuestions.size() == _rhf.getGameManager().getTriviaQuestions().size())
-				{
-					gqr.status = GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED;
-					break;
-				}
-				else break;
-			}
+			gqr.question = this->roomsQuestions[_roomId][currentQuestion].getQ();
+			gqr.answers[0] = this->roomsQuestions[_roomId][currentQuestion].getCA();
+			gqr.answers[1] = this->roomsQuestions[_roomId][currentQuestion].getWA1();
+			gqr.answers[2] = this->roomsQuestions[_roomId][currentQuestion].getWA2();
+			gqr.answers[3] = this->roomsQuestions[_roomId][currentQuestion].getWA3();
 		}
 		catch (std::runtime_error& e)
 		{
