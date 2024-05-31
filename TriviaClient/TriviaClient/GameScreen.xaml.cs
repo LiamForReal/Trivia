@@ -63,17 +63,27 @@ namespace TriviaClient
 
         private void UpdateTimeAndData()
         {
-
+            
         }
 
         private void UpdateTimeAndDataLoop_DoWork(object sender, DoWorkEventArgs e)
         {
+            while (true)
+            {
+                if (this.updateTimeAndDataBackgroundWorker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    break;
+                }
 
+                this.updateTimeAndDataBackgroundWorker.ReportProgress(0);
+                Thread.Sleep(1000);
+            }
         }
 
         private void UpdateTimeAndDataLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            this.UpdateTimeAndData();
         }
 
         private void UpdateTimeAndDataLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
