@@ -21,7 +21,13 @@ namespace TriviaClient
     public partial class GameScreen : Window
     {
         public ConnectedRoom _connectedRoom;
-        public BackgroundWorker updateTimeAndDataBackgroundWorker;
+        public BackgroundWorker updateDataBackgroundWorker;
+
+        private System.Windows.Threading.DispatcherTimer timer;
+
+        private bool isFinished;
+        private uint currentQuestion;
+        private uint timeLeftForQuestion;
 
         private uint questionsAmount;
         private uint timePerQuestion;
@@ -29,71 +35,120 @@ namespace TriviaClient
 
         public GameScreen(ConnectedRoom connectedRoom, uint questionsAmount, uint timePerQuestion)
         {
-            this.updateTimeAndDataBackgroundWorker = new BackgroundWorker();
+            this.updateDataBackgroundWorker = new BackgroundWorker();
 
-            this.updateTimeAndDataBackgroundWorker.WorkerSupportsCancellation = true;
-            this.updateTimeAndDataBackgroundWorker.WorkerReportsProgress = true;
+            this.updateDataBackgroundWorker.WorkerSupportsCancellation = true;
+            this.updateDataBackgroundWorker.WorkerReportsProgress = true;
 
-            this.updateTimeAndDataBackgroundWorker.DoWork += UpdateTimeAndDataLoop_DoWork;
-            this.updateTimeAndDataBackgroundWorker.ProgressChanged += UpdateTimeAndDataLoop_ProgressChanged;
-            this.updateTimeAndDataBackgroundWorker.RunWorkerCompleted += UpdateTimeAndDataLoop_RunWorkerCompleted;
+            this.updateDataBackgroundWorker.DoWork += UpdateDataLoop_DoWork;
+            this.updateDataBackgroundWorker.ProgressChanged += UpdateDataLoop_ProgressChanged;
+            this.updateDataBackgroundWorker.RunWorkerCompleted += UpdateDataLoop_RunWorkerCompleted;
 
-            this.updateTimeAndDataBackgroundWorker.RunWorkerAsync();
+            this.updateDataBackgroundWorker.RunWorkerAsync();
 
-            _connectedRoom = connectedRoom;
+            this.isFinished = false;
+            this.currentQuestion = 1;
 
             this.questionsAmount = questionsAmount;
             this.timePerQuestion = timePerQuestion;
 
+            this.timeLeftForQuestion = this.timePerQuestion;
+
+            this.timer = new System.Windows.Threading.DispatcherTimer();
+
+            this.timer.Interval = new TimeSpan(0, 0, 1);
+            this.timer.Tick += this.timer_Tick;
+            this.timer.Start();
+
+            _connectedRoom = connectedRoom;
+
             InitializeComponent();
+
+            this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
+
         }
 
         private void Answer1_Click(object sender, RoutedEventArgs e)
         {
-
+            this.HandleClickOnAnswer();
         }
 
         private void Answer2_Click(object sender, RoutedEventArgs e)
         {
-
+            this.HandleClickOnAnswer();
         }
 
         private void Answer3_Click(object sender, RoutedEventArgs e)
         {
-
+            this.HandleClickOnAnswer();
         }
 
         private void Answer4_Click(object sender, RoutedEventArgs e)
         {
-
+            this.HandleClickOnAnswer();
         }
 
-        private void UpdateTimeAndData()
+        private void HandleClickOnAnswer()
         {
-            
+
         }
 
-        private void UpdateTimeAndDataLoop_DoWork(object sender, DoWorkEventArgs e)
+        private void UpdateData()
+        {
+            if (this.isFinished)
+            {
+                this.updateDataBackgroundWorker.CancelAsync();
+            }
+
+
+        }
+        
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            this.timeLeftForQuestion--;
+
+            if (this.timeLeftForQuestion <= 3)
+            {
+                this.TimeLeftLabel.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            else if (this.timeLeftForQuestion <= 5)
+            {
+                this.TimeLeftLabel.Foreground = new SolidColorBrush(Colors.Orange);
+            }
+            else if (this.timeLeftForQuestion <= 10)
+            {
+                this.TimeLeftLabel.Foreground = new SolidColorBrush(Colors.Yellow);
+            }
+            else
+            {
+                this.TimeLeftLabel.Foreground = new SolidColorBrush(Colors.Aqua);
+            }
+
+            this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
+
+        }
+
+        private void UpdateDataLoop_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
             {
-                if (this.updateTimeAndDataBackgroundWorker.CancellationPending)
+                if (this.updateDataBackgroundWorker.CancellationPending)
                 {
                     e.Cancel = true;
                     break;
                 }
 
-                this.updateTimeAndDataBackgroundWorker.ReportProgress(0);
+                this.updateDataBackgroundWorker.ReportProgress(0);
                 Thread.Sleep(1000);
             }
         }
 
-        private void UpdateTimeAndDataLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void UpdateDataLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.UpdateTimeAndData();
+            this.UpdateData();
         }
 
-        private void UpdateTimeAndDataLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void UpdateDataLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled)
             {
