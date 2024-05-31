@@ -5,16 +5,17 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using static TriviaClient.GetGameResultsRequest;
 using static TriviaClient.SubmitAnswerRequest;
 
 namespace TriviaClient
 {
-    internal class GetGameResultsRequest
+    internal class GetQuestionRequest
     {
         private List<byte> Serialize()
         {
             List<byte> list = new List<byte>();
-            list.Add((byte)Cods.ResponseCode.GET_GAME_RESULTS_RC);
+            list.Add((byte)Cods.ResponseCode.GET_QUESTION_RC);
             return list;
         }
 
@@ -23,25 +24,27 @@ namespace TriviaClient
             SocketTools.SendToServer(Serialize(), clientStream);
         }
 
-        public GetGameResultsResponse GetFromServer(NetworkStream clientStream)
+        public GetQuestionResponse GetFromServer(NetworkStream clientStream)
         {
-            GetGameResultsResponse GetGameResultsResponse = GetGameResultsResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
-            return GetGameResultsResponse;
+            GetQuestionResponse GetQuestionResponse = GetQuestionResponse.Deserialize(SocketTools.GetMsgFromServer(clientStream));
+            return GetQuestionResponse;
         }
-
-        internal struct GetGameResultsResponse
+        
+        internal struct GetQuestionResponse
         {
             public uint status;
-            public List<PlayerResults> results;
+            public string question;
+            public SortedDictionary<uint, string> answers;
 
-            public GetGameResultsResponse()
+            public GetQuestionResponse()
             {
-                results = new List<PlayerResults>();
+                this.question = "";
+                this.answers = new SortedDictionary<uint, string>();
             }
 
-            public static GetGameResultsResponse Deserialize(List<byte> list)
+            public static GetQuestionResponse Deserialize(List<byte> list)
             {
-                GetGameResultsResponse response = new GetGameResultsResponse();
+                GetQuestionResponse response = new GetQuestionResponse();
 
                 UInt32 length = BitConverter.ToUInt32(list.GetRange(1, 4).ToArray());
 
@@ -56,7 +59,7 @@ namespace TriviaClient
                         jsonMessage += ch;
                     }
 
-                    response = JsonConvert.DeserializeObject<GetGameResultsResponse>(jsonMessage);
+                    response = JsonConvert.DeserializeObject<GetQuestionResponse>(jsonMessage);
                 }
 
                 return response;

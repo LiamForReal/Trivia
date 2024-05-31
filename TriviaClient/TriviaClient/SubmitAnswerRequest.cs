@@ -12,6 +12,7 @@ namespace TriviaClient
     internal class SubmitAnswerRequest
     {
         public string answer;
+
         public SubmitAnswerRequest (string answer)
         {
             this.answer = answer;
@@ -50,7 +51,6 @@ namespace TriviaClient
         internal struct SubmitAnswerResponse
         {
             public uint status;
-            public uint correctAnswerId;
 
             public SubmitAnswerResponse()
             {
