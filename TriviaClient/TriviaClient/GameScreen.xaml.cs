@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,22 @@ namespace TriviaClient
     public partial class GameScreen : Window
     {
         public ConnectedRoom _connectedRoom;
+        public BackgroundWorker updateTimeAndDataBackgroundWorker;
 
 
         public GameScreen(ConnectedRoom connectedRoom)
         {
+            this.updateTimeAndDataBackgroundWorker = new BackgroundWorker();
+
+            this.updateTimeAndDataBackgroundWorker.WorkerSupportsCancellation = true;
+            this.updateTimeAndDataBackgroundWorker.WorkerReportsProgress = true;
+
+            this.updateTimeAndDataBackgroundWorker.DoWork += UpdateTimeAndDataLoop_DoWork;
+            this.updateTimeAndDataBackgroundWorker.ProgressChanged += UpdateTimeAndDataLoop_ProgressChanged;
+            this.updateTimeAndDataBackgroundWorker.RunWorkerCompleted += UpdateTimeAndDataLoop_RunWorkerCompleted;
+
+            this.updateTimeAndDataBackgroundWorker.RunWorkerAsync();
+
             _connectedRoom = connectedRoom;
             InitializeComponent();
         }
@@ -46,6 +59,33 @@ namespace TriviaClient
         private void Answer4_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void UpdateTimeAndData()
+        {
+
+        }
+
+        private void UpdateTimeAndDataLoop_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void UpdateTimeAndDataLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void UpdateTimeAndDataLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                // MessageBox.Show("BackgroundWorker cancelled");
+            }
+            else
+            {
+                // MessageBox.Show("BackgroundWorker ended successfully");
+            }
         }
     }
 }
