@@ -72,8 +72,8 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			std::cout << e.what() << std::endl;
 		}
 		if (ggr.status == GET_GAME_RESULTS_STATUS)
-			if(this->roomsQuestions.find(_roomId) != this->roomsQuestions.end())
-				this->roomsQuestions.erase(_roomId);
+			if(this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
+				this->roomsQuestions[_roomId].clear();
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(ggr);
 	}
 	else if (requestInfo.id == SUBMIT_ANSWER_RC)
