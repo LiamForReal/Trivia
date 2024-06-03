@@ -11,7 +11,7 @@ class RequestHandlerFactory;
 class GameRequestHandler : virtual public IRequestHandler
 {
 public:
-	GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId);
+	GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId);
 	~GameRequestHandler();
 	bool isRequestRelevant(const RequestInfo& requestInfo) override;
 	void randQuestionsToRoom();

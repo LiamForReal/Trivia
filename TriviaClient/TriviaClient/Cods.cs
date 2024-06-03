@@ -45,7 +45,8 @@ namespace TriviaClient
             GET_ROOM_STATE_STATUS = 121,
             LEAVE_ROOM_STATUS = 131,
             GET_GAME_RESULTS_STATUS = 141,
-            SUBMIT_ANSWER_STATUS = 151,
+            SUBMIT_ANSWER_CORRECT = 151,
+            SUBMIT_ANSWER_WRONG = 152,
             GET_QUESTION_STATUS = 161,
             LEAVE_GAME_STATUS = 171,
         }

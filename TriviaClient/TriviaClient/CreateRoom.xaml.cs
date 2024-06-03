@@ -21,14 +21,13 @@ namespace TriviaClient
     public partial class CreateRoom : Window
     {
         public MainWindow mainWindow;
-        private List<CreateRoomRequest.RoomData> rooms;
         public ConnectedRoom connectedRoom;
-
+        private uint amountOfRooms;
         public CreateRoom(MainWindow main)
         {
             mainWindow = main;
-            rooms = new List<CreateRoomRequest.RoomData>();
             InitializeComponent();
+            amountOfRooms = 0;
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -40,7 +39,8 @@ namespace TriviaClient
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
-                || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "")
+                || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "" ||
+                int.Parse(this.NumberOfQuestionsTextBox.Text) > 10)
 
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
@@ -61,8 +61,8 @@ namespace TriviaClient
                 {
                     try
                     {
-                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, (uint)this.rooms.Count());
-                        rooms.Add(roomData);
+                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, amountOfRooms);
+                        amountOfRooms++;
                     }
                     catch (Exception ex)
                     {

@@ -55,7 +55,7 @@ MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser l
 	return new MenuRequestHandler(*this, loggedUser);
 }
 
-GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser loggedUser, unsigned roomId)
+GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser loggedUser, unsigned int roomId)
 {
 	return new GameRequestHandler(*this, loggedUser, roomId);
 }

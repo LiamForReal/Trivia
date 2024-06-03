@@ -2,7 +2,7 @@
 
 std::map<unsigned int, std::vector<Question>> GameRequestHandler::roomsQuestions;
 
-GameRequestHandler::GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
+GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
 	_roomId = roomId;
 	currentQuestion = 0;
@@ -92,8 +92,9 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			}
 			else sarr.status = SUBMIT_ANSWER_WRONG;
 			QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
-			this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
 			currentQuestion++;
+			this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
+			
 		}
 		catch (std::runtime_error& e)
 		{
@@ -107,6 +108,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	{
 		GetQuestionResponse gqr = GetQuestionResponse();
 		gqr.status = GET_QUESTION_STATUS;
+		//std::cout << currentQuestion << "\n\n\n";
 		try
 		{
 			if (currentQuestion >= this->roomsQuestions[_roomId].size())
@@ -115,10 +117,10 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 				throw std::runtime_error("question out of vectors bounds");
 			}
 			gqr.question = this->roomsQuestions[_roomId][currentQuestion].getQ();
-			gqr.answers[0] = this->roomsQuestions[_roomId][currentQuestion].getCA();
-			gqr.answers[1] = this->roomsQuestions[_roomId][currentQuestion].getWA1();
-			gqr.answers[2] = this->roomsQuestions[_roomId][currentQuestion].getWA2();
-			gqr.answers[3] = this->roomsQuestions[_roomId][currentQuestion].getWA3();
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getCA());
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA1());
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA2());
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA3());
 		}
 		catch (std::runtime_error& e)
 		{

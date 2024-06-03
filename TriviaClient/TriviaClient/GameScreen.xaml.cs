@@ -24,7 +24,7 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public ConnectedRoom _connectedRoom;
-        public BackgroundWorker updateDataBackgroundWorker;
+        // public BackgroundWorker updateDataBackgroundWorker;
 
         private System.Windows.Threading.DispatcherTimer timer;
 
@@ -82,54 +82,53 @@ namespace TriviaClient
 
         private void GetNextQuestion()
         {
-            MessageBox.Show("Gettinging new question...");
 
             GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
-            MessageBox.Show("1");
             getQuestionRequest.SendToServer(this.mainWindow.clientStream);
-            MessageBox.Show("2");
             GetQuestionRequest.GetQuestionResponse getQuestionResponse = getQuestionRequest.GetFromServer(this.mainWindow.clientStream);
-            MessageBox.Show("3");
-            //getQuestionResponse.answers = this.Shuffle(getQuestionResponse.answers);
-
-            MessageBox.Show("Sent request & got response...");
+            getQuestionResponse.answers = this.Shuffle(getQuestionResponse.answers);
 
             this.Answer1.Content = getQuestionResponse.answers[0];
             this.Answer2.Content = getQuestionResponse.answers[1];
             this.Answer3.Content = getQuestionResponse.answers[2];
             this.Answer4.Content = getQuestionResponse.answers[3];
 
-            MessageBox.Show("Put stuff...");
-
             this.QuestionLabel.Content = getQuestionResponse.question;
         }
 
         private void Answer1_Click(object sender, RoutedEventArgs e)
         {
-            this.HandleClickOnAnswer();
+            this.HandleClickOnAnswer(this.Answer1.Content.ToString());
         }
 
         private void Answer2_Click(object sender, RoutedEventArgs e)
         {
-            this.HandleClickOnAnswer();
+            this.HandleClickOnAnswer(this.Answer2.Content.ToString());
         }
 
         private void Answer3_Click(object sender, RoutedEventArgs e)
         {
-            this.HandleClickOnAnswer();
+            this.HandleClickOnAnswer(this.Answer3.Content.ToString());
         }
 
         private void Answer4_Click(object sender, RoutedEventArgs e)
         {
-            this.HandleClickOnAnswer();
+            this.HandleClickOnAnswer(this.Answer4.Content.ToString());
         }
 
-        private void HandleClickOnAnswer()
+        private void HandleClickOnAnswer(string answer)
         {
+            SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest(answer);
+            submitAnswerRequest.SendToServer(this.mainWindow.clientStream);
+            SubmitAnswerRequest.SubmitAnswerResponse submitAnswerResponse = submitAnswerRequest.GetFromServer(this.mainWindow.clientStream);
 
+            if ((uint)(Cods.Status.SUBMIT_ANSWER_CORRECT) == submitAnswerResponse.status || (uint)(Cods.Status.SUBMIT_ANSWER_WRONG) == submitAnswerResponse.status)
+            {
+                this.GetNextQuestion();
+            }
         }
 
-        private void UpdateData()
+        /*private void UpdateData()
         {
             if (this.isFinished)
             {
@@ -137,7 +136,7 @@ namespace TriviaClient
             }
 
 
-        }
+        }*/
         
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -164,7 +163,7 @@ namespace TriviaClient
 
         }
 
-        private void UpdateDataLoop_DoWork(object sender, DoWorkEventArgs e)
+        /*private void UpdateDataLoop_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
             {
@@ -195,5 +194,6 @@ namespace TriviaClient
                 // MessageBox.Show("BackgroundWorker ended successfully");
             }
         }
+    */
     }
 }
