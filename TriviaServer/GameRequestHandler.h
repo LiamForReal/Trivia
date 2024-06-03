@@ -14,12 +14,13 @@ public:
 	GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId);
 	~GameRequestHandler();
 	bool isRequestRelevant(const RequestInfo& requestInfo) override;
+	void randQuestionsToRoom();
 	RequestResult handleRequest(const RequestInfo& requestInfo) override;
 private:
 	RequestHandlerFactory& _rhf;
 	LoggedUser _user;
 	unsigned int _roomId;
-	unsigned int questionId;
-	vector<unsigned int> prevQuestions;
+	static map<unsigned int, vector<Question>> roomsQuestions;
+	int currentQuestion;
 };
 

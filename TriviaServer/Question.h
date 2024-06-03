@@ -22,6 +22,7 @@ public:
 	void setWA2(const string& newWA2);
 	void setWA3(const string& newWA3);
 
+	bool operator==(const Question& other) const;
 private:
 	string _question;
 	string _correctAnswer;
