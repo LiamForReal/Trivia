@@ -166,7 +166,7 @@ typedef struct GetQuestionResponse
 {
 	unsigned int status;
 	std::string question;
-	std::map<unsigned int, std::string> answers;
+	std::vector<std::string> answers;
 } GetQuestionResponse;
 
 typedef struct LeaveGameResponse

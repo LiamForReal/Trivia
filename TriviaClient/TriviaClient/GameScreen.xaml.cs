@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TriviaClient
 {
@@ -20,6 +22,7 @@ namespace TriviaClient
     /// </summary>
     public partial class GameScreen : Window
     {
+        public MainWindow mainWindow;
         public ConnectedRoom _connectedRoom;
         public BackgroundWorker updateDataBackgroundWorker;
 
@@ -32,10 +35,12 @@ namespace TriviaClient
         private uint questionsAmount;
         private uint timePerQuestion;
 
+        public FinishWaitingRoom finishWaitingRoom;
 
-        public GameScreen(ConnectedRoom connectedRoom, uint questionsAmount, uint timePerQuestion)
+        public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
             this.updateDataBackgroundWorker = new BackgroundWorker();
+            this.mainWindow = mainWindow;
 
             this.updateDataBackgroundWorker.WorkerSupportsCancellation = true;
             this.updateDataBackgroundWorker.WorkerReportsProgress = true;
@@ -62,10 +67,27 @@ namespace TriviaClient
 
             _connectedRoom = connectedRoom;
 
-            InitializeComponent();
-
             this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
 
+            GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
+            getQuestionRequest.SendToServer(this.mainWindow.clientStream);
+            GetQuestionRequest.GetQuestionResponse getQuestionResponse = getQuestionRequest.GetFromServer(this.mainWindow.clientStream);
+
+            getQuestionResponse.answers = this.Shuffle(getQuestionResponse.answers);
+
+            this.Answer1.Content = getQuestionResponse.answers[0];
+            this.Answer2.Content = getQuestionResponse.answers[1];
+            this.Answer3.Content = getQuestionResponse.answers[2];
+            this.Answer4.Content = getQuestionResponse.answers[3];
+
+            this.QuestionLabel.Content = getQuestionResponse.question;
+
+            InitializeComponent();
+        }
+
+        private List<string> Shuffle(List<string> items)
+        {
+            return items.Distinct().OrderBy(x => System.Guid.NewGuid().ToString()).ToList();
         }
 
         private void Answer1_Click(object sender, RoutedEventArgs e)

@@ -99,7 +99,7 @@ namespace TriviaClient
             else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status && !isOwner)
             {
                 this.getRoomStateBackgroundWorker.CancelAsync();
-                this.gameScreen = new GameScreen(this, this.questionsAmount, this.timePerQuestion);
+                this.gameScreen = new GameScreen(this, this.mainWindow, this.questionsAmount, this.timePerQuestion);
                 this.gameScreen.Show();
                 this.Close();
             }
@@ -154,7 +154,7 @@ namespace TriviaClient
             if (Cods.Status.START_GAME_STATUS == (Cods.Status)responed.status)
             {
                 this.Hide();
-                this.gameScreen = new GameScreen(this, this.questionsAmount, this.timePerQuestion);
+                this.gameScreen = new GameScreen(this, this.mainWindow, this.questionsAmount, this.timePerQuestion);
                 this.gameScreen.Show();
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();

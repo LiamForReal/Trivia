@@ -34,12 +34,12 @@ namespace TriviaClient
         {
             public uint status;
             public string question;
-            public SortedDictionary<uint, string> answers;
+            public List<string> answers;
 
             public GetQuestionResponse()
             {
                 this.question = "";
-                this.answers = new SortedDictionary<uint, string>();
+                this.answers = new List<string>();
             }
 
             public static GetQuestionResponse Deserialize(List<byte> list)
