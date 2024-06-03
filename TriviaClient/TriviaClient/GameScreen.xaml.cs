@@ -39,17 +39,17 @@ namespace TriviaClient
 
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
-            this.updateDataBackgroundWorker = new BackgroundWorker();
+            //this.updateDataBackgroundWorker = new BackgroundWorker();
             this.mainWindow = mainWindow;
 
-            this.updateDataBackgroundWorker.WorkerSupportsCancellation = true;
-            this.updateDataBackgroundWorker.WorkerReportsProgress = true;
+            //this.updateDataBackgroundWorker.WorkerSupportsCancellation = true;
+            //this.updateDataBackgroundWorker.WorkerReportsProgress = true;
 
-            this.updateDataBackgroundWorker.DoWork += UpdateDataLoop_DoWork;
-            this.updateDataBackgroundWorker.ProgressChanged += UpdateDataLoop_ProgressChanged;
-            this.updateDataBackgroundWorker.RunWorkerCompleted += UpdateDataLoop_RunWorkerCompleted;
+            //this.updateDataBackgroundWorker.DoWork += UpdateDataLoop_DoWork;
+            //this.updateDataBackgroundWorker.ProgressChanged += UpdateDataLoop_ProgressChanged;
+            //this.updateDataBackgroundWorker.RunWorkerCompleted += UpdateDataLoop_RunWorkerCompleted;
 
-            this.updateDataBackgroundWorker.RunWorkerAsync();
+            //this.updateDataBackgroundWorker.RunWorkerAsync();
 
             this.isFinished = false;
             this.currentQuestion = 1;
@@ -67,27 +67,41 @@ namespace TriviaClient
 
             _connectedRoom = connectedRoom;
 
+            InitializeComponent();
+
+
+            this.GetNextQuestion();
+
             this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
+        }
+
+        private List<string> Shuffle(List<string> items)
+        {
+            return items.Distinct().OrderBy(x => System.Guid.NewGuid().ToString()).ToList();
+        }
+
+        private void GetNextQuestion()
+        {
+            MessageBox.Show("Gettinging new question...");
 
             GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
+            MessageBox.Show("1");
             getQuestionRequest.SendToServer(this.mainWindow.clientStream);
+            MessageBox.Show("2");
             GetQuestionRequest.GetQuestionResponse getQuestionResponse = getQuestionRequest.GetFromServer(this.mainWindow.clientStream);
+            MessageBox.Show("3");
+            //getQuestionResponse.answers = this.Shuffle(getQuestionResponse.answers);
 
-            getQuestionResponse.answers = this.Shuffle(getQuestionResponse.answers);
+            MessageBox.Show("Sent request & got response...");
 
             this.Answer1.Content = getQuestionResponse.answers[0];
             this.Answer2.Content = getQuestionResponse.answers[1];
             this.Answer3.Content = getQuestionResponse.answers[2];
             this.Answer4.Content = getQuestionResponse.answers[3];
 
+            MessageBox.Show("Put stuff...");
+
             this.QuestionLabel.Content = getQuestionResponse.question;
-
-            InitializeComponent();
-        }
-
-        private List<string> Shuffle(List<string> items)
-        {
-            return items.Distinct().OrderBy(x => System.Guid.NewGuid().ToString()).ToList();
         }
 
         private void Answer1_Click(object sender, RoutedEventArgs e)

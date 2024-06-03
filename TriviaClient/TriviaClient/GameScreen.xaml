@@ -48,7 +48,7 @@
 
 
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Button Name="Answer1" Content="Answer 1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer1_Click"
+                    <Button x:Name="Answer1" Content="Answer 1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer1_Click"
                        Height="40"
                        Background="RoyalBlue"
                        Foreground="White"
@@ -59,7 +59,7 @@
                        Opacity="0.8"
                     />
 
-                    <Button Name="Answer2" Content="Answer 2" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer2_Click"
+                    <Button x:Name="Answer2" Content="Answer 2" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer2_Click"
                        Height="40"
                        Background="RoyalBlue"
                        Foreground="White"
@@ -72,7 +72,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Button Name="Answer3" Content="Answer 3" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer3_Click"
+                    <Button x:Name="Answer3" Content="Answer 3" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer3_Click"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
@@ -83,7 +83,7 @@
                         Opacity="0.8"
                     />
 
-                    <Button Name="Answer4" Content="Answer 4" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer4_Click"
+                    <Button x:Name="Answer4" Content="Answer 4" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer4_Click"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"

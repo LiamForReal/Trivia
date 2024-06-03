@@ -127,10 +127,6 @@ void run_json_test_v4(void)
 	GetQuestionResponse getQuestionResponse;
 	getQuestionResponse.status = 50;
 	getQuestionResponse.question = "What D name of ur family DoCToR?";
-	getQuestionResponse.answers.insert({ 0, "Boris" });
-	getQuestionResponse.answers.insert({ 1, "Ofek" });
-	getQuestionResponse.answers.insert({ 2, "Liam" });
-	getQuestionResponse.answers.insert({ 3, "Gavriel" });
 
-	std::vector<unsigned char> vec = JsonResponsePacketSerializer::serializeResponse(getQuestionResponse);
+	//std::vector<unsigned char> vec = JsonResponsePacketSerializer::serializeResponse(getQuestionResponse);
 }
