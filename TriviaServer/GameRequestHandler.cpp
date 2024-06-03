@@ -115,10 +115,11 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 				throw std::runtime_error("question out of vectors bounds");
 			}
 			gqr.question = this->roomsQuestions[_roomId][currentQuestion].getQ();
-			gqr.answers[0] = this->roomsQuestions[_roomId][currentQuestion].getCA();
-			gqr.answers[1] = this->roomsQuestions[_roomId][currentQuestion].getWA1();
-			gqr.answers[2] = this->roomsQuestions[_roomId][currentQuestion].getWA2();
-			gqr.answers[3] = this->roomsQuestions[_roomId][currentQuestion].getWA3();
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getCA());
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA1());
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA2());
+			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA3());
+			//1
 		}
 		catch (std::runtime_error& e)
 		{
