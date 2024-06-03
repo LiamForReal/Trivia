@@ -7,13 +7,6 @@ Game::Game(int id)
 	this->gameId = id;
 }
 
-Game::Game()
-{
-	this->avrageTimePerAnswer = 0.0f;
-	this->questionId = -1;
-	this->gameId = -1;
-}
-
 Game::~Game() {}
 
 int Game::getQuestionId() const 

@@ -1,6 +1,7 @@
 #include "GameRequestHandler.h"
 
 std::map<unsigned int, std::pair<std::vector<Question>, int>> GameRequestHandler::roomsQuestions;
+std::map<LoggedUser, std::chrono::high_resolution_clock::time_point> GameRequestHandler::avrageTime;
 
 GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
@@ -60,7 +61,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			for (auto it = users.begin(); it != users.end(); ++it)
 			{
 				playerResults = PlayerResults(*it, (unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[1])),
-					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[2])), 
+					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[2])),
 					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[3])));
 				ggr.results.push_back(playerResults);
 			}
@@ -72,7 +73,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			std::cout << e.what() << std::endl;
 		}
 		if (ggr.status == GET_GAME_RESULTS_STATUS)
-			if(this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
+			if (this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
 				this->roomsQuestions[_roomId].first.clear();
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(ggr);
 	}
@@ -91,10 +92,12 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 				isCorrect = true;
 			}
 			else sarr.status = SUBMIT_ANSWER_WRONG;
+			this->_rhf.getGameManager().getGame(_user).setQuestionId(this->roomsQuestions[_roomId].first[currentQuestion].getId());
+			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count() / FROM_MILI_TO_SEC));
 			QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
-			this->roomsQuestions[_roomId].second++;
+			std::cout << q.getGameId() << "\n" << q.getQuestionId() << "\n" << q.getAnswer();
 			this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
-			
+			this->roomsQuestions[_roomId].second++;
 		}
 		catch (std::runtime_error& e)
 		{
@@ -128,6 +131,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		}
 		rr.newHandler = _rhf.createGameRequestHandler(_user, _roomId);
 		std::cout << "DEBUG: response code " << gqr.status << std::endl;
+		this->avrageTime[_user] = std::chrono::high_resolution_clock::now();
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(gqr);
 	}
 	else if (requestInfo.id == LEAVE_GAME_RC)
