@@ -45,6 +45,7 @@ namespace TriviaClient
 
         private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
+            CreateRoomRequest.RoomData connectedRoomData = new CreateRoomRequest.RoomData();
             uint roomId = 0;
             string selectedRoom = this.RoomsListBox.SelectedItem.ToString();
 
@@ -61,6 +62,7 @@ namespace TriviaClient
                         if (rd.name == selectedRoom)
                         {
                             roomId = rd.id;
+                            connectedRoomData = rd;
                             break;
                         }
                     }
@@ -75,8 +77,11 @@ namespace TriviaClient
                 {
                     this.Hide();
                     this.refreshBackgroundWorker.CancelAsync();
-                    this.connectedRoom = new ConnectedRoom(this.mainWindow, false);
+                    this.connectedRoom = new ConnectedRoom(this.mainWindow, false, connectedRoomData.numOfQuestionsInGame, connectedRoomData.timePerQuestion);
                     this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
+                    this.connectedRoom.MaxPlayersLabel.Content = "Max players: " + connectedRoomData.maxPlayers;
+                    this.connectedRoom.AmountOfQuestionsLabel.Content = "Amount of questions: " + connectedRoomData.numOfQuestionsInGame;
+                    this.connectedRoom.TimePerQuestionLabel.Content = "Timer per question: " + connectedRoomData.timePerQuestion;
                     this.connectedRoom.Show();
                 } else MessageBox.Show("cant join room");
 

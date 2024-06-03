@@ -28,13 +28,15 @@ namespace TriviaClient
         public bool isOwner;
         public GameScreen gameScreen;
 
+        private uint questionsAmount;
+        private uint timePerQuestion;
+
         private BackgroundWorker getRoomStateBackgroundWorker;
 
-        public ConnectedRoom(MainWindow main, bool isOwner)
+        public ConnectedRoom(MainWindow main, bool isOwner, uint questionsAmount, uint timePerQuestion)
         {
             this.mainWindow = main;
             InitializeComponent();
-
 
             this.getRoomStateBackgroundWorker = new BackgroundWorker();
 
@@ -58,6 +60,9 @@ namespace TriviaClient
             }
 
             this.getRoomStateBackgroundWorker.RunWorkerAsync();
+
+            this.questionsAmount = questionsAmount;
+            this.timePerQuestion = timePerQuestion;
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
@@ -94,7 +99,7 @@ namespace TriviaClient
             else if ((uint)Cods.Status.GET_ROOM_STATE_STATUS == getRoomStateResponse.status && !isOwner)
             {
                 this.getRoomStateBackgroundWorker.CancelAsync();
-                this.gameScreen = new GameScreen(this);
+                this.gameScreen = new GameScreen(this, this.questionsAmount, this.timePerQuestion);
                 this.gameScreen.Show();
                 this.Close();
             }
@@ -149,7 +154,7 @@ namespace TriviaClient
             if (Cods.Status.START_GAME_STATUS == (Cods.Status)responed.status)
             {
                 this.Hide();
-                this.gameScreen = new GameScreen(this);
+                this.gameScreen = new GameScreen(this, this.questionsAmount, this.timePerQuestion);
                 this.gameScreen.Show();
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();

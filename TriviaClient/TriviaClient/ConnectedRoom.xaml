@@ -91,6 +91,13 @@
                 />
             </StackPanel>
 
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Margin="5">
+                <Label Name="MaxPlayersLabel" Content="Max players: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="85,145,5,0" FontSize="12"/>
+                <Label Name="AmountOfQuestionsLabel" Content="Amount of questions: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="85,0" FontSize="12"/>
+                <Label Name="TimePerQuestionLabel" Content="Time per question: " Foreground="White" FontWeight="ExtraBlack" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="85,0" FontSize="12"/>
+
+            </StackPanel>
+
         </Grid>
     </GroupBox>
 </Window>
