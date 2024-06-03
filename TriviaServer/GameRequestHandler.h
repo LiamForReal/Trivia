@@ -20,7 +20,6 @@ private:
 	RequestHandlerFactory& _rhf;
 	LoggedUser _user;
 	unsigned int _roomId;
-	static map<unsigned int, vector<Question>> roomsQuestions;
-	int currentQuestion;
+	static map<unsigned int, std::pair<vector<Question>, int>> roomsQuestions;
 };
 
