@@ -12,7 +12,6 @@ LoginManager::LoginManager()
 LoginManager::~LoginManager()
 {
 	this->_dataBace->close();
-	delete _dataBace;
 }
 
 void LoginManager::logout(const string name)

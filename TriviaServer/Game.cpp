@@ -1,11 +1,17 @@
 #include "Game.h"
 
+Game::Game(int id)
+{
+	this->avrageTimePerAnswer = 0.0f;
+	this->questionId = -1;
+	this->gameId = id;
+}
+
 Game::Game()
 {
 	this->avrageTimePerAnswer = 0.0f;
-	this->currentTrueAnswers = 0;
-	this->currentWrongAnswers = 0;
 	this->questionId = -1;
+	this->gameId = -1;
 }
 
 Game::~Game() {}
@@ -13,16 +19,6 @@ Game::~Game() {}
 int Game::getQuestionId() const 
 {
 	return this->questionId;
-}
-
-int Game::getTrueAns() const
-{
-	return this->currentTrueAnswers;
-}
-
-int Game::getWrongAns() const
-{
-	return this->currentWrongAnswers;
 }
 
 float Game::getAvrageTime() const
@@ -35,31 +31,24 @@ void Game::setQuestionId(const int questionId)
 	this->questionId = questionId;
 }
 
-void Game::incTrueAns()
-{
-	this->currentTrueAnswers++;
-}
-void Game::incWrongAns()
-{
-	this->currentWrongAnswers++;
-}
-void Game::setTrueAns(const int trueAns)
-{
-	this->currentTrueAnswers = trueAns;
-}
-void Game::setWrongAns(const int wrongAns)
-{
-	this->currentWrongAnswers = wrongAns;
-}
 void Game::setavrageTime(const float avrageTime)
 {
 	this->avrageTimePerAnswer = avrageTime;
 }
 
+void Game::setGameId(const int gameId)
+{
+	this->gameId = gameId;
+}
+
+int Game::getGameId() const
+{
+	return this->gameId;
+}
+
 bool Game::operator==(const Game& other) const
 {
-	return  this->avrageTimePerAnswer == other.avrageTimePerAnswer && this->currentTrueAnswers == other.currentTrueAnswers && 
-		this->currentWrongAnswers == other.currentWrongAnswers && this->questionId == this->questionId;
+	return  this->avrageTimePerAnswer == other.avrageTimePerAnswer && this->questionId == this->questionId;
 }
 
 Game& Game::operator=(const Game& other)
@@ -70,8 +59,6 @@ Game& Game::operator=(const Game& other)
 	}
 
 	this->avrageTimePerAnswer = other.avrageTimePerAnswer;
-	this->currentTrueAnswers = other.currentTrueAnswers;
-	this->currentWrongAnswers = other.currentWrongAnswers;
 	this->questionId = other.questionId;
 	return *this;
 }

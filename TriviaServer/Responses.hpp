@@ -42,7 +42,8 @@ typedef enum Status
 	GET_ROOM_STATE_SERVER_STATUS = 121,
 	LEAVE_ROOM_STATUS = 131,
 	GET_GAME_RESULTS_STATUS = 141,
-	SUBMIT_ANSWER_STATUS = 151,
+	SUBMIT_ANSWER_CORRECT = 151,
+	SUBMIT_ANSWER_WRONG = 152,
 	GET_QUESTION_STATUS = 161,
 	LEAVE_GAME_STATUS = 171,
 } Status;
@@ -68,6 +69,7 @@ typedef enum Errors
 	GET_GAME_RESULTS_ERROR = 145,
 	SUBMIT_ANSWER_ERROR = 155,
 	GET_QUESTION_ERROR = 165,
+	GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED = 156,
 	LEAVE_GAME_ERROR = 175,
 } Errors;
 
@@ -158,14 +160,13 @@ typedef struct GetGameResultsResponse
 typedef struct SubmitAnswerResponse
 {
 	unsigned int status;
-	unsigned int correctAnswerId;
 } SubmitAnswerResponse;
 
 typedef struct GetQuestionResponse
 {
 	unsigned int status;
 	std::string question;
-	std::map<unsigned int, std::string> answers;
+	std::vector<std::string> answers;
 } GetQuestionResponse;
 
 typedef struct LeaveGameResponse

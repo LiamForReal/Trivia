@@ -420,8 +420,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	unsigned int len = 0;
 
 	json sarJson = {
-		{"status", submitAnswerResponse.status},
-		{"correctAnswerId", submitAnswerResponse.correctAnswerId}
+		{"status", submitAnswerResponse.status}
 	};
 
 	std::string sarJsonStr = sarJson.dump();
@@ -452,7 +451,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	std::string gqrJsonStr = gqrJson.dump();
 
-	std::cout << "[Json Structs and Maps] DEBUG: " << gqrJsonStr << std::endl;
+	std::cout << "[QUESTION DATA DEBUG:] " << gqrJsonStr << std::endl;
 
 	// Insert Message Length Into Vector
 	len = (unsigned int)(gqrJsonStr.size()); // possible lose of data for 64 bits.

@@ -40,11 +40,11 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		sgr.status = START_GAME_STATUS;
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(sgr);
 		std::cout << "DEBUG: response code " << sgr.status << std::endl;
-		rr.newHandler = _rhf.createRoomAdminRequestHandler(roomId, Owner);
+		rr.newHandler = _rhf.createGameRequestHandler(Owner, roomId);
 	}
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
 	{
-		GetRoomStateResponse grsr = GetRoomStateResponse(); //TO CHANGE
+		GetRoomStateResponse grsr = GetRoomStateResponse();
 		grsr.players = std::vector<std::string>();
 		std::vector<std::string> usersInRoom = _rhf.getRoomManager().getRoom(roomId).getAllUsers();
 		std::copy(usersInRoom.begin(), usersInRoom.end(), std::back_inserter(grsr.players));

@@ -161,27 +161,25 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerReques
 {
 	SubmitAnswerRequest sar;
 	std::string jsonDataStr = "";
-
 	unsigned int len = 0, i = 0;
 
-	memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
-	// std::cout << len << std::endl;
+	std::memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	std::cout << len << std::endl;
 
 	for (i = 0; i < len; i++)
 	{
 		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
 	}
-
+	std::cout << jsonDataStr;
 	json jsonData = json::parse(jsonDataStr);
 
 	try
 	{
-		sar.answerId = jsonData["answerId"];
+		sar.answer = jsonData["answer"];
 	}
 	catch (...)
 	{
 		throw std::runtime_error("Invalid json structure passed");
 	}
-
 	return sar;
 }

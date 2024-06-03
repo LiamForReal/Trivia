@@ -53,7 +53,6 @@ vector<string> StatisticsManager::getHighScore()
 		}
 	}
 	std::cout << "3\n";
-	//done here
 	return fiveBestScores;
 }
 
@@ -67,4 +66,9 @@ vector<string> StatisticsManager::getUserStatistics(string username) const
 	userStatistics.push_back(std::to_string(_db->getNumOfTotalAnswers(username) - correctAnswers));
 	userStatistics.push_back(std::to_string(_db->getPlayerAverageAnswerTime(username)));
 	return userStatistics; 
+}
+
+void StatisticsManager::addNewQuestionStatistics(const QuestionStatistics q)
+{
+	this->_db->addNewQuestionStatistics(q);
 }
