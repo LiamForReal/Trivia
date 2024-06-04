@@ -5,6 +5,11 @@ std::map<LoggedUser, std::chrono::high_resolution_clock::time_point> GameRequest
 
 GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
+	for (auto it = _rhf.getRoomManager().getRooms().begin(); it != _rhf.getRoomManager().getRooms().end(); ++it)
+	{
+		if (it->id == roomId)
+			_rhf.getRoomManager().deleteRoom(roomId);
+	}
 	_roomId = roomId;
 	randQuestionsToRoom();
 }
@@ -94,6 +99,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			else sarr.status = SUBMIT_ANSWER_WRONG;
 			this->_rhf.getGameManager().getGame(_user).setQuestionId(this->roomsQuestions[_roomId].first[currentQuestion].getId());
 			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count() / FROM_MICRO_TO_SEC));
+			std::cout << "game id: " << this->_rhf.getGameManager().getGame(_user).getGameId();
 			QuestionStatistics* q = new QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
 			this->_rhf.getStatisticsManager().addNewQuestionStatistics(*q);
 			this->roomsQuestions[_roomId].second++;

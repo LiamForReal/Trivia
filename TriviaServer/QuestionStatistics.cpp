@@ -1,6 +1,6 @@
 #include "QuestionStatistics.h"
 
-QuestionStatistics::QuestionStatistics(string username, float answerTime, bool isCorrect, string answe)
+QuestionStatistics::QuestionStatistics(string username, float answerTime, bool isCorrect, string answer)
 {
 	this->_username = username;
 	this->_isCorrect = isCorrect;
