@@ -1,7 +1,7 @@
 #include "GameManager.h"
 #include <stdexcept>
 
-int GameManager::gameId = 0;
+int GameManager::gameId = 1;
 
 GameManager::GameManager()
 {
@@ -21,14 +21,30 @@ Game& GameManager::getGame(LoggedUser user)
     return std::ref(this->games[user]);
 }
 
-Game& GameManager::createGame(Room room, LoggedUser user)
+Game& GameManager::createGame(Room room)
 {
     vector<string> users = room.getAllUsers();
-    for (auto it = users.begin(); it != users.end(); it++)
+    auto it = users.begin();
+    bool flag = false;
+    Game game;
+    for (it = users.begin(); it != users.end(); it++)
     {
-        this->games[user] = Game(gameId);
+        if (this->games.find(*it) == this->games.end())
+        {
+            game = Game();
+            game.setGameId(gameId);
+            this->games[*it] = game;
+            flag = true;
+        } 
     }
-    return std::ref(this->games[user]);
+
+    if (flag)
+    {
+        gameId++;
+        return std::ref(this->games[room.getAllUsers()[0]]);
+    }
+    throw std::runtime_error("cant create geme for room!");
+       
 }
 
 void GameManager::deleteGame(LoggedUser user)
