@@ -38,17 +38,7 @@ namespace TriviaClient
 
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
-            //this.updateDataBackgroundWorker = new BackgroundWorker();
             this.mainWindow = mainWindow;
-
-            //this.updateDataBackgroundWorker.WorkerSupportsCancellation = true;
-            //this.updateDataBackgroundWorker.WorkerReportsProgress = true;
-
-            //this.updateDataBackgroundWorker.DoWork += UpdateDataLoop_DoWork;
-            //this.updateDataBackgroundWorker.ProgressChanged += UpdateDataLoop_ProgressChanged;
-            //this.updateDataBackgroundWorker.RunWorkerCompleted += UpdateDataLoop_RunWorkerCompleted;
-
-            //this.updateDataBackgroundWorker.RunWorkerAsync();
 
             this.isFinished = false;
 
@@ -137,22 +127,16 @@ namespace TriviaClient
                 this.GetNextQuestion();
             }
         }
-
-        /*private void UpdateData()
-        {
-            if (this.isFinished)
-            {
-                this.updateDataBackgroundWorker.CancelAsync();
-            }
-
-
-        }*/
         
         private void timer_Tick(object sender, EventArgs e)
         {
             this.timeLeftForQuestion--;
 
-            if (this.timeLeftForQuestion <= 3)
+            if (this.timeLeftForQuestion <= 0)
+            {
+                this.GetNextQuestion();
+            }
+            else if (this.timeLeftForQuestion <= 3)
             {
                 this.TimeLeftLabel.Foreground = new SolidColorBrush(Colors.Red);
             }
@@ -172,38 +156,5 @@ namespace TriviaClient
             this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
 
         }
-
-        /*private void UpdateDataLoop_DoWork(object sender, DoWorkEventArgs e)
-        {
-            while (true)
-            {
-                if (this.updateDataBackgroundWorker.CancellationPending)
-                {
-                    e.Cancel = true;
-                    break;
-                }
-
-                this.updateDataBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(1000);
-            }
-        }
-
-        private void UpdateDataLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            this.UpdateData();
-        }
-
-        private void UpdateDataLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-            {
-                // MessageBox.Show("BackgroundWorker cancelled");
-            }
-            else
-            {
-                // MessageBox.Show("BackgroundWorker ended successfully");
-            }
-        }
-    */
     }
 }
