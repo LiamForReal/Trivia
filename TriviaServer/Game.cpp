@@ -7,6 +7,10 @@ Game::Game(int id)
 	this->gameId = id;
 }
 
+Game::Game()
+{
+}
+
 Game::~Game() {}
 
 int Game::getQuestionId() const 
