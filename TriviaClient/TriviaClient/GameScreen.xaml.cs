@@ -24,35 +24,18 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public ConnectedRoom _connectedRoom;
-        // public BackgroundWorker updateDataBackgroundWorker;
+        public FinishWaitingRoom finishWaitingRoom;
 
         private System.Windows.Threading.DispatcherTimer timer;
 
-        private bool isFinished;
-        private uint currentQuestion;
         private uint timeLeftForQuestion;
 
         private uint questionsAmount;
         private uint timePerQuestion;
 
-        public FinishWaitingRoom finishWaitingRoom;
-
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
-            //this.updateDataBackgroundWorker = new BackgroundWorker();
             this.mainWindow = mainWindow;
-
-            //this.updateDataBackgroundWorker.WorkerSupportsCancellation = true;
-            //this.updateDataBackgroundWorker.WorkerReportsProgress = true;
-
-            //this.updateDataBackgroundWorker.DoWork += UpdateDataLoop_DoWork;
-            //this.updateDataBackgroundWorker.ProgressChanged += UpdateDataLoop_ProgressChanged;
-            //this.updateDataBackgroundWorker.RunWorkerCompleted += UpdateDataLoop_RunWorkerCompleted;
-
-            //this.updateDataBackgroundWorker.RunWorkerAsync();
-
-            this.isFinished = false;
-            this.currentQuestion = 1;
 
             this.questionsAmount = questionsAmount;
             this.timePerQuestion = timePerQuestion;
@@ -82,6 +65,18 @@ namespace TriviaClient
 
         private void GetNextQuestion()
         {
+            this.questionsAmount--;
+
+            if (this.questionsAmount <= 0)
+            {
+                this.finishWaitingRoom = new FinishWaitingRoom(this.mainWindow);
+                this.timer.Stop();
+                this.Close();
+                this.finishWaitingRoom.Show();
+            }
+
+            this.timeLeftForQuestion = this.timePerQuestion;
+            this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
 
             GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
             getQuestionRequest.SendToServer(this.mainWindow.clientStream);
@@ -127,22 +122,16 @@ namespace TriviaClient
                 this.GetNextQuestion();
             }
         }
-
-        /*private void UpdateData()
-        {
-            if (this.isFinished)
-            {
-                this.updateDataBackgroundWorker.CancelAsync();
-            }
-
-
-        }*/
         
         private void timer_Tick(object sender, EventArgs e)
         {
             this.timeLeftForQuestion--;
 
-            if (this.timeLeftForQuestion <= 3)
+            if (this.timeLeftForQuestion <= 0)
+            {
+                this.GetNextQuestion();
+            }
+            else if (this.timeLeftForQuestion <= 3)
             {
                 this.TimeLeftLabel.Foreground = new SolidColorBrush(Colors.Red);
             }
@@ -163,37 +152,19 @@ namespace TriviaClient
 
         }
 
-        /*private void UpdateDataLoop_DoWork(object sender, DoWorkEventArgs e)
+        private void LeaveGameButton_Click(object sender, RoutedEventArgs e)
         {
-            while (true)
-            {
-                if (this.updateDataBackgroundWorker.CancellationPending)
-                {
-                    e.Cancel = true;
-                    break;
-                }
+            LeaveGameRequest leaveGameRequest = new LeaveGameRequest();
+            leaveGameRequest.SendToServer(this.mainWindow.clientStream);
+            LeaveGameRequest.LeaveGameResponse leaveGameResponse = leaveGameRequest.GetFromServer(this.mainWindow.clientStream);
 
-                this.updateDataBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(1000);
-            }
-        }
-
-        private void UpdateDataLoop_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            this.UpdateData();
-        }
-
-        private void UpdateDataLoop_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled)
+            if ((uint)(Cods.Status.LEAVE_GAME_STATUS) == leaveGameResponse.status)
             {
-                // MessageBox.Show("BackgroundWorker cancelled");
+                this.timer.Stop();
+                this.Close();
+                this.mainWindow.Show();
             }
-            else
-            {
-                // MessageBox.Show("BackgroundWorker ended successfully");
-            }
+            else MessageBox.Show("Could not leave game!", "[Trivia] Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-    */
     }
 }
