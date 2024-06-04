@@ -93,7 +93,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			}
 			else sarr.status = SUBMIT_ANSWER_WRONG;
 			this->_rhf.getGameManager().getGame(_user).setQuestionId(this->roomsQuestions[_roomId].first[currentQuestion].getId());
-			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count() / FROM_MILI_TO_SEC));
+			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count() / FROM_MICRO_TO_SEC));
 			QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
 			std::cout << q.getGameId() << "\n" << q.getQuestionId() << "\n" << q.getAnswer();
 			this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
