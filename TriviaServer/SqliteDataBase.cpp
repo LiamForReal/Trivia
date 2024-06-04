@@ -141,7 +141,7 @@ bool SqliteDataBase::open()
 	{
 		users = sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);");
 		questions = sendSQLMsg("CREATE TABLE IF NOT EXISTS QUESTIONS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION TEXT NOT NULL, CORRECT_ANS TEXT NOT NULL, ANS2 TEXT NOT NULL, ANS3 TEXT NOT NULL, ANS4 TEXT NOT NULL);");
-		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER PRIMARY KEY NOT NULL, QUESTION_ID INT, USER_NAME TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER TEXT NOT NULL,ANSWER_TIME REAL NOT NULL, FOREIGN KEY(QUESTION_ID) REFERENCES QUESTIONS(ID));");
+		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER PRIMARY KEY NOT NULL, QUESTION_ID INT NOT NULL, USER_NAME TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER TEXT NOT NULL,ANSWER_TIME REAL NOT NULL);");
 		if(!users || !questions || !statistics)
 		{
 			std::cerr << "Error creating db!";
@@ -157,7 +157,7 @@ bool SqliteDataBase::open()
 		addNewQuestion(Question("Which of the following is not a language?", "Palestinian", "Russian", "Hebrew", "English"));
 		addNewQuestion(Question("Who is Jubzik?", "Liam", "Gavriels pet", "The Janitor", "Ofek"));
 		addNewQuestion(Question("Who is Shmulik?", "Cyber Teacher", "Penguin", "Actor", "Diver"));
-		addNewQuestion(Question("Did you like the game?", "Yes", "No", "I dont know", "Maybe"));
+		addNewQuestion(Question("What is ofek s head shape?", "tangle", "rectangle", "dimoned", "unDeclared"));
 	}
 	else
 	{
@@ -236,13 +236,14 @@ void SqliteDataBase::addNewQuestion(Question question)
 
 void SqliteDataBase::addNewQuestionStatistics(QuestionStatistics stats)
 {
-	std::string msg = "INSERT INTO STATISTICS (GAME_ID, QUESTION_ID, USER_NAME, IS_CORRECT, ANSWER,  ANSWER_TIME) VALUES ("
+	std::string msg = "INSERT INTO STATISTICS (GAME_ID, QUESTION_ID, USER_NAME, IS_CORRECT, ANSWER, ANSWER_TIME) VALUES ("
 		+ std::to_string(stats.getGameId()) + ", "
 		+ std::to_string(stats.getQuestionId()) + ", '"
 		+ stats.getUserName() + "', "
-		+ std::to_string(stats.getIsCorrect()) + ", "
+		+ std::to_string(stats.getIsCorrect()) + ", '"
 		+ stats.getAnswer() + "', "
 		+ std::to_string(stats.getAnswerTime()) + ");";
+	std::cout << msg;
 	const char* sqlStatement = msg.c_str();
 	sendSQLMsg(sqlStatement);
 }

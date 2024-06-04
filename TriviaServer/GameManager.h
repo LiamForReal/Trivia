@@ -7,15 +7,15 @@
 class GameManager
 {
 public:
-	GameManager(LoggedUser user); //TODO to think of a better way to do this
+	GameManager(); //TODO to think of a better way to do this
 	~GameManager();
-	Game createGame(Room room);
-	void deleteGame();
-	Game getGame(LoggedUser user);
+	Game& createGame(Room room, LoggedUser user);
+	void deleteGame(LoggedUser user);
+	Game& getGame(LoggedUser user);
 	list<Question> getTriviaQuestions();
-
+	void setQuestionId(const int newQuestionId, LoggedUser user);
+	void setAvrageTime(const float newAvrageTime, LoggedUser user);
 private:
-	LoggedUser user;
 	std::map<LoggedUser, Game> games;
 	IDatabase* db;
 	static int gameId;

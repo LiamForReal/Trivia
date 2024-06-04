@@ -56,7 +56,6 @@ namespace TriviaClient
                 createRoomRequest.SendToServer(this.mainWindow.clientStream);
 
                 CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);
-                MessageBox.Show(createRoomResponse.status.ToString());
                 if ((uint)Cods.Status.CREATE_ROOM_STATUS == createRoomResponse.status)
                 {
                     try
