@@ -26,11 +26,8 @@ namespace TriviaClient
         public ConnectedRoom _connectedRoom;
         public FinishWaitingRoom finishWaitingRoom;
 
-        // public BackgroundWorker updateDataBackgroundWorker;
-
         private System.Windows.Threading.DispatcherTimer timer;
 
-        private bool isFinished;
         private uint timeLeftForQuestion;
 
         private uint questionsAmount;
@@ -39,8 +36,6 @@ namespace TriviaClient
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
             this.mainWindow = mainWindow;
-
-            this.isFinished = false;
 
             this.questionsAmount = questionsAmount;
             this.timePerQuestion = timePerQuestion;
