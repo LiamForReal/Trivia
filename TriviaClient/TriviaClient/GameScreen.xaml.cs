@@ -154,7 +154,17 @@ namespace TriviaClient
 
         private void LeaveGameButton_Click(object sender, RoutedEventArgs e)
         {
+            LeaveGameRequest leaveGameRequest = new LeaveGameRequest();
+            leaveGameRequest.SendToServer(this.mainWindow.clientStream);
+            LeaveGameRequest.LeaveGameResponse leaveGameResponse = leaveGameRequest.GetFromServer(this.mainWindow.clientStream);
 
+            if ((uint)(Cods.Status.LEAVE_GAME_STATUS) == leaveGameResponse.status)
+            {
+                this.timer.Stop();
+                this.Close();
+                this.mainWindow.Show();
+            }
+            else MessageBox.Show("Could not leave game!", "[Trivia] Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
