@@ -19,8 +19,12 @@ namespace TriviaClient
     /// </summary>
     public partial class FinishWaitingRoom : Window
     {
-        public FinishWaitingRoom()
+        MainWindow mainWindow;
+
+        public FinishWaitingRoom(MainWindow mainWindow)
         {
+            this.mainWindow = mainWindow;
+
             InitializeComponent();
         }
     }

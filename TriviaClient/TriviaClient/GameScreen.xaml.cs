@@ -24,6 +24,8 @@ namespace TriviaClient
     {
         public MainWindow mainWindow;
         public ConnectedRoom _connectedRoom;
+        public FinishWaitingRoom finishWaitingRoom;
+
         // public BackgroundWorker updateDataBackgroundWorker;
 
         private System.Windows.Threading.DispatcherTimer timer;
@@ -34,8 +36,6 @@ namespace TriviaClient
 
         private uint questionsAmount;
         private uint timePerQuestion;
-
-        public FinishWaitingRoom finishWaitingRoom;
 
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
@@ -82,6 +82,18 @@ namespace TriviaClient
 
         private void GetNextQuestion()
         {
+            this.questionsAmount--;
+
+            if (this.questionsAmount <= 0)
+            {
+                this.finishWaitingRoom = new FinishWaitingRoom(this.mainWindow);
+                this.timer.Stop();
+                this.Close();
+                this.finishWaitingRoom.Show();
+            }
+
+            this.timeLeftForQuestion = this.timePerQuestion;
+            this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
 
             GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
             getQuestionRequest.SendToServer(this.mainWindow.clientStream);
