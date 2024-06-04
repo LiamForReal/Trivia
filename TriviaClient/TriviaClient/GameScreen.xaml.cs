@@ -151,5 +151,10 @@ namespace TriviaClient
             this.TimeLeftLabel.Content = this.timeLeftForQuestion.ToString();
 
         }
+
+        private void LeaveGameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
