@@ -31,7 +31,6 @@ namespace TriviaClient
         private System.Windows.Threading.DispatcherTimer timer;
 
         private bool isFinished;
-        private uint currentQuestion;
         private uint timeLeftForQuestion;
 
         private uint questionsAmount;
@@ -52,7 +51,6 @@ namespace TriviaClient
             //this.updateDataBackgroundWorker.RunWorkerAsync();
 
             this.isFinished = false;
-            this.currentQuestion = 1;
 
             this.questionsAmount = questionsAmount;
             this.timePerQuestion = timePerQuestion;
