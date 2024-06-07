@@ -58,7 +58,21 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		{
 			getStatsRoom[_roomId].setMetadata(_rhf.getRoomManager().getRoom(_roomId).getMetadata());
 			getStatsRoom[_roomId].setRoomStatus(INACTIVE_ROOM);
-			getStatsRoom[_roomId].addUser(_user);
+			
+			bool found = false;
+
+			for (int i = 0; i < getStatsRoom[_roomId].getAllUsers().size(); i++)
+			{
+				if (getStatsRoom[_roomId].getAllUsers()[i] == _user.getUserName())
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				getStatsRoom[_roomId].addUser(_user);
+			}
 		}
 		catch (std::runtime_error& e)
 		{
@@ -76,9 +90,15 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			vector<string> users = _rhf.getRoomManager().getRoom(_roomId).getAllUsers();
 			for (auto it = users.begin(); it != users.end(); ++it)
 			{
+				std::cout << "STOI BLOCK START" << std::endl;
+				std::cout << _rhf.getStatisticsManager().getUserStatistics(*it)[1] << std::endl;
+				std::cout << _rhf.getStatisticsManager().getUserStatistics(*it)[2] << std::endl;
+				std::cout << _rhf.getStatisticsManager().getUserStatistics(*it)[3] << std::endl;
+				std::cout << "STOI BLOCK END" << std::endl;
+
 				playerResults = PlayerResults(*it, (unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[1])),
 					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[2])),
-					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[3])));
+					(float)(std::stof(_rhf.getStatisticsManager().getUserStatistics(*it)[3])));
 				ggr.results.push_back(playerResults);
 			}
 		}

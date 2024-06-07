@@ -55,20 +55,14 @@ namespace TriviaClient
 
                 foreach (PlayerResults playerResults in getGameResultsResponse.results)
                 {
-                    if (playerResults.username == this.mainWindow.username)
-                    { 
-                        resultsReport = "Correct Answers Amount: " + playerResults.correctAnswerCount + "\nWrong Answers Amount: " + playerResults.wrongAnswerCount + "\nAverage Answer Time: " + playerResults.averageAnswerTime;
-                        break;
-                    }
+                    // TODO: calculate score as our formula 
+                    resultsReport += "Username: " + playerResults.username + " Correct Answers Amount: " + playerResults.correctAnswerCount + " Wrong Answers Amount: " + playerResults.wrongAnswerCount + " Average Answer Time: " + playerResults.averageAnswerTime + "\n\n";
                 }
 
-                MessageBoxResult messageBoxResult = MessageBox.Show(resultsReport, "[Trivia] " + this.mainWindow.username + "'s Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
-                if (MessageBoxResult.OK == messageBoxResult)
-                {
-                    this.getResultsBackgroundWorker.CancelAsync();
-                    this.Close();
-                    this.mainWindow.Show();
-                }
+                MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.getResultsBackgroundWorker.CancelAsync();
+                this.Close();
+                this.mainWindow.Show();
             }
         }
 
@@ -83,7 +77,7 @@ namespace TriviaClient
                 }
 
                 this.getResultsBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }
         }
 

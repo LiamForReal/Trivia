@@ -30,14 +30,14 @@ namespace TriviaClient
 
         private uint timeLeftForQuestion;
 
-        private uint questionsAmount;
+        private int questionsAmount;
         private uint timePerQuestion;
 
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
             this.mainWindow = mainWindow;
 
-            this.questionsAmount = questionsAmount;
+            this.questionsAmount = (int)questionsAmount;
             this.timePerQuestion = timePerQuestion;
 
             this.timeLeftForQuestion = this.timePerQuestion;
@@ -67,12 +67,13 @@ namespace TriviaClient
         {
             this.questionsAmount--;
 
-            if (this.questionsAmount <= 0)
+            if (this.questionsAmount < 0)
             {
                 this.finishWaitingRoom = new FinishWaitingRoom(this.mainWindow);
                 this.timer.Stop();
                 this.Close();
                 this.finishWaitingRoom.Show();
+                return;
             }
 
             this.timeLeftForQuestion = this.timePerQuestion;
