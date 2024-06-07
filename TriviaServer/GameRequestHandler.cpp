@@ -1,7 +1,7 @@
 #include "GameRequestHandler.h"
 
-map<unsigned int, std::pair<vector<Question>, std::map<LoggedUser, int>>> GameRequestHandler::roomsQuestions;
-std::map<LoggedUser, std::chrono::high_resolution_clock::time_point> GameRequestHandler::avrageTime;
+map<unsigned int, std::pair<vector<Question>, map<LoggedUser, int>>> GameRequestHandler::roomsQuestions;
+map<LoggedUser, std::chrono::high_resolution_clock::time_point> GameRequestHandler::avrageTime;
 map<unsigned int, Room> GameRequestHandler::getStatsRoom;
 
 GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
