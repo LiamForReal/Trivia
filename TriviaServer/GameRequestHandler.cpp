@@ -1,11 +1,11 @@
 #include "GameRequestHandler.h"
 
-std::map<unsigned int, std::vector<Question>> GameRequestHandler::roomsQuestions;
+std::map<unsigned int, std::pair<std::vector<Question>, int>> GameRequestHandler::roomsQuestions;
+std::map<LoggedUser, std::chrono::high_resolution_clock::time_point> GameRequestHandler::avrageTime;
 
-GameRequestHandler::GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
+GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
-	_roomId = roomId;
-	currentQuestion = 0;
+	_roomId = roomId;	
 	randQuestionsToRoom();
 }
 
@@ -13,11 +13,11 @@ GameRequestHandler::~GameRequestHandler() {}
 
 void GameRequestHandler::randQuestionsToRoom() 
 {
-	if (this->roomsQuestions[_roomId].size() > 0)
+	if (this->roomsQuestions[_roomId].first.size() > 0)
 		return;
 
 	std::srand(std::time(0));
-
+	
 	std::vector<Question> questions;
 	unsigned int numOfQuestions = _rhf.getRoomManager().getRoom(_roomId).getMetadata().numOfQuestionsInGame;
 	std::list<Question> questionsList = _rhf.getGameManager().getTriviaQuestions();
@@ -36,7 +36,7 @@ void GameRequestHandler::randQuestionsToRoom()
 			questions.push_back(*it);
 		}
 	}
-	this->roomsQuestions[_roomId] = questions;
+	this->roomsQuestions[_roomId].first = questions; 
 }
 
 bool GameRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
@@ -48,6 +48,7 @@ bool GameRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
 	RequestResult rr = RequestResult();
+	int currentQuestion = this->roomsQuestions[_roomId].second;
 	if (requestInfo.id == GET_GAME_RESULTS_RC)
 	{
 		PlayerResults playerResults;
@@ -60,7 +61,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			for (auto it = users.begin(); it != users.end(); ++it)
 			{
 				playerResults = PlayerResults(*it, (unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[1])),
-					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[2])), 
+					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[2])),
 					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[3])));
 				ggr.results.push_back(playerResults);
 			}
@@ -72,8 +73,8 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			std::cout << e.what() << std::endl;
 		}
 		if (ggr.status == GET_GAME_RESULTS_STATUS)
-			if(this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
-				this->roomsQuestions[_roomId].clear();
+			if (this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
+				this->roomsQuestions[_roomId].first.clear();
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(ggr);
 	}
 	else if (requestInfo.id == SUBMIT_ANSWER_RC)
@@ -83,17 +84,20 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		bool isCorrect = false;
 		try
 		{
-			if (currentQuestion >= this->roomsQuestions[_roomId].size())
+			if (currentQuestion >= this->roomsQuestions[_roomId].first.size())
 				throw std::runtime_error("question out of vectors bounds");
-			if (sar.answer == this->roomsQuestions[_roomId][currentQuestion].getCA())
+			if (sar.answer == this->roomsQuestions[_roomId].first[currentQuestion].getCA())
 			{
 				sarr.status = SUBMIT_ANSWER_CORRECT;
 				isCorrect = true;
 			}
 			else sarr.status = SUBMIT_ANSWER_WRONG;
-			QuestionStatistics q = QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
-			this->_rhf.getStatisticsManager().addNewQuestionStatistics(q);
-			currentQuestion++;
+			this->_rhf.getGameManager().getGame(_user).setQuestionId(this->roomsQuestions[_roomId].first[currentQuestion].getId());
+			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count()) / FROM_MICRO_TO_SEC);
+			QuestionStatistics* q = new QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
+			this->_rhf.getStatisticsManager().addNewQuestionStatistics(*q);
+			this->roomsQuestions[_roomId].second++;
+			delete q;
 		}
 		catch (std::runtime_error& e)
 		{
@@ -109,17 +113,16 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		gqr.status = GET_QUESTION_STATUS;
 		try
 		{
-			if (currentQuestion >= this->roomsQuestions[_roomId].size())
+			if (currentQuestion >= this->roomsQuestions[_roomId].first.size())
 			{
 				gqr.status = GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED;
 				throw std::runtime_error("question out of vectors bounds");
 			}
-			gqr.question = this->roomsQuestions[_roomId][currentQuestion].getQ();
-			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getCA());
-			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA1());
-			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA2());
-			gqr.answers.push_back(this->roomsQuestions[_roomId][currentQuestion].getWA3());
-			//1
+			gqr.question = this->roomsQuestions[_roomId].first[currentQuestion].getQ();
+			gqr.answers.push_back(this->roomsQuestions[_roomId].first[currentQuestion].getCA());
+			gqr.answers.push_back(this->roomsQuestions[_roomId].first[currentQuestion].getWA1());
+			gqr.answers.push_back(this->roomsQuestions[_roomId].first[currentQuestion].getWA2());
+			gqr.answers.push_back(this->roomsQuestions[_roomId].first[currentQuestion].getWA3());
 		}
 		catch (std::runtime_error& e)
 		{
@@ -128,6 +131,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		}
 		rr.newHandler = _rhf.createGameRequestHandler(_user, _roomId);
 		std::cout << "DEBUG: response code " << gqr.status << std::endl;
+		this->avrageTime[_user] = std::chrono::high_resolution_clock::now();
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(gqr);
 	}
 	else if (requestInfo.id == LEAVE_GAME_RC)

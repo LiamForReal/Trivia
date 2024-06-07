@@ -7,11 +7,12 @@ class RequestHandlerFactory;
 #include "PlayerResults.hpp"
 #include "QuestionStatistics.h"
 #include <random>
+#include <chrono>
 
 class GameRequestHandler : virtual public IRequestHandler
 {
 public:
-	GameRequestHandler(RequestHandlerFactory rhf, LoggedUser user, unsigned int roomId);
+	GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId);
 	~GameRequestHandler();
 	bool isRequestRelevant(const RequestInfo& requestInfo) override;
 	void randQuestionsToRoom();
@@ -20,7 +21,7 @@ private:
 	RequestHandlerFactory& _rhf;
 	LoggedUser _user;
 	unsigned int _roomId;
-	static map<unsigned int, vector<Question>> roomsQuestions;
-	int currentQuestion;
+	static map<unsigned int, std::pair<vector<Question>, int>> roomsQuestions;
+	static map<LoggedUser, std::chrono::high_resolution_clock::time_point> avrageTime;
 };
 

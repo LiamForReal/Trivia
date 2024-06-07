@@ -38,6 +38,15 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		StartGameResponse sgr = StartGameResponse();
 		_rhf.getRoomManager().getRoom(roomId).setRoomStatus(1);
 		sgr.status = START_GAME_STATUS;
+		try
+		{
+			this->_rhf.getGameManager().createGame(this->_rhf.getRoomManager().getRoom(roomId));
+		}
+		catch (std::runtime_error& e)
+		{
+			sgr.status = START_GAME_ERROR;
+			std::cout << e.what() << std::endl;
+		}
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(sgr);
 		std::cout << "DEBUG: response code " << sgr.status << std::endl;
 		rr.newHandler = _rhf.createGameRequestHandler(Owner, roomId);

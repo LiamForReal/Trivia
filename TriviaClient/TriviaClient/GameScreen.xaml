@@ -8,33 +8,97 @@
         Title="[Trivia] Game Screen" Height="600" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="/Resources/game_screen_background.png"/>
-        </Window.Background>
+    </Window.Background>
 
-        <GroupBox BorderThickness="2" BorderBrush="White" Margin="10" Foreground="Black">
-            <GroupBox.Header>
-                <Span FontWeight="Bold" Foreground="White" FontSize="18">
-                    Game
-                </Span>
-            </GroupBox.Header>
+    <GroupBox BorderThickness="2" BorderBrush="White" Margin="10" Foreground="Black">
+        <GroupBox.Header>
+            <Span FontWeight="Bold" Foreground="White" FontSize="18">
+                Game
+            </Span>
+        </GroupBox.Header>
 
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row="0" Grid.Column="0">
                 <Label Content="Game Screen" Foreground="Aqua" HorizontalAlignment="Center" FontSize="32" FontWeight="ExtraBold" Margin="10,-5,10,0" />
             </StackPanel>
-                
 
-            </Grid>
-        </GroupBox>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <Label Name="QuestionLabel" Content="Question" Foreground="White" HorizontalAlignment="Center" FontSize="26" FontWeight="ExtraBold" Margin="10,25,10,0" />
 
-    </Window>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="80,20">
+                    <!-- Icon Image -->
+
+                    <!-- Label Text -->
+                    <Image Source="/Resources/clock.png" Width="44" Height="44" />
+
+                    <!-- Label Text -->
+                    <Label x:Name="TimeLeftLabel" Content="TimeLeft" Foreground="Aqua" HorizontalAlignment="Center" FontSize="18" FontWeight="ExtraBold" Background="Black" BorderThickness="3" BorderBrush="Gray"/>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button x:Name="Answer1" Content="Answer 1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer1_Click"
+                       Height="40"
+                       Background="RoyalBlue"
+                       Foreground="White"
+                       FontFamily="Arial"
+                       FontSize="18"
+                       FontWeight="DemiBold"                            
+                       Style="{DynamicResource RoundedButtonStyle}"
+                       Opacity="0.8"
+                    />
+
+                    <Button x:Name="Answer2" Content="Answer 2" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer2_Click"
+                       Height="40"
+                       Background="RoyalBlue"
+                       Foreground="White"
+                       FontFamily="Arial"
+                       FontSize="18"
+                       FontWeight="DemiBold"
+                       Style="{DynamicResource RoundedButtonStyle}"
+                       Opacity="0.8"
+                    />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button x:Name="Answer3" Content="Answer 3" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,20,50,20" Click="Answer3_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                    />
+
+                    <Button x:Name="Answer4" Content="Answer 4" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,5,0" Click="Answer4_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                    />
+                </StackPanel>
+
+            </StackPanel>
+
+
+        </Grid>
+    </GroupBox>
+
+</Window>

@@ -4,7 +4,7 @@ RequestHandlerFactory::RequestHandlerFactory()
 {
 	this->_loginMeneger = new LoginManager();
 	this->_roomManager = new RoomManager();
-	this->_gameManager = new GameManager(LoggedUser(""));
+	this->_gameManager = new GameManager();
 	this->_statisticsManager = new StatisticsManager();
 	this->_db = new SqliteDataBase();
 	if (!this->_db->open())
@@ -55,7 +55,7 @@ MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser l
 	return new MenuRequestHandler(*this, loggedUser);
 }
 
-GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser loggedUser, unsigned roomId)
+GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser loggedUser, unsigned int roomId)
 {
 	return new GameRequestHandler(*this, loggedUser, roomId);
 }

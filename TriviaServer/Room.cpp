@@ -30,17 +30,11 @@ void Room::removeUser(const LoggedUser& user)
 std::vector<std::string> Room::getAllUsers()
 {
 	std::vector<std::string> vec = std::vector<std::string>();
-
-	std::cout << "LOVE FLAG" << std::endl;
-
 	for (auto it = this->m_users.begin(); it != this->m_users.end(); it++)
 	{
 		vec.push_back(it->getUserName());
 		std::cout << "PLAYER USERNAME: " << it->getUserName() << std::endl;
 	}
-
-	std::cout << "KYS FLAG" << std::endl;
-
 	return vec;
 }
 

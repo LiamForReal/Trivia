@@ -1,9 +1,9 @@
 #include "GameManager.h"
 #include <stdexcept>
 
-int GameManager::gameId = 0;
+int GameManager::gameId = 1;
 
-GameManager::GameManager(LoggedUser user) : user(user)
+GameManager::GameManager()
 {
     db = new SqliteDataBase();
     if (!this->db->open())
@@ -16,26 +16,38 @@ GameManager::~GameManager()
     delete this->db;
 }
 
-Game GameManager::getGame(LoggedUser user)
+Game& GameManager::getGame(LoggedUser user)
 {
-    return this->games[user];
+    return std::ref(this->games[user]);
 }
 
-Game GameManager::createGame(Room room)
+Game& GameManager::createGame(Room room)
 {
-    for (const auto& it : room.getAllUsers())
+    vector<string> users = room.getAllUsers();
+    auto it = users.begin();
+    bool flag = false;
+    Game game;
+    for (it = users.begin(); it != users.end(); it++)
     {
-        if (it == user.getUserName() && this->games.find(user) == games.end())
+        if (this->games.find(*it) == this->games.end())
         {
-            this->games[this->user] = Game(gameId);
-            gameId++;
-            return this->games[this->user];
-        }
+            game = Game();
+            game.setGameId(gameId);
+            this->games[*it] = game;
+            flag = true;
+        } 
     }
-    throw std::runtime_error("Player not in the room");
+
+    if (flag)
+    {
+        gameId++;
+        return std::ref(this->games[room.getAllUsers()[0]]);
+    }
+    throw std::runtime_error("cant create geme for room!");
+       
 }
 
-void GameManager::deleteGame()
+void GameManager::deleteGame(LoggedUser user)
 {
     if (this->games.find(user) != games.end())
         this->games.erase(user);
@@ -46,4 +58,12 @@ void GameManager::deleteGame()
 std::list<Question> GameManager::getTriviaQuestions()
 {
     return this->db->getQuestions();
+}
+void GameManager::setQuestionId(const int newQuestionId, LoggedUser user)
+{
+    this->games[user].setQuestionId(newQuestionId);
+}
+void GameManager::setAvrageTime(const float newAvrageTime, LoggedUser user)
+{
+    this->games[user].setavrageTime(newAvrageTime);
 }
