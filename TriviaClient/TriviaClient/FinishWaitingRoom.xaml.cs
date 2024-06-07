@@ -45,6 +45,8 @@ namespace TriviaClient
 
         private void getResults()
         {
+            this.getResultsBackgroundWorker.CancelAsync();
+
             GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
             getGameResultsRequest.SendToServer(this.mainWindow.clientStream);
             GetGameResultsRequest.GetGameResultsResponse getGameResultsResponse = getGameResultsRequest.GetFromServer(this.mainWindow.clientStream);
@@ -60,9 +62,12 @@ namespace TriviaClient
                 }
 
                 MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.getResultsBackgroundWorker.CancelAsync();
                 this.Close();
                 this.mainWindow.Show();
+            }
+            else
+            {
+                this.getResultsBackgroundWorker.RunWorkerAsync();
             }
         }
 
@@ -77,7 +82,7 @@ namespace TriviaClient
                 }
 
                 this.getResultsBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
             }
         }
 
