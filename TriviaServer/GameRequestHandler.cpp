@@ -90,6 +90,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			{
 				this->roomsQuestions[_roomId].first.clear();
 				getStatsRoom[_roomId].removeAllUsers();
+				_rhf.getRoomManager().deleteRoom(_roomId);
 			}
 		}
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(ggr);
