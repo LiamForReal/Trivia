@@ -95,6 +95,19 @@
                     />
                 </StackPanel>
 
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button x:Name="LeaveGameButton" Content="Leave Game" Width="150" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,40,5,0" Click="LeaveGameButton_Click"
+                        Height="40"
+                        Background="Red"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                    />
+                </StackPanel>
+
             </StackPanel>
 
 
