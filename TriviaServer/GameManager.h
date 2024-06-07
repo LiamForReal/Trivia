@@ -9,7 +9,7 @@ class GameManager
 public:
 	GameManager(); //TODO to think of a better way to do this
 	~GameManager();
-	Game& createGame(Room room);
+	Game& createGame(Room room, LoggedUser user);
 	void deleteGame(LoggedUser user);
 	Game& getGame(LoggedUser user);
 	list<Question> getTriviaQuestions();

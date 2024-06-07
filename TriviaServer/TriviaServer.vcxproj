@@ -170,6 +170,7 @@
     <ClInclude Include="LoggedUser.h" />
     <ClInclude Include="LoginManager.h" />
     <ClInclude Include="LoginRequestHandler.h" />
+    <ClInclude Include="MagshChat.h" />
     <ClInclude Include="MagshMessageServer.h" />
     <ClInclude Include="PlayerResults.hpp" />
     <ClInclude Include="Room.h" />
@@ -192,6 +193,9 @@
     <ClInclude Include="QuestionStatistics.h" />
     <ClInclude Include="UserStatistics.h" />
     <ClInclude Include="WSAInitializer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="triviaDB.sqlite" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
