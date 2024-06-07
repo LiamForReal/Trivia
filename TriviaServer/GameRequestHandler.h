@@ -6,6 +6,7 @@ class RequestHandlerFactory;
 #include "defines.hpp"
 #include "PlayerResults.hpp"
 #include "QuestionStatistics.h"
+#include "Room.h"
 #include <random>
 #include <chrono>
 

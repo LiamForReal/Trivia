@@ -14,6 +14,7 @@ class Room
 		std::vector<std::string> getAllUsers();
 		RoomData getMetadata() const;
 		void setRoomStatus(const unsigned int newStatus);
+		void setMetadata(const RoomData& metadata);
 		bool operator==(const Room& other) const;
 
 	private:

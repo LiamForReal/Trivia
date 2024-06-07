@@ -30,14 +30,14 @@ namespace TriviaClient
 
         private uint timeLeftForQuestion;
 
-        private uint questionsAmount;
+        private int questionsAmount;
         private uint timePerQuestion;
 
         public GameScreen(ConnectedRoom connectedRoom, MainWindow mainWindow, uint questionsAmount, uint timePerQuestion)
         {
             this.mainWindow = mainWindow;
 
-            this.questionsAmount = questionsAmount;
+            this.questionsAmount = (int)questionsAmount;
             this.timePerQuestion = timePerQuestion;
 
             this.timeLeftForQuestion = this.timePerQuestion;
@@ -67,12 +67,14 @@ namespace TriviaClient
         {
             this.questionsAmount--;
 
-            if (this.questionsAmount <= 0)
+            if (this.questionsAmount < 0)
             {
-                this.finishWaitingRoom = new FinishWaitingRoom(this.mainWindow);
                 this.timer.Stop();
+                this.timer.IsEnabled = false;
                 this.Close();
+                this.finishWaitingRoom = new FinishWaitingRoom(this.mainWindow);
                 this.finishWaitingRoom.Show();
+                return;
             }
 
             this.timeLeftForQuestion = this.timePerQuestion;
@@ -81,12 +83,15 @@ namespace TriviaClient
             GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
             getQuestionRequest.SendToServer(this.mainWindow.clientStream);
             GetQuestionRequest.GetQuestionResponse getQuestionResponse = getQuestionRequest.GetFromServer(this.mainWindow.clientStream);
-            getQuestionResponse.answers = this.Shuffle(getQuestionResponse.answers);
+            List<string> answers = this.Shuffle(getQuestionResponse.answers);
 
-            this.Answer1.Content = getQuestionResponse.answers[0];
-            this.Answer2.Content = getQuestionResponse.answers[1];
-            this.Answer3.Content = getQuestionResponse.answers[2];
-            this.Answer4.Content = getQuestionResponse.answers[3];
+            if (answers.Count == 4)
+            {
+                this.Answer1.Content = answers[0];
+                this.Answer2.Content = answers[1];
+                this.Answer3.Content = answers[2];
+                this.Answer4.Content = answers[3];
+            }
 
             this.QuestionLabel.Content = getQuestionResponse.question;
         }
@@ -129,6 +134,10 @@ namespace TriviaClient
 
             if (this.timeLeftForQuestion <= 0)
             {
+                SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest("");
+                submitAnswerRequest.SendToServer(this.mainWindow.clientStream);
+                SubmitAnswerRequest.SubmitAnswerResponse submitAnswerResponse = submitAnswerRequest.GetFromServer(this.mainWindow.clientStream);
+
                 this.GetNextQuestion();
             }
             else if (this.timeLeftForQuestion <= 3)
@@ -161,6 +170,7 @@ namespace TriviaClient
             if ((uint)(Cods.Status.LEAVE_GAME_STATUS) == leaveGameResponse.status)
             {
                 this.timer.Stop();
+                this.timer.IsEnabled = false;
                 this.Close();
                 this.mainWindow.Show();
             }

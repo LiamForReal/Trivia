@@ -75,7 +75,7 @@ namespace TriviaClient
                 uint statusCode= (uint)jrr.GetFromServer(this.mainWindow.clientStream).status;
                 if((Cods.Status)statusCode == Cods.Status.JOIN_ROOM_STATUS)
                 {
-                    this.Hide();
+                    this.Close();
                     this.refreshBackgroundWorker.CancelAsync();
                     this.connectedRoom = new ConnectedRoom(this.mainWindow, false, connectedRoomData.numOfQuestionsInGame, connectedRoomData.timePerQuestion);
                     this.connectedRoom.ConnectedRoomNameLabel.Content = selectedRoom;
@@ -118,7 +118,10 @@ namespace TriviaClient
                 this.RoomsListBox.Items.Clear();
                 foreach (CreateRoomRequest.RoomData rd in getRoomsResponse.rooms)
                 {
-                    this.RoomsListBox.Items.Add(rd.name);
+                    if (rd.isActive == 0) // not active
+                    {
+                        this.RoomsListBox.Items.Add(rd.name);
+                    }
                 }
 
                 if (this.RoomsListBox.SelectedItem != null)

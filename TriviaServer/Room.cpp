@@ -51,6 +51,16 @@ void Room::setRoomStatus(const unsigned int newStatus)
 	this->m_metadata.isActive = newStatus;
 }
 
+void Room::setMetadata(const RoomData& metadata)
+{
+	this->m_metadata.id = metadata.id;
+	this->m_metadata.isActive = metadata.isActive;
+	this->m_metadata.name = metadata.name;
+	this->m_metadata.maxPlayers = metadata.maxPlayers;
+	this->m_metadata.numOfQuestionsInGame = metadata.numOfQuestionsInGame;
+	this->m_metadata.timePerQuestion = metadata.timePerQuestion;
+}
+
 RoomData Room::getMetadata() const
 {
 	RoomData deepcopied = this->m_metadata;
