@@ -127,6 +127,5 @@ void run_json_test_v4(void)
 	GetQuestionResponse getQuestionResponse;
 	getQuestionResponse.status = 50;
 	getQuestionResponse.question = "What D name of ur family DoCToR?";
-
-	//std::vector<unsigned char> vec = JsonResponsePacketSerializer::serializeResponse(getQuestionResponse);
+	std::vector<unsigned char> vec = JsonResponsePacketSerializer::serializeResponse(getQuestionResponse);
 }
