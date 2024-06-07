@@ -20,7 +20,7 @@ namespace TriviaClient
     /// </summary>
     public partial class FinishWaitingRoom : Window
     {
-        MainWindow mainWindow;
+        public MainWindow mainWindow;
 
         private BackgroundWorker getResultsBackgroundWorker;
 
@@ -29,23 +29,47 @@ namespace TriviaClient
         {
             this.mainWindow = mainWindow;
 
+            InitializeComponent();
+
             this.getResultsBackgroundWorker = new BackgroundWorker();
 
             this.getResultsBackgroundWorker.WorkerSupportsCancellation = true;
             this.getResultsBackgroundWorker.WorkerReportsProgress = true;
 
-            this.getResultsBackgroundWorker.DoWork += ;
-            this.getResultsBackgroundWorker.ProgressChanged += ;
-            this.getResultsBackgroundWorker.RunWorkerCompleted += ;
+            this.getResultsBackgroundWorker.DoWork += this.getResultsLoop_DoWork;
+            this.getResultsBackgroundWorker.ProgressChanged += this.getResultsLoop_ProgressChanged;
+            this.getResultsBackgroundWorker.RunWorkerCompleted += this.getResultsLoop_RunWorkerCompleted;
 
             this.getResultsBackgroundWorker.RunWorkerAsync();
-
-            InitializeComponent();
         }
 
         private void getResults()
         {
-            
+            GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
+            getGameResultsRequest.SendToServer(this.mainWindow.clientStream);
+            GetGameResultsRequest.GetGameResultsResponse getGameResultsResponse = getGameResultsRequest.GetFromServer(this.mainWindow.clientStream);
+
+            if ((uint)(Cods.Status.GET_GAME_RESULTS_STATUS) == getGameResultsResponse.status)
+            {
+                string resultsReport = "";
+
+                foreach (PlayerResults playerResults in getGameResultsResponse.results)
+                {
+                    if (playerResults.username == this.mainWindow.username)
+                    { 
+                        resultsReport = "Correct Answers Amount: " + playerResults.correctAnswerCount + "\nWrong Answers Amount: " + playerResults.wrongAnswerCount + "\nAverage Answer Time: " + playerResults.averageAnswerTime;
+                        break;
+                    }
+                }
+
+                MessageBoxResult messageBoxResult = MessageBox.Show(resultsReport, "[Trivia] " + this.mainWindow.username + "'s Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (MessageBoxResult.OK == messageBoxResult)
+                {
+                    this.getResultsBackgroundWorker.CancelAsync();
+                    this.Close();
+                    this.mainWindow.Show();
+                }
+            }
         }
 
         private void getResultsLoop_DoWork(object sender, DoWorkEventArgs e)
