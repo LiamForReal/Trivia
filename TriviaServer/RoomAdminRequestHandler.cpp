@@ -49,7 +49,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		}
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(sgr);
 		std::cout << "DEBUG: response code " << sgr.status << std::endl;
-		rr.newHandler = _rhf.createGameRequestHandler(Owner, roomId);
+		rr.newHandler = _rhf.createGameRequestHandler(Owner, _rhf.getRoomManager().getRoom(roomId));
 	}
 	else if (requestInfo.id == GET_ROOM_STATE_RC)
 	{
