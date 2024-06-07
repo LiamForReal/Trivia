@@ -56,6 +56,8 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		GetGameResultsResponse ggr = GetGameResultsResponse();
 		try
 		{
+			getStatsRoom[_roomId].setMetadata(_rhf.getRoomManager().getRoom(_roomId).getMetadata());
+			getStatsRoom[_roomId].setRoomStatus(INACTIVE_ROOM);
 			getStatsRoom[_roomId].addUser(_user);
 		}
 		catch (std::runtime_error& e)
@@ -66,6 +68,9 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		rr.newHandler = _rhf.createMenuRequestHandler(_user);
 		try
 		{
+			std::cout << "USERS IN GAME: " << getStatsRoom[_roomId].getAllUsers().size() << std::endl;
+			std::cout << "USERS IN GAME FROM RHF: " << _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size() << std::endl;
+
 			if (getStatsRoom[_roomId].getAllUsers().size() != _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size())
 				throw std::runtime_error("not all the users in waiting room!");
 			vector<string> users = _rhf.getRoomManager().getRoom(_roomId).getAllUsers();
