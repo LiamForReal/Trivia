@@ -129,6 +129,10 @@ namespace TriviaClient
 
             if (this.timeLeftForQuestion <= 0)
             {
+                SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest("");
+                submitAnswerRequest.SendToServer(this.mainWindow.clientStream);
+                SubmitAnswerRequest.SubmitAnswerResponse submitAnswerResponse = submitAnswerRequest.GetFromServer(this.mainWindow.clientStream);
+
                 this.GetNextQuestion();
             }
             else if (this.timeLeftForQuestion <= 3)
