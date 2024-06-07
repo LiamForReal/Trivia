@@ -54,11 +54,16 @@ namespace TriviaClient
             if ((uint)(Cods.Status.GET_GAME_RESULTS_STATUS) == getGameResultsResponse.status)
             {
                 string resultsReport = "";
-
+                int totalAnswers = 0;
+                double score = 0.0;
                 foreach (PlayerResults playerResults in getGameResultsResponse.results)
                 {
                     // TODO: calculate score as our formula 
-                    resultsReport += "Username: " + playerResults.username + " Correct Answers Amount: " + playerResults.correctAnswerCount + " Wrong Answers Amount: " + playerResults.wrongAnswerCount + " Average Answer Time: " + playerResults.averageAnswerTime + "\n\n";
+                    totalAnswers = (int)(playerResults.wrongAnswerCount + playerResults.correctAnswerCount);
+                    if((int)(playerResults.correctAnswerCount) != 0 && (double)(playerResults.averageAnswerTime) != 0.0)
+                        score = (double)((totalAnswers / playerResults.correctAnswerCount) / playerResults.averageAnswerTime);
+                    else score = 0.0;
+                    resultsReport += "Username: " + playerResults.username + " Avrage Global Score Is: " + score.ToString() + "\n";
                 }
 
                 MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);

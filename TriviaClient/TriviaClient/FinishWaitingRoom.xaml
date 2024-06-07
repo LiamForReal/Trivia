@@ -31,7 +31,7 @@
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Orientation="Vertical">
                 <Label Content="Finish Game Waiting Room" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
-                <Label Content="Waiting for all players to finish answering on all questions..." Foreground="White"  HorizontalAlignment="Center" FontSize="18" FontWeight="ExtraBold" Margin="10,50,10,0"/>
+                <Label Content="Waiting for players to finish answering..." Foreground="White"  HorizontalAlignment="Center" FontSize="18" FontWeight="ExtraBold" Margin="10,50,10,0"/>
             </StackPanel>
 
 

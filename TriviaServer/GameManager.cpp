@@ -1,11 +1,11 @@
 #include "GameManager.h"
 #include <stdexcept>
 
-int GameManager::gameId = 0;
-
 GameManager::GameManager()
 {
+    this->gameId = 1;
     db = new SqliteDataBase();
+    this->games = std::map<LoggedUser, Game>();
     if (!this->db->open())
         throw std::runtime_error("Failed to open database!");
 }
@@ -21,14 +21,20 @@ Game& GameManager::getGame(LoggedUser user)
     return std::ref(this->games[user]);
 }
 
-Game& GameManager::createGame(Room room, LoggedUser user)
+Game& GameManager::createGame(Room room)
 {
     vector<string> users = room.getAllUsers();
     for (auto it = users.begin(); it != users.end(); it++)
     {
-        this->games[user] = Game(gameId);
+        Game game = Game();
+        game.setGameId(gameId);
+        std::cout << "0# gameId is - " << game.getGameId() << std::endl; // 1
+        this->games[*it] = game;
+        std::cout << "1# gameId is - " << this->games[*it].getGameId() << std::endl; //-842150451
     }
-    return std::ref(this->games[user]);
+    std::cout << "2# gameId is - " << this->games[users[0]].getGameId() << std::endl;//-842150451
+    gameId++;
+    return std::ref(this->games[users[0]]);
 }
 
 void GameManager::deleteGame(LoggedUser user)
