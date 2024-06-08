@@ -138,9 +138,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 
 			this->_rhf.getGameManager().getGame(_user).setQuestionId(this->roomsQuestions[_roomId].first[currentQuestion].getId());
 			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count()) / FROM_MICRO_TO_SEC);
-			std::cout << "4# gameId is - " << _rhf.getGameManager().getGame(_user).getGameId() << std::endl;
 			QuestionStatistics* q = new QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
-			std::cout << "5# gameId is - " << _rhf.getGameManager().getGame(_user).getGameId() << std::endl;
 			this->_rhf.getStatisticsManager().addNewQuestionStatistics(*q);
 			this->roomsQuestions[_roomId].second[_user]++;
 			delete q;

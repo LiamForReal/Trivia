@@ -26,13 +26,9 @@ Game& GameManager::createGame(Room room)
     vector<string> users = room.getAllUsers();
     for (auto it = users.begin(); it != users.end(); it++)
     {
-        Game game = Game();
-        game.setGameId(gameId);
-        std::cout << "0# gameId is - " << game.getGameId() << std::endl; // 1
-        this->games[*it] = game;
-        std::cout << "1# gameId is - " << this->games[*it].getGameId() << std::endl; //-842150451
+        this->games[*it] = Game();
+        this->games[*it].setGameId(this->gameId);
     }
-    std::cout << "2# gameId is - " << this->games[users[0]].getGameId() << std::endl;//-842150451
     gameId++;
     return std::ref(this->games[users[0]]);
 }
