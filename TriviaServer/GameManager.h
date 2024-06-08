@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "SqliteDataBase.h"
 #include "LoggedUser.h"
+#include "QuestionStatistics.h"
 #include "Room.h"
 
 class GameManager

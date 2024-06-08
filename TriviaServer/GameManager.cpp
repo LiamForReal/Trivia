@@ -3,11 +3,25 @@
 
 GameManager::GameManager()
 {
-    this->gameId = 1;
     db = new SqliteDataBase();
     this->games = std::map<LoggedUser, Game>();
     if (!this->db->open())
         throw std::runtime_error("Failed to open database!");
+    list<QuestionStatistics> questionStats = db->getQuestionsStatistics();
+    if (questionStats.size() == 0)
+    {
+        this->gameId = 1;
+    }
+    else
+    {
+        int max = 0;
+        for (auto it = questionStats.begin(); it != questionStats.end(); it++)
+        {
+            if (max < it->getGameId())
+                max = it->getGameId();
+        }
+        this->gameId = max + 1;
+    }
 }
 
 GameManager::~GameManager()
