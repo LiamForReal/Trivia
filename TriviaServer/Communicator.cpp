@@ -165,3 +165,8 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
 
     return ri;
 }
+
+std::map<SOCKET, IRequestHandler*> Communicator::getHandlers() const
+{
+    return this->_handlers;
+}

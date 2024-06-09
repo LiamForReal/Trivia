@@ -11,7 +11,7 @@ class Communicator
 		~Communicator();
 		void handleNewClient(SOCKET clientSocket);
 		RequestInfo buildRI(SOCKET clientSocket, unsigned int statusCode);
-
+		std::map<SOCKET, IRequestHandler*> getHandlers() const;
 	private:
 		std::map<SOCKET, IRequestHandler*> _handlers;
 		RequestHandlerFactory* rhf;

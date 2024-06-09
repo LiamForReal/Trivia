@@ -78,7 +78,12 @@ void SocketTools::checkifInput()
 		std::getline(std::cin, input_string);
 		if (input_string == "EXIT")
 		{
-			closesocket(_socket);
+			std::map<SOCKET, IRequestHandler*> handlers = this->_communicator.getHandlers();
+			for (auto it = handlers.begin(); it != handlers.end(); ++it)
+			{
+				closesocket(it->first);
+				delete it->second;
+			}
 			exit(1);
 		}
 	}
