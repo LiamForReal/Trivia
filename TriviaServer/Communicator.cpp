@@ -116,7 +116,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         ri.id = LOGOUT_RC;
         ri.buffer.clear();
         _handlers[clientSocket]->handleRequest(ri);
-        std::cout << "client - " << clientSocket << " crashed!";
+        std::cout << "client - " << clientSocket << " crashed";
     }
     ri.buffer.clear();
     closesocket(clientSocket);
