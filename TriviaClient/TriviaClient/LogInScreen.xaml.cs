@@ -63,7 +63,7 @@ namespace TriviaClient
             {
                 loginRequest.password = this.PasswordTextBox.Password;
             }
-            
+
             loginRequest.SendToServer(mainWindow.clientStream);
 
             Cods.Status res = (Cods.Status)(loginRequest.GetFromServer(mainWindow.clientStream).status);
@@ -81,8 +81,8 @@ namespace TriviaClient
                 this.mainWindow.LogInButton.Visibility = Visibility.Collapsed;
                 this.Close();
                 this.mainWindow.Show();
-                
-               
+
+
                 var button = (Button)(this.mainWindow.FindName("SignUpButton"));
                 if (button != null)
                 {

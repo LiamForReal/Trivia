@@ -41,7 +41,6 @@ std::vector<std::string> Room::getAllUsers()
 	for (auto it = this->m_users.begin(); it != this->m_users.end(); it++)
 	{
 		vec.push_back(it->getUserName());
-		std::cout << "PLAYER USERNAME: " << it->getUserName() << std::endl;
 	}
 	return vec;
 }
@@ -63,7 +62,13 @@ void Room::setMetadata(const RoomData& metadata)
 
 RoomData Room::getMetadata() const
 {
-	RoomData deepcopied = this->m_metadata;
+	RoomData deepcopied = RoomData();
+	deepcopied.id = this->m_metadata.id;
+	deepcopied.isActive = this->m_metadata.isActive;
+	deepcopied.maxPlayers = this->m_metadata.maxPlayers;
+	deepcopied.name = this->m_metadata.name;
+	deepcopied.numOfQuestionsInGame = this->m_metadata.numOfQuestionsInGame;
+	deepcopied.timePerQuestion = this->m_metadata.timePerQuestion;
 	return deepcopied;
 }
 

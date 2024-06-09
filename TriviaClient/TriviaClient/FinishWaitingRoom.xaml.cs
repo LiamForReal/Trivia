@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Threading;
 
 namespace TriviaClient
 {
@@ -40,6 +39,8 @@ namespace TriviaClient
 
         private void getResults()
         {
+            this.getResultsBackgroundWorker.CancelAsync();
+
             GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
             getGameResultsRequest.SendToServer(this.mainWindow.clientStream);
             GetGameResultsRequest.GetGameResultsResponse getGameResultsResponse = getGameResultsRequest.GetFromServer(this.mainWindow.clientStream);
@@ -56,14 +57,12 @@ namespace TriviaClient
                         score = (double)((playerResults.correctAnswerCount / totalAnswers) / playerResults.averageAnswerTime);
                     else score = 0.0;
                     score *= 100;
-                    resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F2") + "\n";
+                    resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F4") + "\n";
                 }
 
-                Application.Current.Dispatcher.Invoke(() => {
-                    MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.Close();
-                    this.mainWindow.Show();
-                });
+                MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+                this.mainWindow.Show();
             }
             else
             {
@@ -81,8 +80,8 @@ namespace TriviaClient
                     break;
                 }
 
-                Thread.Sleep(3000);
                 this.getResultsBackgroundWorker.ReportProgress(0);
+                Thread.Sleep(3000);
             }
         }
 
@@ -100,19 +99,6 @@ namespace TriviaClient
             else
             {
                 MessageBox.Show("BackgroundWorker ended successfully");
-            }
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            this.getResultsBackgroundWorker.CancelAsync();
-            if (this.getResultsBackgroundWorker.IsBusy)
-            {
-                while (this.getResultsBackgroundWorker.IsBusy)
-                {
-                    Thread.Sleep(100); // Wait for the worker to finish
-                    System.Windows.Forms.Application.DoEvents(); // Process UI events
-                }
             }
         }
     }

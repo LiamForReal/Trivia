@@ -83,7 +83,7 @@ namespace TriviaClient
             GetQuestionRequest getQuestionRequest = new GetQuestionRequest();
             getQuestionRequest.SendToServer(this.mainWindow.clientStream);
             GetQuestionRequest.GetQuestionResponse getQuestionResponse = getQuestionRequest.GetFromServer(this.mainWindow.clientStream);
-            List<string> answers = this.Shuffle(getQuestionResponse.answers);
+            List<string> answers = getQuestionResponse.answers;//this.Shuffle(getQuestionResponse.answers);
 
             if (answers.Count == 4)
             {

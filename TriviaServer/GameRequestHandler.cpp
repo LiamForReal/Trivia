@@ -106,8 +106,11 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			if (this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
 			{
 				this->roomsQuestions.erase(_roomId);
-				getStatsRoom[_roomId].removeAllUsers();
-				_rhf.getRoomManager().deleteRoom(_roomId);
+				getStatsRoom[_roomId].removeUser(_user);
+				if (getStatsRoom[_roomId].getAllUsers().size() == 0)
+				{
+					_rhf.getRoomManager().deleteRoom(_roomId);
+				}
 			}
 		}
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(ggr);
