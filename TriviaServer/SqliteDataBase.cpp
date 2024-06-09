@@ -67,7 +67,7 @@ int callbackQuestionStatistics(void* data, int argc, char** argv, char** azColNa
 		else if (string(azColName[i]) == "IS_CORRECT")
 			questionStatistics->setIsCorrect(bool(std::stoi(argv[i])));
 		else if (string(azColName[i]) == "ANSWER_TIME")
-			questionStatistics->setAnswerTime(time_t(argv[i]));
+			questionStatistics->setAnswerTime(std::stof(argv[i]));
 		else if (string(azColName[i]) == "QUESTION_ID")
 			questionStatistics->setQuestionId(std::stoi(argv[i]));
 		else if(string(azColName[i]) == "GAME_ID")
@@ -264,13 +264,12 @@ float SqliteDataBase::getPlayerAverageAnswerTime(string username)
 
 	if (!counter)
 	{
-		std::cout << "OFEK IS 0" << std::endl;
 		return 0;
 	}
 	else
 	{
-		std::cout << "OFEK IS " << (AnswerTime / counter) << std::endl;
-
+		std::cout << "AnswerTime: " << AnswerTime  << ",counter: " << counter << std::endl;
+		std::cout << "avrage Score: " << AnswerTime / counter;
 	}
 	return AnswerTime / counter;
 }
