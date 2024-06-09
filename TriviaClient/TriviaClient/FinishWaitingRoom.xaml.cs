@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace TriviaClient
 {
@@ -27,30 +28,18 @@ namespace TriviaClient
         public FinishWaitingRoom(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
+            InitializeComponent();
             this.getResultsBackgroundWorker = new BackgroundWorker();
             this.getResultsBackgroundWorker.WorkerSupportsCancellation = true;
             this.getResultsBackgroundWorker.WorkerReportsProgress = true;
             this.getResultsBackgroundWorker.DoWork += this.getResultsLoop_DoWork;
             this.getResultsBackgroundWorker.ProgressChanged += this.getResultsLoop_ProgressChanged;
             this.getResultsBackgroundWorker.RunWorkerCompleted += this.getResultsLoop_RunWorkerCompleted;
-            MessageBox.Show("6");
-            try
-            {
-                this.getResultsBackgroundWorker.RunWorkerAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            InitializeComponent();
-            
-            
+            this.getResultsBackgroundWorker.RunWorkerAsync();
         }
 
         private void getResults()
         {
-            this.getResultsBackgroundWorker.CancelAsync();
-
             GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
             getGameResultsRequest.SendToServer(this.mainWindow.clientStream);
             GetGameResultsRequest.GetGameResultsResponse getGameResultsResponse = getGameResultsRequest.GetFromServer(this.mainWindow.clientStream);
@@ -63,16 +52,18 @@ namespace TriviaClient
                 foreach (PlayerResults playerResults in getGameResultsResponse.results)
                 {
                     totalAnswers = (int)(playerResults.wrongAnswerCount + playerResults.correctAnswerCount);
-                    if((int)(playerResults.correctAnswerCount) != 0 && (double)(playerResults.averageAnswerTime) != 0.0)
+                    if ((int)(playerResults.correctAnswerCount) != 0 && (double)(playerResults.averageAnswerTime) != 0.0)
                         score = (double)((playerResults.correctAnswerCount / totalAnswers) / playerResults.averageAnswerTime);
                     else score = 0.0;
                     score *= 100;
-                    resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F4") + "\n";
+                    resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F2") + "\n";
                 }
 
-                MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
-                this.mainWindow.Show();
+                Application.Current.Dispatcher.Invoke(() => {
+                    MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
+                    this.mainWindow.Show();
+                });
             }
             else
             {
@@ -90,8 +81,8 @@ namespace TriviaClient
                     break;
                 }
 
-                this.getResultsBackgroundWorker.ReportProgress(0);
                 Thread.Sleep(3000);
+                this.getResultsBackgroundWorker.ReportProgress(0);
             }
         }
 
@@ -109,6 +100,19 @@ namespace TriviaClient
             else
             {
                 MessageBox.Show("BackgroundWorker ended successfully");
+            }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            this.getResultsBackgroundWorker.CancelAsync();
+            if (this.getResultsBackgroundWorker.IsBusy)
+            {
+                while (this.getResultsBackgroundWorker.IsBusy)
+                {
+                    Thread.Sleep(100); // Wait for the worker to finish
+                    System.Windows.Forms.Application.DoEvents(); // Process UI events
+                }
             }
         }
     }
