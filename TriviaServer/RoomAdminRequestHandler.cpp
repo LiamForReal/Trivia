@@ -40,7 +40,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
 		sgr.status = START_GAME_STATUS;
 		try
 		{
-			this->_rhf.getGameManager().createGame(this->_rhf.getRoomManager().getRoom(roomId), Owner);
+			this->_rhf.getGameManager().createGame(this->_rhf.getRoomManager().getRoom(roomId));
 		}
 		catch (std::runtime_error& e)
 		{

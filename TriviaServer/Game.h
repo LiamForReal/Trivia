@@ -3,9 +3,29 @@
 class Game
 {
 public:
-	Game(int id);
 	Game();
 	~Game();
+
+    Game(const Game& other) :
+        avrageTimePerAnswer(other.avrageTimePerAnswer),
+        questionId(other.questionId),
+        gameId(other.gameId)
+    {
+    }
+
+    // Assignment operator
+    Game& operator=(const Game& other)
+    {
+        if (this == &other)
+            return *this; // Handle self-assignment
+
+        // Copy data members
+        avrageTimePerAnswer = other.avrageTimePerAnswer;
+        questionId = other.questionId;
+        gameId = other.gameId;
+
+        return *this;
+    }
 
 	int getQuestionId() const;
 	int getGameId() const;
@@ -14,8 +34,6 @@ public:
 	void setGameId(const int gameId);
 	void setQuestionId(const int questionId);
 	void setavrageTime(const float avrageTime);
-	bool operator==(const Game& other) const;
-	Game& operator=(const Game& other);
 private:
 	int gameId;
 	int questionId;

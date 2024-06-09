@@ -16,7 +16,7 @@ StatisticsManager::~StatisticsManager()
 vector<string> StatisticsManager::getHighScore()
 {
 	vector<string> fiveBestScores;
-	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime - numOfGames / 100)
+	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime - numOfGames / 1000)
 	std::cout << "0\n";
 	map<string, double> userScores;
 	double divCorrectAnsInTotal = 0.0, addAvrageToNumOfGames = 0.0, score = 0.0;
@@ -30,7 +30,7 @@ vector<string> StatisticsManager::getHighScore()
 			continue;
 		}
 		divCorrectAnsInTotal = _db->getNumOfCorrectAnswers(itU->getName()) / _db->getNumOfTotalAnswers(itU->getName());
-		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) - (_db->getNumOfPlayerGames(itU->getName()) / 100);
+		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) - (_db->getNumOfPlayerGames(itU->getName()) / 1000);
 	    userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
 	}
 	std::cout << "2\n";
