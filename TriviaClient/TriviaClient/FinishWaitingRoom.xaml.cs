@@ -63,7 +63,7 @@ namespace TriviaClient
                     if((int)(playerResults.correctAnswerCount) != 0 && (double)(playerResults.averageAnswerTime) != 0.0)
                         score = (double)((totalAnswers / playerResults.correctAnswerCount) / playerResults.averageAnswerTime);
                     else score = 0.0;
-                    resultsReport += "Username: " + playerResults.username + " Avrage Global Score Is: " + score.ToString() + "\n";
+                    resultsReport += "Username: " + playerResults.username + " Average Global Score Is: " + score.ToString() + "\n";
                 }
 
                 MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);

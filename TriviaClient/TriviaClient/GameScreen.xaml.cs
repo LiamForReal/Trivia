@@ -91,9 +91,14 @@ namespace TriviaClient
                 this.Answer2.Content = answers[1];
                 this.Answer3.Content = answers[2];
                 this.Answer4.Content = answers[3];
+                this.QuestionLabel.Content = getQuestionResponse.question;
+            }
+            else
+            {
+                MessageBox.Show("Not enough data from server....");
             }
 
-            this.QuestionLabel.Content = getQuestionResponse.question;
+            // MessageBox.Show("Got new question with success!");
         }
 
         private void Answer1_Click(object sender, RoutedEventArgs e)
@@ -118,6 +123,8 @@ namespace TriviaClient
 
         private void HandleClickOnAnswer(string answer)
         {
+            MessageBox.Show("Clicked...");
+
             SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest(answer);
             submitAnswerRequest.SendToServer(this.mainWindow.clientStream);
             SubmitAnswerRequest.SubmitAnswerResponse submitAnswerResponse = submitAnswerRequest.GetFromServer(this.mainWindow.clientStream);

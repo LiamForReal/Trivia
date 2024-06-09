@@ -261,8 +261,17 @@ float SqliteDataBase::getPlayerAverageAnswerTime(string username)
 			AnswerTime += it->getAnswerTime();
 		}
 	}
+
 	if (!counter)
+	{
+		std::cout << "OFEK IS 0" << std::endl;
 		return 0;
+	}
+	else
+	{
+		std::cout << "OFEK IS " << (AnswerTime / counter) << std::endl;
+
+	}
 	return AnswerTime / counter;
 }
 
