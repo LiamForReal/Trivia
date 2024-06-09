@@ -67,9 +67,6 @@ namespace TriviaClient
                         }
                     }
                 }
-
-                MessageBox.Show($"Joining room: {selectedRoom}");
-
                 jrr.roomId = roomId;
                 jrr.SendToServer(this.mainWindow.clientStream);
                 uint statusCode= (uint)jrr.GetFromServer(this.mainWindow.clientStream).status;

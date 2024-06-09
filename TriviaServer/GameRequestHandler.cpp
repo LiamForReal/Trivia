@@ -48,6 +48,7 @@ bool GameRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 
 RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 {
+	std::cout << "GAME REQUEST HANDLER\n\n";
 	RequestResult rr = RequestResult();
 	int currentQuestion = this->roomsQuestions[_roomId].second[_user];
 	if (requestInfo.id == GET_GAME_RESULTS_RC)
@@ -82,20 +83,11 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 		rr.newHandler = _rhf.createMenuRequestHandler(_user);
 		try
 		{
-			std::cout << "USERS IN GAME: " << getStatsRoom[_roomId].getAllUsers().size() << std::endl;
-			std::cout << "USERS IN GAME FROM RHF: " << _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size() << std::endl;
-
 			if (getStatsRoom[_roomId].getAllUsers().size() != _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size())
 				throw std::runtime_error("not all the users in waiting room!");
 			vector<string> users = _rhf.getRoomManager().getRoom(_roomId).getAllUsers();
 			for (auto it = users.begin(); it != users.end(); ++it)
 			{
-				std::cout << "STOI BLOCK START" << std::endl;
-				std::cout << _rhf.getStatisticsManager().getUserStatistics(*it)[1] << std::endl;
-				std::cout << _rhf.getStatisticsManager().getUserStatistics(*it)[2] << std::endl;
-				std::cout << _rhf.getStatisticsManager().getUserStatistics(*it)[3] << std::endl;
-				std::cout << "STOI BLOCK END" << std::endl;
-
 				playerResults = PlayerResults(*it, (unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[1])),
 					(unsigned int)(std::stoi(_rhf.getStatisticsManager().getUserStatistics(*it)[2])),
 					(float)(std::stof(_rhf.getStatisticsManager().getUserStatistics(*it)[3])));
@@ -174,7 +166,6 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			std::cout << e.what() << std::endl;
 		}
 		rr.newHandler = _rhf.createGameRequestHandler(_user, _roomId);
-		std::cout << "DEBUG: response code " << gqr.status << std::endl;
 		this->avrageTime[_user] = std::chrono::high_resolution_clock::now();
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(gqr);
 	}
@@ -193,7 +184,6 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			rr.newHandler = _rhf.createGameRequestHandler(_user, _roomId);
 			std::cout << e.what() << std::endl;
 		}
-		std::cout << "DEBUG: response code " << lgr.status << std::endl;
 		rr.buffer = JsonResponsePacketSerializer::serializeResponse(lgr);
 	}
 	else throw std::runtime_error("invalid request id [game request handler]");

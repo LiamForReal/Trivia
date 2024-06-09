@@ -81,6 +81,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         try
                         {
                             rr = _handlers[clientSocket]->handleRequest(ri);
+                            std::cout << "DEBUG: response code " << rr.buffer[0] << std::endl;
                             Helper::sendVector(clientSocket, rr.buffer);
                         }
                         catch (std::runtime_error& e)
@@ -116,7 +117,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
         ri.id = LOGOUT_RC;
         ri.buffer.clear();
         _handlers[clientSocket]->handleRequest(ri);
-        std::cout << "client - " << clientSocket << " crashed";
+        std::cout << "client - " << clientSocket << " crashed!";
     }
     ri.buffer.clear();
     closesocket(clientSocket);

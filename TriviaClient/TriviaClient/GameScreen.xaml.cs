@@ -123,8 +123,6 @@ namespace TriviaClient
 
         private void HandleClickOnAnswer(string answer)
         {
-            MessageBox.Show("Clicked...");
-
             SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest(answer);
             submitAnswerRequest.SendToServer(this.mainWindow.clientStream);
             SubmitAnswerRequest.SubmitAnswerResponse submitAnswerResponse = submitAnswerRequest.GetFromServer(this.mainWindow.clientStream);
