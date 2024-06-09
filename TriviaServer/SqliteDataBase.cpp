@@ -263,14 +263,7 @@ float SqliteDataBase::getPlayerAverageAnswerTime(string username)
 	}
 
 	if (!counter)
-	{
 		return 0;
-	}
-	else
-	{
-		std::cout << "AnswerTime: " << AnswerTime  << ",counter: " << counter << std::endl;
-		std::cout << "avrage Score: " << AnswerTime / counter;
-	}
 	return AnswerTime / counter;
 }
 

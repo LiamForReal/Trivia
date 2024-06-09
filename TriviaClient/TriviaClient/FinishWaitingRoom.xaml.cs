@@ -58,12 +58,12 @@ namespace TriviaClient
                 double score = 0.0;
                 foreach (PlayerResults playerResults in getGameResultsResponse.results)
                 {
-                    // TODO: calculate score as our formula 
                     totalAnswers = (int)(playerResults.wrongAnswerCount + playerResults.correctAnswerCount);
                     if((int)(playerResults.correctAnswerCount) != 0 && (double)(playerResults.averageAnswerTime) != 0.0)
-                        score = (double)((totalAnswers / playerResults.correctAnswerCount) / playerResults.averageAnswerTime);
+                        score = (double)((playerResults.correctAnswerCount / totalAnswers) / playerResults.averageAnswerTime);
                     else score = 0.0;
-                    resultsReport += "Username: " + playerResults.username + " Average Global Score Is: " + score.ToString() + "\n";
+                    score *= 100;
+                    resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString() + "\n";
                 }
 
                 MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
