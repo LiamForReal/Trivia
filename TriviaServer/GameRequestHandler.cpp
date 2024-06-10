@@ -67,6 +67,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 				if (getStatsRoom[_roomId].getAllUsers()[i] == _user.getUserName())
 				{
 					found = true;
+					std::cout << "FOUND USER " << _user.getUserName() << std::endl;
 					break;
 				}
 			}
@@ -107,6 +108,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			{
 				this->roomsQuestions.erase(_roomId);
 				getStatsRoom[_roomId].removeUser(_user);
+				_rhf.getRoomManager().getRoom(_roomId).removeUser(_user);
 				if (getStatsRoom[_roomId].getAllUsers().size() == 0)
 				{
 					_rhf.getRoomManager().deleteRoom(_roomId);

@@ -59,7 +59,7 @@ namespace TriviaClient
                     resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F4") + "\n";
                 }
 
-                //MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.mainWindow.Show();
                 this.Close();
             }
@@ -80,7 +80,7 @@ namespace TriviaClient
                 }
 
                 this.getResultsBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(1000);
+                Thread.Sleep(4000);
             }
         }
 
