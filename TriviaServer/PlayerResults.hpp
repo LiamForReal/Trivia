@@ -17,7 +17,7 @@ typedef struct PlayerResults
 		this->averageAnswerTime = 0;
 	}
 
-	PlayerResults(const std::string& username, const unsigned int& correctAnswerCount, const unsigned int& wrongAnswerCount, const unsigned int& averageAnswerTime)
+	PlayerResults(const std::string& username, const unsigned int& correctAnswerCount, const unsigned int& wrongAnswerCount, const float& averageAnswerTime)
 	{
 		this->username = username;
 		this->correctAnswerCount = correctAnswerCount;

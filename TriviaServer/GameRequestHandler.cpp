@@ -8,6 +8,24 @@ GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser us
 {
 	_roomId = roomId;	
 	randQuestionsToRoom();
+	try
+	{
+		if (getStatsRoom.find(_roomId) == getStatsRoom.end())
+		{
+			getStatsRoom[_roomId] = Room();
+			getStatsRoom[_roomId].setMetadata(_rhf.getRoomManager().getRoom(_roomId).getMetadata());
+			getStatsRoom[_roomId].setRoomStatus(INACTIVE_ROOM);
+			for (int i = 0; i != _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size(); ++i)
+			{
+				getStatsRoom[_roomId].addUser(LoggedUser(_rhf.getRoomManager().getRoom(_roomId).getAllUsers()[i]));
+			}
+		}
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
 }
 
 GameRequestHandler::~GameRequestHandler() {}
@@ -55,36 +73,11 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	{
 		PlayerResults playerResults;
 		GetGameResultsResponse ggr = GetGameResultsResponse();
-		try
-		{
-			getStatsRoom[_roomId].setMetadata(_rhf.getRoomManager().getRoom(_roomId).getMetadata());
-			getStatsRoom[_roomId].setRoomStatus(INACTIVE_ROOM);
-			
-			bool found = false;
-
-			for (int i = 0; i < getStatsRoom[_roomId].getAllUsers().size(); i++)
-			{
-				if (getStatsRoom[_roomId].getAllUsers()[i] == _user.getUserName())
-				{
-					found = true;
-					std::cout << "FOUND USER " << _user.getUserName() << std::endl;
-					break;
-				}
-			}
-			if (!found)
-			{
-				getStatsRoom[_roomId].addUser(_user);
-			}
-		}
-		catch (std::runtime_error& e)
-		{
-			std::cout << e.what() << std::endl;
-		}
 		ggr.status = GET_GAME_RESULTS_STATUS;
 		rr.newHandler = _rhf.createMenuRequestHandler(_user);
 		try
 		{
-			if (getStatsRoom[_roomId].getAllUsers().size() != _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size())
+			if (getStatsRoom[_roomId].getAllUsers().size() != 0)
 				throw std::runtime_error("not all the users in waiting room!");
 			vector<string> users = _rhf.getRoomManager().getRoom(_roomId).getAllUsers();
 			for (auto it = users.begin(); it != users.end(); ++it)
@@ -107,8 +100,6 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			if (this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
 			{
 				this->roomsQuestions.erase(_roomId);
-				getStatsRoom[_roomId].removeUser(_user);
-				_rhf.getRoomManager().getRoom(_roomId).removeUser(_user);
 				if (getStatsRoom[_roomId].getAllUsers().size() == 0)
 				{
 					_rhf.getRoomManager().deleteRoom(_roomId);
@@ -138,6 +129,10 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			QuestionStatistics* q = new QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
 			this->_rhf.getStatisticsManager().addNewQuestionStatistics(*q);
 			this->roomsQuestions[_roomId].second[_user]++;
+			if (this->roomsQuestions[_roomId].second[_user] == this->roomsQuestions[_roomId].first.size())
+			{
+				getStatsRoom[_roomId].removeUser(_user);
+			}
 			delete q;
 		}
 		catch (std::runtime_error& e)

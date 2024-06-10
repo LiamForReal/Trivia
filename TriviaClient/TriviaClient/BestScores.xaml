@@ -48,11 +48,11 @@
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,70,5,10" Orientation="Vertical">
-                <Label x:Name="FirstPlaceLabel" Content="1. Gavriel - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="3"/>
-                <Label x:Name="SecondPlaceLabel" Content="2. Liam - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="3"/>
-                <Label x:Name="ThirdPlaceLabel" Content="3. Jubzik - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="3"/>
-                <Label x:Name="FourPlaceLabel" Content="3. Jubzik - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="3"/>
-                <Label x:Name="FivePlaceLabel" Content="3. Jubzik - 0 Points" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="3"/>
+                <Label x:Name="FirstPlaceLabel" Content="" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="20" Margin="7"/>
+                <Label x:Name="SecondPlaceLabel" Content="" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="18" Margin="6"/>
+                <Label x:Name="ThirdPlaceLabel" Content="" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="5"/>
+                <Label x:Name="FourPlaceLabel" Content="" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="14" Margin="4"/>
+                <Label x:Name="FivePlaceLabel" Content="" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" FontSize="12" Margin="3"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="20" Orientation="Vertical">

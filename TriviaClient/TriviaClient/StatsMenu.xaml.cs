@@ -40,11 +40,16 @@ namespace TriviaClient
             {
                 this.Hide();
                 this.bestScores = new BestScores(this);
-                this.bestScores.FirstPlaceLabel.Content = $"1. {response.statistics[0]}";
-                this.bestScores.SecondPlaceLabel.Content = $"2. {response.statistics[1]}";
-                this.bestScores.ThirdPlaceLabel.Content = $"3. {response.statistics[2]}";
-                this.bestScores.FourPlaceLabel.Content = $"4. {response.statistics[3]}";
-                this.bestScores.FivePlaceLabel.Content = $"5. {response.statistics[4]}";
+                if(response.statistics[0].ToString() != "")
+                    this.bestScores.FirstPlaceLabel.Content = $"FIRST: {response.statistics[0]}";
+                if (response.statistics[1].ToString() != "")
+                    this.bestScores.SecondPlaceLabel.Content = $"SECONED: {response.statistics[1]}";
+                if (response.statistics[2].ToString() != "")
+                    this.bestScores.ThirdPlaceLabel.Content = $"THIRED: {response.statistics[2]}";
+                if (response.statistics[3].ToString() != "")
+                    this.bestScores.FourPlaceLabel.Content = $"FOURTH: {response.statistics[3]}";
+                if (response.statistics[4].ToString() != "")
+                    this.bestScores.FivePlaceLabel.Content = $"FIFTH: {response.statistics[4]}";
                 this.bestScores.Show();
             }else MessageBox.Show("[GET_HIGH_SCORE] error!");
            
