@@ -39,14 +39,13 @@ namespace TriviaClient
 
         private void getResults()
         {
-            this.getResultsBackgroundWorker.CancelAsync();
-
             GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
             getGameResultsRequest.SendToServer(this.mainWindow.clientStream);
             GetGameResultsRequest.GetGameResultsResponse getGameResultsResponse = getGameResultsRequest.GetFromServer(this.mainWindow.clientStream);
 
             if ((uint)(Cods.Status.GET_GAME_RESULTS_STATUS) == getGameResultsResponse.status)
             {
+                this.getResultsBackgroundWorker.CancelAsync();
                 string resultsReport = "";
                 int totalAnswers = 0;
                 double score = 0.0;
@@ -60,13 +59,13 @@ namespace TriviaClient
                     resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F4") + "\n";
                 }
 
-                MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
+                //MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.mainWindow.Show();
+                this.Close();
             }
             else
             {
-                this.getResultsBackgroundWorker.RunWorkerAsync();
+                //this.getResultsBackgroundWorker.RunWorkerAsync();
             }
         }
 
@@ -81,7 +80,7 @@ namespace TriviaClient
                 }
 
                 this.getResultsBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }
         }
 
@@ -94,11 +93,11 @@ namespace TriviaClient
         {
             if (e.Cancelled)
             {
-                MessageBox.Show("BackgroundWorker canceled");
+                //MessageBox.Show("BackgroundWorker canceled");
             }
             else
             {
-                MessageBox.Show("BackgroundWorker ended successfully");
+                //MessageBox.Show("BackgroundWorker ended successfully");
             }
         }
     }

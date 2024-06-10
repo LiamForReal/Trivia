@@ -27,14 +27,6 @@ void Room::removeUser(const LoggedUser& user)
 		this->m_users.erase(it);
 }
 
-void Room::removeAllUsers()
-{
-	for (int i = 0; i < this->getAllUsers().size(); i++)
-	{
-		removeUser(LoggedUser(this->getAllUsers()[i]));
-	}
-}
-
 std::vector<std::string> Room::getAllUsers()
 {
 	std::vector<std::string> vec = std::vector<std::string>();

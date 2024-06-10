@@ -10,7 +10,6 @@ class Room
 		~Room();
 		void addUser(const LoggedUser& user);
 		void removeUser(const LoggedUser& user);
-		void removeAllUsers();
 		std::vector<std::string> getAllUsers();
 		RoomData getMetadata() const;
 		void setRoomStatus(const unsigned int newStatus);
