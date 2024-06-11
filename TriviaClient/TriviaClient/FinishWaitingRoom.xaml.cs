@@ -84,7 +84,7 @@ namespace TriviaClient
                 }
 
                 this.getResultsBackgroundWorker.ReportProgress(0);
-                Thread.Sleep(4000);
+                Thread.Sleep(3000);
             }
         }
 

@@ -2,7 +2,7 @@
 
 map<unsigned int, std::pair<vector<Question>, map<LoggedUser, int>>> GameRequestHandler::roomsQuestions;
 map<LoggedUser, std::chrono::high_resolution_clock::time_point> GameRequestHandler::avrageTime;
-map<unsigned int, Room> GameRequestHandler::getStatsRoom;
+map<unsigned int, std::pair<Room, int>> GameRequestHandler::getStatsRoom;
 
 GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser user, unsigned int roomId) : _rhf(rhf), _user(user)
 {
@@ -12,12 +12,12 @@ GameRequestHandler::GameRequestHandler(RequestHandlerFactory& rhf, LoggedUser us
 	{
 		if (getStatsRoom.find(_roomId) == getStatsRoom.end())
 		{
-			getStatsRoom[_roomId] = Room();
-			getStatsRoom[_roomId].setMetadata(_rhf.getRoomManager().getRoom(_roomId).getMetadata());
-			getStatsRoom[_roomId].setRoomStatus(INACTIVE_ROOM);
+			getStatsRoom[_roomId].first = Room();
+			getStatsRoom[_roomId].first.setMetadata(_rhf.getRoomManager().getRoom(_roomId).getMetadata());
+			getStatsRoom[_roomId].first.setRoomStatus(INACTIVE_ROOM);
 			for (int i = 0; i != _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size(); ++i)
 			{
-				getStatsRoom[_roomId].addUser(LoggedUser(_rhf.getRoomManager().getRoom(_roomId).getAllUsers()[i]));
+				getStatsRoom[_roomId].first.addUser(LoggedUser(_rhf.getRoomManager().getRoom(_roomId).getAllUsers()[i]));
 			}
 		}
 	}
@@ -71,13 +71,17 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	int currentQuestion = this->roomsQuestions[_roomId].second[_user];
 	if (requestInfo.id == GET_GAME_RESULTS_RC)
 	{
+		if (getStatsRoom[_roomId].first.getAllUsers().size() == 0)
+		{
+			getStatsRoom[_roomId].second = 0;
+		}
 		PlayerResults playerResults;
 		GetGameResultsResponse ggr = GetGameResultsResponse();
 		ggr.status = GET_GAME_RESULTS_STATUS;
 		rr.newHandler = _rhf.createMenuRequestHandler(_user);
 		try
 		{
-			if (getStatsRoom[_roomId].getAllUsers().size() != 0)
+			if (getStatsRoom[_roomId].first.getAllUsers().size() != 0)
 				throw std::runtime_error("not all the users in waiting room!");
 			vector<string> users = _rhf.getRoomManager().getRoom(_roomId).getAllUsers();
 			for (auto it = users.begin(); it != users.end(); ++it)
@@ -97,10 +101,11 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 
 		if (ggr.status == GET_GAME_RESULTS_STATUS)
 		{
-			if (this->roomsQuestions.find(_roomId) != this->roomsQuestions.end() && this->roomsQuestions.size() != 0)
+			if (this->roomsQuestions.find(_roomId) != this->roomsQuestions.end())
 			{
 				this->roomsQuestions.erase(_roomId);
-				if (getStatsRoom[_roomId].getAllUsers().size() == 0)
+				getStatsRoom[_roomId].second++;
+				if (getStatsRoom[_roomId].second == _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size())
 				{
 					_rhf.getRoomManager().deleteRoom(_roomId);
 				}
@@ -125,13 +130,14 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			else sarr.status = SUBMIT_ANSWER_WRONG;
 
 			this->_rhf.getGameManager().getGame(_user).setQuestionId(this->roomsQuestions[_roomId].first[currentQuestion].getId());
-			this->_rhf.getGameManager().getGame(_user).setavrageTime((float)(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count()) / FROM_MICRO_TO_SEC);
+			this->_rhf.getGameManager().getGame(_user).setavrageTime(
+				(float)(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - this->avrageTime[_user]).count()) / FROM_MICRO_TO_SEC);
 			QuestionStatistics* q = new QuestionStatistics(this->_rhf.getGameManager().getGame(_user), _user.getUserName(), isCorrect, sar.answer);
 			this->_rhf.getStatisticsManager().addNewQuestionStatistics(*q);
 			this->roomsQuestions[_roomId].second[_user]++;
 			if (this->roomsQuestions[_roomId].second[_user] == this->roomsQuestions[_roomId].first.size())
 			{
-				getStatsRoom[_roomId].removeUser(_user);
+				getStatsRoom[_roomId].first.removeUser(_user);
 			}
 			delete q;
 		}

@@ -24,6 +24,6 @@ private:
 	unsigned int _roomId;
 	static map<unsigned int, std::pair<vector<Question>, std::map<LoggedUser,int>>> roomsQuestions;
 	static map<LoggedUser, std::chrono::high_resolution_clock::time_point> avrageTime;
-	static map<unsigned int, Room> getStatsRoom;
+	static map<unsigned int, std::pair<Room, int>> getStatsRoom;
 };
 
