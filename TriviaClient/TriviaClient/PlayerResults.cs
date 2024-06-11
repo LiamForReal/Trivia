@@ -11,9 +11,9 @@ namespace TriviaClient
         public string username;
         public uint correctAnswerCount;
         public uint wrongAnswerCount;
-        public uint averageAnswerTime;
+        public double averageAnswerTime;
 
-        public PlayerResults(string username, uint correctAnswerCount, uint wrongAnswerCount, uint averageAnswerTime) 
+        public PlayerResults(string username, uint correctAnswerCount, uint wrongAnswerCount, double averageAnswerTime) 
         {
             this.username = username;
             this.correctAnswerCount = correctAnswerCount;

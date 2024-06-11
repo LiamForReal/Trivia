@@ -7,17 +7,17 @@ typedef struct PlayerResults
 	std::string username;
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
-	unsigned int averageAnswerTime;
+	double averageAnswerTime;
 
 	PlayerResults()
 	{
 		this->username = "";
 		this->correctAnswerCount = 0;
 		this->wrongAnswerCount = 0;
-		this->averageAnswerTime = 0;
+		this->averageAnswerTime = 0.0f;
 	}
 
-	PlayerResults(const std::string& username, const unsigned int& correctAnswerCount, const unsigned int& wrongAnswerCount, const float& averageAnswerTime)
+	PlayerResults(const std::string& username, const unsigned int& correctAnswerCount, const unsigned int& wrongAnswerCount, const double& averageAnswerTime)
 	{
 		this->username = username;
 		this->correctAnswerCount = correctAnswerCount;
