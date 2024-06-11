@@ -31,7 +31,50 @@
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Orientation="Vertical">
                 <Label Content="Finish Game Waiting Room" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
-                <Label Content="Waiting for players to finish answering..." Foreground="White"  HorizontalAlignment="Center" FontSize="18" FontWeight="ExtraBold" Margin="10,50,10,0"/>
+                <Label Name="WaitingLabel" Content="Waiting for players to finish answering..." Foreground="White"  HorizontalAlignment="Center" FontSize="18" FontWeight="ExtraBold" Margin="10,50,10,0"/>
+                <DataGrid AutoGenerateColumns="False" 
+                    Margin="50,20,50,0"
+                    HorizontalAlignment="Center" 
+                    Name="ResultsDataGrid"
+                    Visibility="Collapsed"
+                    VerticalAlignment="Top"
+                    IsReadOnly="True"
+                    Background="DarkBlue"
+                    Foreground="Black"
+                    FontWeight="Bold"
+                    Width="600">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header=" Username" Binding="{Binding Path=username}" Width="100" />
+                        <DataGridTextColumn Header=" Correct Answers Amount" Binding="{Binding Path=correctAnswersAmount}" Width="150" />
+                        <DataGridTextColumn Header=" Wrong Answers Amount" Binding="{Binding Path=wrongAnswersAmount}" Width="150" />
+                        <DataGridTextColumn Header=" Average Answer Time" Binding="{Binding Path=averageAnswerTime}" Width="*" />
+                        
+                    </DataGrid.Columns>
+
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="Turquoise"></Setter>
+                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                            <Setter Property="FontSize" Value="12"></Setter>
+                            <Setter Property="BorderThickness" Value="0,0,1,2"></Setter>
+                            <Setter Property="Foreground" Value="White"></Setter>
+                            <Setter Property="BorderBrush" Value="Black"></Setter>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+
+                <Button x:Name="CloseButton" Content="Close" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="20" Click="CloseButton_Click"
+                        Height="40"
+                        Background="RoyalBlue"
+                        Foreground="White"
+                        FontFamily="Arial"
+                        FontSize="18"
+                        FontWeight="DemiBold"
+                        Style="{DynamicResource RoundedButtonStyle}"
+                        Opacity="0.8"
+                        Visibility="Collapsed"
+                        IsEnabled="False"
+                />
             </StackPanel>
 
 

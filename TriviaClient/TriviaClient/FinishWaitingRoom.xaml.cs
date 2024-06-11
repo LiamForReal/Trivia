@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TriviaClient;
 
 namespace TriviaClient
 {
     /// <summary>
     /// Interaction logic for FinishWaitingRoom.xaml
     /// </summary>
+    /// 
+    public class PlayerResultsDataObject
+    {
+        public string username { get; set; }
+        public string correctAnswersAmount { get; set; }
+        public string wrongAnswersAmount { get; set; }
+
+        public string averageAnswerTime { get; set; }
+    }
+
     public partial class FinishWaitingRoom : Window
     {
         public MainWindow mainWindow;
@@ -46,26 +58,17 @@ namespace TriviaClient
             if ((uint)(Cods.Status.GET_GAME_RESULTS_STATUS) == getGameResultsResponse.status)
             {
                 this.getResultsBackgroundWorker.CancelAsync();
-                string resultsReport = "";
-                int totalAnswers = 0;
-                double score = 0.0;
+
+                this.WaitingLabel.Visibility = Visibility.Hidden;
+                this.CloseButton.Visibility = Visibility.Visible;
+                this.CloseButton.IsEnabled = true;
+
+                this.ResultsDataGrid.Visibility = Visibility.Visible;
+
                 foreach (PlayerResults playerResults in getGameResultsResponse.results)
                 {
-                    totalAnswers = (int)(playerResults.wrongAnswerCount + playerResults.correctAnswerCount);
-                    if ((int)(playerResults.correctAnswerCount) != 0 && (double)(playerResults.averageAnswerTime) != 0.0)
-                        score = (double)((playerResults.correctAnswerCount / totalAnswers) / playerResults.averageAnswerTime);
-                    else score = 0.0;
-                    score *= 100;
-                    resultsReport += "Username: " + playerResults.username + " ,Average Global Score For Game: " + score.ToString("F4") + "\n";
+                    this.ResultsDataGrid.Items.Add(new PlayerResultsDataObject() { username = playerResults.username, correctAnswersAmount = playerResults.correctAnswerCount.ToString(), wrongAnswersAmount = playerResults.wrongAnswerCount.ToString(), averageAnswerTime = ((double)(playerResults.averageAnswerTime)).ToString("F6") });
                 }
-
-                MessageBox.Show(resultsReport, "[Trivia] Game Results Report", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.mainWindow.Show();
-                this.Close();
-            }
-            else
-            {
-                //this.getResultsBackgroundWorker.RunWorkerAsync();
             }
         }
 
@@ -99,6 +102,12 @@ namespace TriviaClient
             {
                 //MessageBox.Show("BackgroundWorker ended successfully");
             }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.mainWindow.Show();
+            this.Close();
         }
     }
 }
