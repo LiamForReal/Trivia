@@ -60,8 +60,6 @@ namespace TriviaClient
                 this.getResultsBackgroundWorker.CancelAsync();
 
                 this.WaitingLabel.Visibility = Visibility.Hidden;
-                this.CloseButton.Visibility = Visibility.Visible;
-                this.CloseButton.IsEnabled = true;
 
                 this.ResultsDataGrid.Visibility = Visibility.Visible;
 
@@ -69,6 +67,9 @@ namespace TriviaClient
                 {
                     this.ResultsDataGrid.Items.Add(new PlayerResultsDataObject() { username = playerResults.username, correctAnswersAmount = playerResults.correctAnswerCount.ToString(), wrongAnswersAmount = playerResults.wrongAnswerCount.ToString(), averageAnswerTime = ((double)(playerResults.averageAnswerTime)).ToString("F6") });
                 }
+
+                this.CloseButton.Visibility = Visibility.Visible;
+                this.CloseButton.IsEnabled = true;
             }
         }
 
