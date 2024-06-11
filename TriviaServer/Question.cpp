@@ -75,3 +75,9 @@ void Question::setWA3(const string& newWA3)
 {
 	this->_wrong3 = newWA3;
 }
+
+bool Question::operator==(const Question& other) const
+{
+	return this->getCA() == other.getCA() && this->getId() == other.getId() && this->getQ() == other.getQ() &&
+		this->getWA1() == other.getWA1() && this->getWA2() == other.getWA2() && this->getWA3() == other.getWA3();
+}

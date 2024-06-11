@@ -16,24 +16,22 @@ StatisticsManager::~StatisticsManager()
 vector<string> StatisticsManager::getHighScore()
 {
 	vector<string> fiveBestScores;
-	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime - numOfGames / 100)
-	std::cout << "0\n";
-	map<string, double> userScores;
+	list<User> users = _db->getUsers(); //calc win - (correctAnswers / totalAnswers) / (AvrageTime)
+	map<string, float> userScores;
 	double divCorrectAnsInTotal = 0.0, addAvrageToNumOfGames = 0.0, score = 0.0;
 	string name = "";
-	std::cout << "1\n";
 	for (auto itU = users.begin(); itU != users.end(); ++itU)
 	{
-		if (_db->getNumOfTotalAnswers(itU->getName()) == 0 || _db->getPlayerAverageAnswerTime(itU->getName()) == 0 || _db->getNumOfTotalAnswers(itU->getName()) == 0)
+		if (_db->getNumOfTotalAnswers(itU->getName()) == 0 || _db->getPlayerAverageAnswerTime(itU->getName()) == 0 || _db->getNumOfCorrectAnswers(itU->getName()) == 0)
 		{
 			userScores[itU->getName()] = 0;
 			continue;
 		}
-		divCorrectAnsInTotal = _db->getNumOfCorrectAnswers(itU->getName()) / _db->getNumOfTotalAnswers(itU->getName());
-		addAvrageToNumOfGames = _db->getPlayerAverageAnswerTime(itU->getName()) - (_db->getNumOfPlayerGames(itU->getName()) / 100);
-	    userScores[itU->getName()] = divCorrectAnsInTotal / addAvrageToNumOfGames;
+		divCorrectAnsInTotal = static_cast<double>(_db->getNumOfCorrectAnswers(itU->getName())) / _db->getNumOfTotalAnswers(itU->getName());
+		addAvrageToNumOfGames = static_cast<double>(_db->getPlayerAverageAnswerTime(itU->getName()));
+	    userScores[itU->getName()] = static_cast<double>(divCorrectAnsInTotal / addAvrageToNumOfGames);
 	}
-	std::cout << "2\n";
+
 	for (int i = 0; i < 5; i++)
 	{
 		if (!userScores.empty())
@@ -52,8 +50,6 @@ vector<string> StatisticsManager::getHighScore()
 			score = 0;
 		}
 	}
-	std::cout << "3\n";
-	//done here
 	return fiveBestScores;
 }
 
@@ -67,4 +63,9 @@ vector<string> StatisticsManager::getUserStatistics(string username) const
 	userStatistics.push_back(std::to_string(_db->getNumOfTotalAnswers(username) - correctAnswers));
 	userStatistics.push_back(std::to_string(_db->getPlayerAverageAnswerTime(username)));
 	return userStatistics; 
+}
+
+void StatisticsManager::addNewQuestionStatistics(const QuestionStatistics q)
+{
+	this->_db->addNewQuestionStatistics(q);
 }

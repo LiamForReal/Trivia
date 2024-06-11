@@ -13,13 +13,16 @@ void run_server();
 
 void run_json_tests();
 
-void run_json_test_v2();
+void run_json_test_v2(void);
+
+void run_json_test_v4(void); // tests for Version 4.0.0
 
 int main()
 {
 	run_server();
 	//run_json_tests();
 	//run_json_test_v2();
+	//run_json_test_v4();
 }
 
 void run_server()
@@ -45,7 +48,7 @@ void run_server()
 	}
 }
 
-void run_json_tests()
+void run_json_tests(void)
 {
 	ErrorResponse er = {"ERORR",};
 
@@ -69,7 +72,7 @@ void run_json_tests()
 	vec.clear();
 }
 
-void run_json_test_v2()
+void run_json_test_v2(void)
 {
 	RoomData rd = {
 		1,
@@ -117,4 +120,12 @@ void run_json_test_v2()
 	}
 
 	vec.clear();
+}
+
+void run_json_test_v4(void)
+{
+	GetQuestionResponse getQuestionResponse;
+	getQuestionResponse.status = 50;
+	getQuestionResponse.question = "What D name of ur family DoCToR?";
+	std::vector<unsigned char> vec = JsonResponsePacketSerializer::serializeResponse(getQuestionResponse);
 }

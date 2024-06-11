@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "RoomData.hpp"
+#include "PlayerResults.hpp"
 
 typedef enum ResponseCode
 {
@@ -18,6 +19,10 @@ typedef enum ResponseCode
 	START_GAME_RC = 110,
 	GET_ROOM_STATE_RC = 120,
 	LEAVE_ROOM_RC = 130,
+	GET_GAME_RESULTS_RC = 140,
+	SUBMIT_ANSWER_RC = 150,
+	GET_QUESTION_RC = 160,
+	LEAVE_GAME_RC = 170,
 	ERROR_RC = 255,
 } ResponseCode;
 
@@ -36,6 +41,11 @@ typedef enum Status
 	START_GAME_STATUS = 111,
 	GET_ROOM_STATE_SERVER_STATUS = 121,
 	LEAVE_ROOM_STATUS = 131,
+	GET_GAME_RESULTS_STATUS = 141,
+	SUBMIT_ANSWER_CORRECT = 151,
+	SUBMIT_ANSWER_WRONG = 152,
+	GET_QUESTION_STATUS = 161,
+	LEAVE_GAME_STATUS = 171,
 } Status;
 
 typedef enum Errors
@@ -56,6 +66,11 @@ typedef enum Errors
 	GET_ROOM_STATE_SERVER_ERROR = 125,
 	GET_ROOM_STATE_ROOM_ERROR = 126,
 	LEAVE_ROOM_ERROR = 135,
+	GET_GAME_RESULTS_ERROR = 145,
+	SUBMIT_ANSWER_ERROR = 155,
+	GET_QUESTION_ERROR = 165,
+	GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED = 156,
+	LEAVE_GAME_ERROR = 175,
 } Errors;
 
 typedef struct ErrorResponse
@@ -135,3 +150,26 @@ typedef struct LeaveRoomResponse
 {
 	unsigned int status;
 } LeaveRoomResponse;
+
+typedef struct GetGameResultsResponse
+{
+	unsigned int status;
+	std::vector<PlayerResults> results;
+} GetGameResultsResponse;
+
+typedef struct SubmitAnswerResponse
+{
+	unsigned int status;
+} SubmitAnswerResponse;
+
+typedef struct GetQuestionResponse
+{
+	unsigned int status;
+	std::string question;
+	std::vector<std::string> answers;
+} GetQuestionResponse;
+
+typedef struct LeaveGameResponse
+{
+	unsigned int status;
+} LeaveGameResponse;

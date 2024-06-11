@@ -31,3 +31,8 @@ typedef struct CreateRoomRequest
 	unsigned int questionsCount;
 	unsigned int answerTimeout;
 } CreateRoomRequest;
+
+typedef struct SubmitAnswerRequest
+{
+	std::string answer;
+} SubmitAnswerRequest;

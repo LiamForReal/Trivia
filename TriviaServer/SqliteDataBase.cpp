@@ -57,17 +57,17 @@ int callbackQuestion(void* data, int argc, char** argv, char** azColName)
 int callbackQuestionStatistics(void* data, int argc, char** argv, char** azColName)
 {
 	list<QuestionStatistics>* questionsStatistics = (list<QuestionStatistics>*)data;
-	QuestionStatistics* questionStatistics = new QuestionStatistics("", "", NULL, false);
+	QuestionStatistics* questionStatistics = new QuestionStatistics("", 0.0, false, "");
 	for (int i = 0; i < argc; i++)
 	{
 		if (string(azColName[i]) == "USER_NAME")
 			questionStatistics->setUserName(argv[i]);
-		else if (string(azColName[i]) == "PLAYER_ANSWER")
-			questionStatistics->setPlayerAnswer(argv[i]);
+		else if(string(azColName[i]) == "ANSWER")
+			questionStatistics->setAnswer(argv[i]);
 		else if (string(azColName[i]) == "IS_CORRECT")
 			questionStatistics->setIsCorrect(bool(std::stoi(argv[i])));
 		else if (string(azColName[i]) == "ANSWER_TIME")
-			questionStatistics->setAnswerTime(time_t(argv[i]));
+			questionStatistics->setAnswerTime(std::stof(argv[i]));
 		else if (string(azColName[i]) == "QUESTION_ID")
 			questionStatistics->setQuestionId(std::stoi(argv[i]));
 		else if(string(azColName[i]) == "GAME_ID")
@@ -141,25 +141,23 @@ bool SqliteDataBase::open()
 	{
 		users = sendSQLMsg("CREATE TABLE IF NOT EXISTS USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);");
 		questions = sendSQLMsg("CREATE TABLE IF NOT EXISTS QUESTIONS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION TEXT NOT NULL, CORRECT_ANS TEXT NOT NULL, ANS2 TEXT NOT NULL, ANS3 TEXT NOT NULL, ANS4 TEXT NOT NULL);");
-		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, QUESTION_ID INT, USER_NAME TEXT NOT NULL, PLAYER_ANSWER TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER_TIME INTEGER NOT NULL, FOREIGN KEY(QUESTION_ID) REFERENCES QUESTIONS(ID));");
+		statistics = sendSQLMsg("CREATE TABLE IF NOT EXISTS STATISTICS(GAME_ID INTEGER NOT NULL, QUESTION_ID INT NOT NULL, USER_NAME TEXT NOT NULL, IS_CORRECT BOOLEAN NOT NULL, ANSWER TEXT NOT NULL,ANSWER_TIME REAL NOT NULL);");
 		if(!users || !questions || !statistics)
 		{
 			std::cerr << "Error creating db!";
 			return false;
 		}
 
-		addNewQuestion(Question("What is the name of your family doctor?", "Boris", "Arik", "Gavriel", "Ofek")); // 1
-		addNewQuestion(Question("Who is the creator of Trivia?", "Liam and Gavriel", "Liam", "Gavriel", "The Janitor")); // 1
-		addNewQuestion(Question("Which city is the capital of Israel?", "Jerusalem", "Tel Aviv", "Yavne", "Chernobyl"));// 1
-		addNewQuestion(Question("Which country does not exist?", "Palestine", "Albania", "Kosovo", "Bosnia"));// 1
+		addNewQuestion(Question("What is the name of your family doctor?", "Boris", "Arik", "Gavriel", "Ofek"));
+		addNewQuestion(Question("Which city is the capital of Israel?", "Jerusalem", "Tel Aviv", "Yavne", "Chernobyl"));
+		addNewQuestion(Question("Which country does not exist?", "Palestine", "Albania", "Kosovo", "Bosnia"));
 		addNewQuestion(Question("What is orange s color?", "Orange", "Red", "Black", "Purple"));
-		addNewQuestion(Question("What is the best religion?", "Judaism", "Islam", "Christianity", "Being Palestinian"));// 1
-		addNewQuestion(Question("First programming language is...", "Assembly", "Python", "C++", "C"));// 1
-		addNewQuestion(Question("Which of the following is not a language?", "Palestinian", "Russian", "Hebrew", "English"));// 1
+		addNewQuestion(Question("What is the best religion?", "Judaism", "Islam", "Christianity", "Being Palestinian"));
+		addNewQuestion(Question("First programming language is...", "Assembly", "Python", "C++", "C"));
+		addNewQuestion(Question("Which of the following is not a language?", "Palestinian", "Russian", "Hebrew", "English"));
 		addNewQuestion(Question("Who is Jubzik?", "Liam", "Gavriels pet", "The Janitor", "Ofek"));
 		addNewQuestion(Question("Who is Shmulik?", "Cyber Teacher", "Penguin", "Actor", "Diver"));
-		addNewQuestion(Question("Did you like the game?", "Yes", "No", "I dont know", "Maybe"));
-		addNewQuestion(Question("What is ofek s shape?", "Rectangle", "tangle", "exagon", "air conditioner"));
+		addNewQuestion(Question("What is ofek s head shape?", "tangle", "rectangle", "dimoned", "unDeclared"));
 	}
 	else
 	{
@@ -236,6 +234,20 @@ void SqliteDataBase::addNewQuestion(Question question)
 	sendSQLMsg(sqlStatement);
 }
 
+void SqliteDataBase::addNewQuestionStatistics(QuestionStatistics stats)
+{
+	std::string msg = "INSERT INTO STATISTICS (GAME_ID, QUESTION_ID, USER_NAME, IS_CORRECT, ANSWER, ANSWER_TIME) VALUES ("
+		+ std::to_string(stats.getGameId()) + ", "
+		+ std::to_string(stats.getQuestionId()) + ", '"
+		+ stats.getUserName() + "', "
+		+ std::to_string(stats.getIsCorrect()) + ", '"
+		+ stats.getAnswer() + "', "
+		+ std::to_string(stats.getAnswerTime()) + ");";
+	std::cout << msg;
+	const char* sqlStatement = msg.c_str();
+	sendSQLMsg(sqlStatement);
+}
+
 float SqliteDataBase::getPlayerAverageAnswerTime(string username)
 {
 	float AnswerTime = 0.0;
@@ -249,6 +261,7 @@ float SqliteDataBase::getPlayerAverageAnswerTime(string username)
 			AnswerTime += it->getAnswerTime();
 		}
 	}
+
 	if (!counter)
 		return 0;
 	return AnswerTime / counter;

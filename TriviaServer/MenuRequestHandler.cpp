@@ -1,9 +1,8 @@
 #include "MenuRequestHandler.h"
 #include <algorithm>
 
-MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf)
+MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf), _user(user)
 {
-    _user = user;
     rr = RequestResult();
 }
 

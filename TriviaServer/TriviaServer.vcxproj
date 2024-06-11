@@ -124,6 +124,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Communicator.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameRequestHandler.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="IRequestHandler.cpp" />
     <ClCompile Include="JsonRequestPacketDeserializer.cpp" />
@@ -154,6 +157,9 @@
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
     <ClInclude Include="defines.hpp" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameRequestHandler.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IDatabase.h" />
     <ClInclude Include="includes.hpp" />
@@ -164,7 +170,9 @@
     <ClInclude Include="LoggedUser.h" />
     <ClInclude Include="LoginManager.h" />
     <ClInclude Include="LoginRequestHandler.h" />
+    <ClInclude Include="MagshChat.h" />
     <ClInclude Include="MagshMessageServer.h" />
+    <ClInclude Include="PlayerResults.hpp" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RoomAdminRequestHandler.h" />
     <ClInclude Include="RoomData.hpp" />
@@ -185,6 +193,9 @@
     <ClInclude Include="QuestionStatistics.h" />
     <ClInclude Include="UserStatistics.h" />
     <ClInclude Include="WSAInitializer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="triviaDB.sqlite" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
