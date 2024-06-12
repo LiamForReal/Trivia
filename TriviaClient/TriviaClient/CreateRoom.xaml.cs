@@ -39,9 +39,7 @@ namespace TriviaClient
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             if ( this.NumberOfPlayersTextBox.Text == "" || this.NumberOfQuestionsTextBox.Text == "" 
-                || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "" ||
-                int.Parse(this.NumberOfQuestionsTextBox.Text) > 10 || 
-                int.Parse(this.NumberOfQuestionsTextBox.Text) <= 0 || int.Parse(this.TimeForQuestionTextBox.Text) <= 3)
+                || this.RoomNameTextBox.Text == "" || this.TimeForQuestionTextBox.Text == "")
             {
                 MessageBox.Show("Invalid Credentials!", "[Trivia] Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 return;

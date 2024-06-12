@@ -1,5 +1,4 @@
 #include "MenuRequestHandler.h"
-#include <algorithm>
 
 MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf), _user(user)
 {
@@ -191,6 +190,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 
     try
     {
+        if (crr.questionsCount > _RHF.getGameManager().getTriviaQuestions().size() || crr.questionsCount <= 0)
+            throw std::runtime_error("the question amount its less then espected!");
         RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;

@@ -2,7 +2,7 @@ class RequestHandlerFactory;
 #pragma once
 #include "LoggedUser.h"
 #include "RequestHandlerFactory.h"
-
+#include "Question.h"
 
 class MenuRequestHandler : public IRequestHandler
 {
