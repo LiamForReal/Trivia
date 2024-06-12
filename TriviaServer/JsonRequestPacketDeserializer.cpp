@@ -183,3 +183,35 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerReques
 	}
 	return sar;
 }
+
+AddNewQuestionRequest JsonRequestPacketDeserializer::deserializeAddNewQuestionRequest(const std::vector<unsigned char>& buffer)
+{
+	AddNewQuestionRequest anqr = AddNewQuestionRequest();
+	std::string jsonDataStr = "";
+	unsigned int len = 0, i = 0;
+
+	std::memcpy(&len, buffer.data() + INC, BYTES_TO_COPY);
+	std::cout << len << std::endl;
+
+	for (i = 0; i < len; i++)
+	{
+		jsonDataStr += buffer[BYTES_TO_COPY + INC + i];
+	}
+	std::cout << jsonDataStr;
+
+	json jsonData = json::parse(jsonDataStr);
+
+	try 
+	{
+		anqr.correctAnswer = jsonData["correctAnswer"];
+		anqr.wrongAnswer1 = jsonData["wrongAnswer1"];
+		anqr.wrongAnswer2 = jsonData["wrongAnswer2"];
+		anqr.wrongAnswer3 = jsonData["wrongAnswer3"];
+	}
+	catch (...)
+	{
+		throw std::runtime_error("Invalid json structure passed");
+	}
+
+	return anqr;
+}
