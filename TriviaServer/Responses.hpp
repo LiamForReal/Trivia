@@ -23,6 +23,7 @@ typedef enum ResponseCode
 	SUBMIT_ANSWER_RC = 150,
 	GET_QUESTION_RC = 160,
 	LEAVE_GAME_RC = 170,
+	ADD_NEW_QUESTION_RC = 180,
 	ERROR_RC = 255,
 } ResponseCode;
 
@@ -46,6 +47,7 @@ typedef enum Status
 	SUBMIT_ANSWER_WRONG = 152,
 	GET_QUESTION_STATUS = 161,
 	LEAVE_GAME_STATUS = 171,
+	ADD_NEW_QUESTION_STATUS = 181,
 } Status;
 
 typedef enum Errors
@@ -71,6 +73,7 @@ typedef enum Errors
 	GET_QUESTION_ERROR = 165,
 	GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED = 156,
 	LEAVE_GAME_ERROR = 175,
+	ADD_NEW_QUESTION_ERROR = 185,
 } Errors;
 
 typedef struct ErrorResponse
@@ -173,3 +176,8 @@ typedef struct LeaveGameResponse
 {
 	unsigned int status;
 } LeaveGameResponse;
+
+typedef struct AddNewQuestionResponse
+{
+	unsigned int status;
+} AddNewQuestionResponse;
