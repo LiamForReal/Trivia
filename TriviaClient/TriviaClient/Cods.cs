@@ -27,6 +27,7 @@ namespace TriviaClient
             SUBMIT_ANSWER_RC = 150,
             GET_QUESTION_RC = 160,
             LEAVE_GAME_RC = 170,
+            ADD_NEW_QUESTION_RC = 180,
         }
 
         public enum Status
@@ -49,6 +50,7 @@ namespace TriviaClient
             SUBMIT_ANSWER_WRONG = 152,
             GET_QUESTION_STATUS = 161,
             LEAVE_GAME_STATUS = 171,
+            ADD_NEW_QUESTION_STATUS = 181,
         }
 
         public enum Errors
@@ -73,6 +75,7 @@ namespace TriviaClient
             SUBMIT_ANSWER_ERROR = 155,
             GET_QUESTION_ERROR = 165,
             LEAVE_GAME_ERROR = 175,
+            ADD_NEW_QUESTION_ERROR = 185,
         }
     }
 }

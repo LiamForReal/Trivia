@@ -486,3 +486,27 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	return vec;
 }
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const AddNewQuestionResponse& addNewQuestionResponse)
+{
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
+	// Add Response Code
+	vec[0] = ((unsigned char)(addNewQuestionResponse.status));
+
+	unsigned int len = 0;
+
+	json anqrJson = {
+		{"status", addNewQuestionResponse.status},
+	};
+
+	std::string anqrJsonStr = anqrJson.dump();
+
+	// Insert Message Length Into Vector
+	len = (unsigned int)(anqrJsonStr.size()); // possible lose of data for 64 bits.
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
+
+	// Insert Message Into Vector
+	vec.insert(vec.end(), anqrJsonStr.begin(), anqrJsonStr.end());
+
+	return vec;
+}

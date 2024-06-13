@@ -15,5 +15,6 @@ class JsonRequestPacketDeserializer
 		static JoinRoomRequest deserializeJoinRoomRequest(const std::vector<unsigned char>& buffer);
 		static CreateRoomRequest deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer);
 		static SubmitAnswerRequest deserializeSubmitAnswerRequest(const std::vector<unsigned char>& buffer);
+		static AddNewQuestionRequest deserializeAddNewQuestionRequest(const std::vector<unsigned char>& buffer);
 };
 

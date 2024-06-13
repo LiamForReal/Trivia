@@ -1,3 +1,4 @@
 1. +5 from omer on part 1 on the casting method
-2. check password strength bonus
+2. 1.0.4 check password strength bonus
 3. reveal and hide password button
+4. add question bonus 4.0.1
