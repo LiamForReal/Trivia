@@ -13,7 +13,7 @@
     <GroupBox BorderThickness="2" BorderBrush="White" Margin="10" Foreground="Black">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
-                Finish Game Waiting Room
+                Waiting Room
             </Span>
         </GroupBox.Header>
 
@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Orientation="Vertical">
-                <Label Content="Finish Game Waiting Room" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="22" FontWeight="ExtraBold" Margin="10,-5,10,0" />
+                <Label Content="Waiting Room" Foreground="Aqua"  HorizontalAlignment="Center" FontSize="26" FontWeight="ExtraBold" Margin="10,5,10,0" />
                 <Label Name="WaitingLabel" Content="Waiting for players to finish answering..." Foreground="White"  HorizontalAlignment="Center" FontSize="18" FontWeight="ExtraBold" Margin="10,50,10,0"/>
                 <DataGrid AutoGenerateColumns="False" 
                     Margin="50,20,50,0"
