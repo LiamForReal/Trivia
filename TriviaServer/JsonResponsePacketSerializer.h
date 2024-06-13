@@ -26,5 +26,6 @@ class JsonResponsePacketSerializer
 		static std::vector<unsigned char> serializeResponse(const SubmitAnswerResponse& submitAnswerResponse);
 		static std::vector<unsigned char> serializeResponse(const GetQuestionResponse& getQuestionResponse);
 		static std::vector<unsigned char> serializeResponse(const LeaveGameResponse& leaveGameResponse);
+		static std::vector<unsigned char> serializeResponse(const AddNewQuestionResponse& addNewQuestionResponse);
 };
 

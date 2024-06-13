@@ -18,7 +18,7 @@ public:
 	RequestResult getHighScore(RequestInfo ri);
 	RequestResult joinRoom(RequestInfo ri);
 	RequestResult createRoom(RequestInfo ri);
-
+	RequestResult addNewQuestion(RequestInfo ri);
 private:
 	LoggedUser _user;
 	RequestHandlerFactory& _RHF;
