@@ -24,6 +24,7 @@ namespace TriviaClient
         public StatsMenu statsMenu;
         public CreateRoom createRoom;
         public JoinRoom joinRoom;
+        public AddNewQuestion addNewQuestion;
 
         public bool isUserLogged;
         public string username;
@@ -85,6 +86,10 @@ namespace TriviaClient
                 }
                 this.statsMenu.Close();
             }
+            if (this.addNewQuestion != null)
+            {
+                this.addNewQuestion.Close();
+            }
 
             this.Close();
           
@@ -129,6 +134,7 @@ namespace TriviaClient
                 this.LogOutButton.IsEnabled = false;
                 this.LogOutButton.Visibility = Visibility.Collapsed;
                 this.StatsMenuButton.IsEnabled = false;
+                this.AddNewQuestionButton.IsEnabled = false;
             }
             else MessageBox.Show("[LogOut] error!");
         }
@@ -169,6 +175,13 @@ namespace TriviaClient
                 Console.Write((char)b);
             }
             Console.WriteLine();
+        }
+
+        private void AddNewQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            this.addNewQuestion = new AddNewQuestion(this);
+            this.addNewQuestion.Show();
         }
     }
 }

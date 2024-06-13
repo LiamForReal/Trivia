@@ -79,6 +79,7 @@ namespace TriviaClient
                 this.mainWindow.LogOutButton.IsEnabled = true;
                 this.mainWindow.StatsMenuButton.IsEnabled = true;
                 this.mainWindow.LogInButton.Visibility = Visibility.Collapsed;
+                this.mainWindow.AddNewQuestionButton.IsEnabled = true;
                 this.Close();
                 this.mainWindow.Show();
 
