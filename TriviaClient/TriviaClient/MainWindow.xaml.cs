@@ -24,6 +24,7 @@ namespace TriviaClient
         public StatsMenu statsMenu;
         public CreateRoom createRoom;
         public JoinRoom joinRoom;
+        public AddNewQuestion addNewQuestion;
 
         public bool isUserLogged;
         public string username;
@@ -84,6 +85,10 @@ namespace TriviaClient
                     this.statsMenu.bestScores.Close();
                 }
                 this.statsMenu.Close();
+            }
+            if (this.addNewQuestion != null)
+            {
+                this.addNewQuestion.Close();
             }
 
             this.Close();
@@ -174,7 +179,9 @@ namespace TriviaClient
 
         private void AddNewQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Hide();
+            this.addNewQuestion = new AddNewQuestion(this);
+            this.addNewQuestion.Show();
         }
     }
 }

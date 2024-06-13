@@ -13,7 +13,7 @@
     <GroupBox BorderThickness="2" BorderBrush="White" Margin="10" Foreground="Black">
         <GroupBox.Header>
             <Span FontWeight="Bold" Foreground="White" FontSize="18">
-                Game
+                Add New Question
             </Span>
         </GroupBox.Header>
 
