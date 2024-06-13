@@ -129,6 +129,7 @@ namespace TriviaClient
                 this.LogOutButton.IsEnabled = false;
                 this.LogOutButton.Visibility = Visibility.Collapsed;
                 this.StatsMenuButton.IsEnabled = false;
+                this.AddNewQuestionButton.IsEnabled = false;
             }
             else MessageBox.Show("[LogOut] error!");
         }
@@ -169,6 +170,11 @@ namespace TriviaClient
                 Console.Write((char)b);
             }
             Console.WriteLine();
+        }
+
+        private void AddNewQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
