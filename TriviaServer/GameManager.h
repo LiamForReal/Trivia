@@ -16,6 +16,7 @@ public:
 	list<Question> getTriviaQuestions();
 	void setQuestionId(const int newQuestionId, LoggedUser user);
 	void setAvrageTime(const float newAvrageTime, LoggedUser user);
+	void addNewQuestion(AddNewQuestionRequest anqr);
 private:
 	std::map<LoggedUser, Game> games;
 	IDatabase* db;

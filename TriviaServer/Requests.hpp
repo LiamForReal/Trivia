@@ -39,6 +39,7 @@ typedef struct SubmitAnswerRequest
 
 typedef struct AddNewQuestionRequest
 {
+	std::string question;
 	std::string correctAnswer;
 	std::string wrongAnswer1;
 	std::string wrongAnswer2;
