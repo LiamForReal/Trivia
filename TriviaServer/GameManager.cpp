@@ -67,3 +67,9 @@ void GameManager::setAvrageTime(const float newAvrageTime, LoggedUser user)
 {
     this->games[user].setavrageTime(newAvrageTime);
 }
+
+void GameManager::addNewQuestion(AddNewQuestionRequest anqr)
+{
+    Question q = Question(anqr.question, anqr.correctAnswer, anqr.wrongAnswer1, anqr.wrongAnswer2, anqr.wrongAnswer3);
+    db->addNewQuestion(q);
+}

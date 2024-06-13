@@ -81,7 +81,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
                         try
                         {
                             rr = _handlers[clientSocket]->handleRequest(ri);
-                            std::cout << "DEBUG: response code " << rr.buffer[0] << std::endl;
+                            std::cout << "DEBUG: response code " << (unsigned int)(rr.buffer[0]) << std::endl;
                             Helper::sendVector(clientSocket, rr.buffer);
                         }
                         catch (std::runtime_error& e)

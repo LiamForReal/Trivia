@@ -203,6 +203,7 @@ AddNewQuestionRequest JsonRequestPacketDeserializer::deserializeAddNewQuestionRe
 
 	try 
 	{
+		anqr.question = jsonData["question"];
 		anqr.correctAnswer = jsonData["correctAnswer"];
 		anqr.wrongAnswer1 = jsonData["wrongAnswer1"];
 		anqr.wrongAnswer2 = jsonData["wrongAnswer2"];

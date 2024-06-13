@@ -1,5 +1,4 @@
 #include "MenuRequestHandler.h"
-#include <algorithm>
 
 MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& rhf, LoggedUser user) : _RHF(rhf), _user(user)
 {
@@ -10,7 +9,7 @@ MenuRequestHandler::~MenuRequestHandler() {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
-    return ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC;
+    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC ) || ri.id == ADD_NEW_QUESTION_RC;
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
@@ -37,6 +36,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         break;
     case GET_PERSONAL_STATS_RC:
         return getPersonalStats(ri);
+        break;
+    case ADD_NEW_QUESTION_RC:
+        return addNewQuestion(ri);
         break;
     default:
         throw std::runtime_error("invalid request id [menu request handler]");
@@ -191,6 +193,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
 
     try
     {
+        if (crr.questionsCount > _RHF.getGameManager().getTriviaQuestions().size() || crr.questionsCount <= 0)
+            throw std::runtime_error("the question amount its less then espected!");
         RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;
@@ -219,5 +223,31 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(crre);
     std::cout << "CREATED ROOM!" << std::endl;
+    return rr;
+}
+
+RequestResult MenuRequestHandler::addNewQuestion(RequestInfo ri)
+{
+    unsigned int status = 0;
+    AddNewQuestionRequest aqr = JsonRequestPacketDeserializer::deserializeAddNewQuestionRequest(ri.buffer);
+    AddNewQuestionResponse anqr;
+    rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    anqr.status = ADD_NEW_QUESTION_STATUS;
+    try
+    {
+        list<Question> question = _RHF.getGameManager().getTriviaQuestions();
+        for(auto it = question.begin(); it != question.end(); ++it)
+        {
+            if (it->getQ() == aqr.question)
+                throw std::runtime_error("the question is already exsist!");
+        }
+        _RHF.getGameManager().addNewQuestion(aqr);
+    }
+    catch (std::runtime_error& e)
+    {
+        std::cout << e.what() << std::endl;
+        anqr.status = ADD_NEW_QUESTION_ERROR;
+    }
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(anqr);
     return rr;
 }
