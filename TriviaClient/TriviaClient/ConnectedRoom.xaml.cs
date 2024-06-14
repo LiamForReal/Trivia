@@ -131,14 +131,7 @@ namespace TriviaClient
                 {
                     if (this.PlayersListBox.Items.Count == 2)
                     {
-                        //DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
-                        //timer.Start();
-                        //timer.Tick += (sender, args) =>
-                        //{
-                        //    timer.Stop();
-                        //    this.StartGameButton_Click(null, new RoutedEventArgs());
-                        //};
-                        this.StartGameButton_Click(null, new RoutedEventArgs());
+                        this.StartGameLogic();
                     }
                 }
             }
@@ -176,7 +169,7 @@ namespace TriviaClient
             }
         }
 
-        private void StartGameButton_Click(object sender, RoutedEventArgs e)
+        private void StartGameLogic()
         {
             this.getRoomStateBackgroundWorker.CancelAsync();
             StartGameRequest sgr = new StartGameRequest();
@@ -189,6 +182,11 @@ namespace TriviaClient
                 this.gameScreen.Show();
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();
+        }
+
+        private void StartGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.StartGameLogic();
         }
 
         private void CloseRoomButton_Click(object sender, RoutedEventArgs e)
