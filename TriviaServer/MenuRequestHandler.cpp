@@ -257,6 +257,7 @@ RequestResult MenuRequestHandler::addNewQuestion(RequestInfo ri)
 
 RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
 {
+    // TODO: check if ri.id is for join or create
     MatchmakeResponse mr = MatchmakeResponse();
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     bool flag = false;
