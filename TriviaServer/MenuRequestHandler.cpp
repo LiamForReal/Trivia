@@ -9,7 +9,8 @@ MenuRequestHandler::~MenuRequestHandler() {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
-    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC ) || ri.id == ADD_NEW_QUESTION_RC || ri.id == MATCHMAKE_RC;
+    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC ) || ri.id == ADD_NEW_QUESTION_RC 
+        || ri.id == MATCHMAKE_RC || ri.id == MATCHMAKE_ROOM_RC;
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
@@ -29,6 +30,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         return joinRoom(ri);
         break;
     case CREATE_ROOM_RC:
+        return createRoom(ri);
+        break;
+    case MATCHMAKE_ROOM_RC:
         return createRoom(ri);
         break;
     case GET_HIGH_SCORE_RC:
@@ -193,12 +197,15 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     CreateRoomRequest crr = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
     rr.buffer = std::vector<unsigned char>();
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    RoomData roomData;
 
     try
     {
         if (crr.questionsCount > _RHF.getGameManager().getTriviaQuestions().size() || crr.questionsCount <= 0)
             throw std::runtime_error("the question amount its less then espected!");
-        RoomData roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
+        roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
+        if (ri.id == MATCHMAKE_ROOM_RC)
+            roomData.isActive = MATCHMAKE_INACTIVE_ROOM;
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;
         for (auto it = rooms.begin(); it != rooms.end(); ++it)
@@ -257,27 +264,33 @@ RequestResult MenuRequestHandler::addNewQuestion(RequestInfo ri)
 
 RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
 {
-    // TODO: check if ri.id is for join or create
     MatchmakeResponse mr = MatchmakeResponse();
-    rr.newHandler = _RHF.createMenuRequestHandler(_user);
-    bool flag = false;
+    unsigned int id = 0;
     try
     {
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         for (auto it = rooms.begin(); it != rooms.end(); ++it)
         {
             if (it->isActive == MATCHMAKE_INACTIVE_ROOM)
-                flag = true;
+                id = it->id;
         }
 
-        if (!flag)
+        if (id == 0)
+        {
             mr.status = MATCHMAKE_CREATE_STATUS;
-        else mr.status = MATCHMAKE_JOIN_STATUS;
+            rr.newHandler = _RHF.createMenuRequestHandler(_user);
+        }
+        else
+        {
+            mr.status = MATCHMAKE_JOIN_STATUS;
+            rr.newHandler = _RHF.createRoomMemberRequestHandler(id, _user);
+        }
+        mr.id = id;
     }
     catch (std::runtime_error& e)
     {
         std::cout << e.what() << std::endl;
-        mr.status = CREATE_ROOM_ERROR;
+        mr.status = MATCHMAKE_ERROR;
         rr.newHandler = _RHF.createMenuRequestHandler(_user);
     }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(mr);
