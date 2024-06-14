@@ -30,8 +30,6 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         return joinRoom(ri);
         break;
     case CREATE_ROOM_RC:
-        return createRoom(ri);
-        break;
     case MATCHMAKE_ROOM_RC:
         return createRoom(ri);
         break;
