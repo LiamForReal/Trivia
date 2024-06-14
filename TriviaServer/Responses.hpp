@@ -186,7 +186,13 @@ typedef struct AddNewQuestionResponse
 	unsigned int status;
 } AddNewQuestionResponse;
 
-typedef struct MatchmakeResponse
+typedef struct MatchmakeCreateResponse
 {
 	unsigned int status;
+} MatchmakeResponse;
+
+typedef struct MatchmakeJoinResponse
+{
+	unsigned int status;
+	unsigned int id;
 } MatchmakeResponse;

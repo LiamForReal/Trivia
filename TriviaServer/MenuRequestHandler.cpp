@@ -9,7 +9,7 @@ MenuRequestHandler::~MenuRequestHandler() {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
-    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC ) || ri.id == ADD_NEW_QUESTION_RC;
+    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC ) || ri.id == ADD_NEW_QUESTION_RC || ri.id == MATCHMAKE_RC;
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
@@ -39,6 +39,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         break;
     case ADD_NEW_QUESTION_RC:
         return addNewQuestion(ri);
+        break;
+    case MATCHMAKE_RC:
+        return matchMake(ri);
         break;
     default:
         throw std::runtime_error("invalid request id [menu request handler]");
@@ -249,5 +252,33 @@ RequestResult MenuRequestHandler::addNewQuestion(RequestInfo ri)
         anqr.status = ADD_NEW_QUESTION_ERROR;
     }
     rr.buffer = JsonResponsePacketSerializer::serializeResponse(anqr);
+    return rr;
+}
+
+RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
+{
+    MatchmakeResponse mr = MatchmakeResponse();
+    rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    bool flag = false;
+    try
+    {
+        vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
+        for (auto it = rooms.begin(); it != rooms.end(); ++it)
+        {
+            if (it->isActive == MATCHMAKE_INACTIVE_ROOM)
+                flag = true;
+        }
+
+        if (!flag)
+            mr.status = MATCHMAKE_CREATE_STATUS;
+        else mr.status = MATCHMAKE_JOIN_STATUS;
+    }
+    catch (std::runtime_error& e)
+    {
+        std::cout << e.what() << std::endl;
+        mr.status = CREATE_ROOM_ERROR;
+        rr.newHandler = _RHF.createMenuRequestHandler(_user);
+    }
+    rr.buffer = JsonResponsePacketSerializer::serializeResponse(mr);
     return rr;
 }

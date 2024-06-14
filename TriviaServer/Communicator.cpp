@@ -140,7 +140,7 @@ RequestInfo Communicator::buildRI(SOCKET clientSocket, unsigned int statusCode)
     if (statusCode == LOGOUT_RC || statusCode == GET_HIGH_SCORE_RC || statusCode == GET_ROOMS_RC ||
         statusCode == GET_PERSONAL_STATS_RC || statusCode == LEAVE_ROOM_RC || statusCode == START_GAME_RC ||
         statusCode == CLOSE_ROOM_RC || statusCode == GET_ROOM_STATE_RC || statusCode == GET_QUESTION_RC || 
-        statusCode == LEAVE_GAME_RC || statusCode == GET_GAME_RESULTS_RC)
+        statusCode == LEAVE_GAME_RC || statusCode == GET_GAME_RESULTS_RC || statusCode == MATCHMAKE_RC)
         return ri;
 
     clientMsgLength = Helper::getLengthPartFromSocket(clientSocket);
