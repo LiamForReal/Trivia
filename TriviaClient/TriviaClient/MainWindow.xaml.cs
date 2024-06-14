@@ -187,7 +187,35 @@ namespace TriviaClient
 
         private void JoinMatchmakingButton_Click(object sender, RoutedEventArgs e)
         {
+            MatchmakeRequest matchmakeRequest = new MatchmakeRequest();
+            matchmakeRequest.SendToServer(this.clientStream);
+            MatchmakeRequest.MatchmakeResponse matchmakeResponse = matchmakeRequest.GetFromServer(this.clientStream);
 
+            if ((uint)(Cods.Status.MATCHMAKE_CREATE_STATUS) == matchmakeResponse.status)
+            {
+                this.Hide();
+                this.createRoom = new CreateRoom(this, true);
+                this.createRoom.Show();
+            }
+            else if ((uint)(Cods.Status.MATCHMAKE_JOIN_STATUS) == matchmakeResponse.status)
+            {
+                GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
+                getRoomsRequest.SendToServer(this.clientStream);
+                GetRoomsRequest.GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.clientStream);
+                if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
+                {
+                    foreach (CreateRoomRequest.RoomData roomData in getRoomsResponse.rooms)
+                    {
+                        if (roomData.id == matchmakeResponse.id)
+                        {
+                            this.Hide();
+                            ConnectedRoom connectedRoom = new ConnectedRoom(this, false, roomData.numOfQuestionsInGame, roomData.timePerQuestion, true);
+                            connectedRoom.Show();
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
