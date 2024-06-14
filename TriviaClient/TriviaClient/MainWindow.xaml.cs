@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using System.Windows.Interop;
+using static TriviaClient.CreateRoomRequest;
 
 namespace TriviaClient
 {
@@ -199,22 +200,9 @@ namespace TriviaClient
             }
             else if ((uint)(Cods.Status.MATCHMAKE_JOIN_STATUS) == matchmakeResponse.status)
             {
-                GetRoomsRequest getRoomsRequest = new GetRoomsRequest();
-                getRoomsRequest.SendToServer(this.clientStream);
-                GetRoomsRequest.GetRoomsResponse getRoomsResponse = getRoomsRequest.GetFromServer(this.clientStream);
-                if ((uint)(Cods.Status.GET_ROOMS_STATUS) == getRoomsResponse.status)
-                {
-                    foreach (CreateRoomRequest.RoomData roomData in getRoomsResponse.rooms)
-                    {
-                        if (roomData.id == matchmakeResponse.id)
-                        {
-                            this.Hide();
-                            ConnectedRoom connectedRoom = new ConnectedRoom(this, false, roomData.numOfQuestionsInGame, roomData.timePerQuestion, true);
-                            connectedRoom.Show();
-                            break;
-                        }
-                    }
-                }
+                this.Hide();
+                ConnectedRoom connectedRoom = new ConnectedRoom(this, false, matchmakeResponse.amountOfQuestions, matchmakeResponse.timePerQuestion, true);
+                connectedRoom.Show();
             }
         }
     }

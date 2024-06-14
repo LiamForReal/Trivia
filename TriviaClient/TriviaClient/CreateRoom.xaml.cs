@@ -67,7 +67,14 @@ namespace TriviaClient
                 {
                     try
                     {
-                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, amountOfRooms);
+                        uint isActive = 0; // inactive regular room
+
+                        if (isMatchmaking)
+                        {
+                            isActive = 3; // inactive matchmaking
+                        }
+
+                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, isActive, amountOfRooms);
                         amountOfRooms++;
                     }
                     catch (Exception ex)
@@ -77,7 +84,7 @@ namespace TriviaClient
                     }
 
                     this.Close();
-                    this.connectedRoom = new ConnectedRoom(mainWindow, true, createRoomRequest.questionsCount, createRoomRequest.answerTimeout, false);
+                    this.connectedRoom = new ConnectedRoom(mainWindow, true, createRoomRequest.questionsCount, createRoomRequest.answerTimeout, this.isMatchmaking);
                     this.connectedRoom.room = this;
                     this.connectedRoom.mainWindow = this.mainWindow;
                     this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;

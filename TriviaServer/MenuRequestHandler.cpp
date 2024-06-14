@@ -214,7 +214,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
             throw std::runtime_error("the question amount its less then espected!");
         else if (crr.answerTimeout <= 3)
             throw std::runtime_error("the answertimeout is too short");
-
+        roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         if (ri.id == MATCHMAKE_ROOM_RC)
         {
             roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
@@ -233,6 +233,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
                 std::cout << "ROOM WITH SUCH NAME (" << it->name << ") ALREADY EXIST" << std::endl << std::endl;
             }
         }
+
         if (crre.status == CREATE_ROOM_STATUS || ri.id == MATCHMAKE_ROOM_RC)
         {
             _RHF.getRoomManager().createRoom(_user, roomData);
