@@ -15,7 +15,7 @@ void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 		if (room == it->second)
 			throw std::runtime_error("room with this name already exist");
 	}
-	this->m_rooms.insert({roomData.id, room});
+	this->m_rooms[roomData.id] = room;
 }
 
 void RoomManager::deleteRoom(const unsigned int& id)

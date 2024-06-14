@@ -136,7 +136,7 @@ namespace TriviaClient
                         timer.Tick += (sender, args) =>
                         {
                             timer.Stop();
-                            this.StartGameButton_Click(null, new RoutedEventArgs());
+                            this.StartGameButton.PerformClick();
                         };
                     }
                 }
@@ -189,7 +189,6 @@ namespace TriviaClient
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();
         }
-
         private void CloseRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.getRoomStateBackgroundWorker.CancelAsync();
