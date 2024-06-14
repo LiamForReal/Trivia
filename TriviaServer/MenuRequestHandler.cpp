@@ -9,7 +9,7 @@ MenuRequestHandler::~MenuRequestHandler() {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
-    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC ) || ri.id == ADD_NEW_QUESTION_RC 
+    return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC) || ri.id == ADD_NEW_QUESTION_RC
         || ri.id == MATCHMAKE_RC || ri.id == MATCHMAKE_ROOM_RC;
 }
 
@@ -59,7 +59,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo ri)
     {
         _RHF.getLoginMeneger().logout(_user.getUserName());
         lr.status = LOGOUT_STATUS;
-    } 
+    }
     catch (std::runtime_error e)
     {
         lr.status = LOGOUT_ERROR;
@@ -85,14 +85,21 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
     }
 
     std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
-    for (auto it = rd.begin(); it != rd.end(); ++it)
+    for (int i = 0; i < rd.size(); ++i)
     {
-        if (it->isActive == MATCHMAKE_ACTIVE_ROOM || it->isActive == MATCHMAKE_INACTIVE_ROOM)
-            rd.erase(it);
+        if (rd[i].isActive == MATCHMAKE_ACTIVE_ROOM || rd[i].isActive == MATCHMAKE_INACTIVE_ROOM)
+        {
+            rd.erase(rd.begin() + i);
+            std::cout << "in\n";
+        }
+        std::cout << "out\n";
     }
     std::cout << "START COPYING PROCESS" << std::endl;
 
-    grr.rooms = rd; // Direct assignment of the vector
+    if (rd.size() != 0)
+    {
+        grr.rooms = rd; // Direct assignment of the vector
+    }
 
     std::cout << "COPIED ROOM_DATA VECTOR WITH SUCCESS" << std::endl;
 
@@ -167,7 +174,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
     rr.buffer = std::vector<unsigned char>();
     std::vector<unsigned char> buffer;
     unsigned int status = 0;
-    
+
     JoinRoomRequest jrr = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
     rr.newHandler = _RHF.createMenuRequestHandler(_user);
     try
@@ -178,7 +185,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo ri)//go over
             std::cout << "CREATE ROOM MEMEBER HANDLER\n\n";
             rr.newHandler = _RHF.createRoomMemberRequestHandler(jrr.roomId, _user);
             status = JOIN_ROOM_STATUS;
-        } 
+        }
         else status = JOIN_ROOM_ERROR;
     }
     catch (std::runtime_error& e)
@@ -209,7 +216,13 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
             throw std::runtime_error("the answertimeout is too short");
         roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         if (ri.id == MATCHMAKE_ROOM_RC)
-            roomData.isActive = MATCHMAKE_INACTIVE_ROOM;
+        {
+            roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
+        }
+        else
+        {
+            roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, MATCHMAKE_INACTIVE_ROOM);
+        }
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;
         for (auto it = rooms.begin(); it != rooms.end(); ++it)
@@ -227,9 +240,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
             rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);
             std::cout << "CREATE ROOM ADMIN HANDLER\n\n";
         }
-            
+
     }
-    catch(std::runtime_error& e)
+    catch (std::runtime_error& e)
     {
         std::cout << e.what() << std::endl;
         crre.status = CREATE_ROOM_ERROR;
@@ -250,7 +263,7 @@ RequestResult MenuRequestHandler::addNewQuestion(RequestInfo ri)
     try
     {
         list<Question> question = _RHF.getGameManager().getTriviaQuestions();
-        for(auto it = question.begin(); it != question.end(); ++it)
+        for (auto it = question.begin(); it != question.end(); ++it)
         {
             if (it->getQ() == aqr.question)
                 throw std::runtime_error("the question is already exsist!");

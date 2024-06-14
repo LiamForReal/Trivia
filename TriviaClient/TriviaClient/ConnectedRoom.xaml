@@ -68,7 +68,7 @@
 
             <!-- Buttons For Owner -->
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="5" Orientation="Vertical">
-                <Button Name="StartGameButton" Content="Start Game" Width="100" Click="StartGameButton_Click" Margin="5" Visibility="Collapsed" IsEnabled="False"
+                <Button x:Name="StartGameButton" Content="Start Game" Width="100" Click="StartGameButton_Click" Margin="5" Visibility="Collapsed" IsEnabled="False"
                         Height="40"
                         Background="RoyalBlue"
                         Foreground="White"
