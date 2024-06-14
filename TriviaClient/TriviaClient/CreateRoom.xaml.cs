@@ -60,6 +60,7 @@ namespace TriviaClient
                 createRoomRequest.maxUsers = uint.Parse(this.NumberOfPlayersTextBox.Text);
                 createRoomRequest.answerTimeout = uint.Parse(this.TimeForQuestionTextBox.Text);
                 createRoomRequest.questionsCount = uint.Parse(this.NumberOfQuestionsTextBox.Text);
+                createRoomRequest.isMatchMake = this.isMatchmaking;
                 createRoomRequest.SendToServer(this.mainWindow.clientStream);
 
                 CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);

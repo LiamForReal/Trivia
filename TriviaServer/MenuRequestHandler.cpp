@@ -10,7 +10,7 @@ MenuRequestHandler::~MenuRequestHandler() {}
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& ri)
 {
     return (ri.id >= LOGOUT_RC && ri.id <= GET_PERSONAL_STATS_RC) || ri.id == ADD_NEW_QUESTION_RC
-        || ri.id == MATCHMAKE_RC || ri.id == MATCHMAKE_ROOM_RC;
+        || ri.id == MATCHMAKE_RC;
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
@@ -30,7 +30,6 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& ri)
         return joinRoom(ri);
         break;
     case CREATE_ROOM_RC:
-    case MATCHMAKE_ROOM_RC:
         return createRoom(ri);
         break;
     case GET_HIGH_SCORE_RC:
@@ -85,29 +84,20 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
     }
 
     std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
+    std::cout << "roomsSize: " << rd.size() << std::endl;
     for (int i = 0; i < rd.size(); ++i)
     {
+        std::cout << "roomName: " << rd[i].name << ", isActive: " << rd[i].isActive << std::endl;
         if (rd[i].isActive == MATCHMAKE_ACTIVE_ROOM || rd[i].isActive == MATCHMAKE_INACTIVE_ROOM)
         {
             rd.erase(rd.begin() + i);
-            std::cout << "in\n";
         }
-        std::cout << "out\n";
-    }
-    std::cout << "START COPYING PROCESS" << std::endl;
-
-    if (rd.size() != 0)
-    {
-        grr.rooms = rd; // Direct assignment of the vector
     }
 
-    std::cout << "COPIED ROOM_DATA VECTOR WITH SUCCESS" << std::endl;
+    grr.rooms = rd; // Direct assignment of the vector
 
     std::vector<unsigned char> buffer = JsonResponsePacketSerializer::serializeResponse(grr);
     rr.buffer = buffer; // Direct assignment of the vector
-
-    std::cout << "COPIED BYTES VECTOR WITH SUCCESS" << std::endl;
-
     return rr;
 }
 
@@ -215,26 +205,29 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         else if (crr.answerTimeout <= 3)
             throw std::runtime_error("the answertimeout is too short");
         roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
-        if (ri.id == MATCHMAKE_ROOM_RC)
+        if (crr.isMatchMake)
         {
-            roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
+            roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1,
+                crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, MATCHMAKE_INACTIVE_ROOM);
         }
         else
         {
-            roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, MATCHMAKE_INACTIVE_ROOM);
+            roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1,
+                crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         }
+        std::cout << "active: " << roomData.isActive << std::endl;
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;
         for (auto it = rooms.begin(); it != rooms.end(); ++it)
         {
-            if (it->id == roomData.id || it->name == roomData.name)
+            if ((it->id == roomData.id || it->name == roomData.name) && it->isActive == roomData.isActive)
             {
                 crre.status = CREATE_ROOM_ERROR;
                 std::cout << "ROOM WITH SUCH NAME (" << it->name << ") ALREADY EXIST" << std::endl << std::endl;
             }
         }
 
-        if (crre.status == CREATE_ROOM_STATUS || ri.id == MATCHMAKE_ROOM_RC)
+        if (crre.status == CREATE_ROOM_STATUS || crr.isMatchMake)
         {
             _RHF.getRoomManager().createRoom(_user, roomData);
             rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);
@@ -284,15 +277,22 @@ RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
     MatchmakeResponse mr = MatchmakeResponse();
     mr.amountOfQuestions = 0;
     mr.timePerQuestion = 0;
+    mr.roomName = "";
     unsigned int id = 0;
     try
     {
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         for (auto it = rooms.begin(); it != rooms.end(); ++it)
         {
+            std::cout << "isActive: " << it->isActive << std::endl;
             if (it->isActive == MATCHMAKE_INACTIVE_ROOM)
+            {
                 id = it->id;
+                std::cout << "id is : " << it->id;
+            }
         }
+
+        std::cout << "id is : " << id;
 
         if (id == 0)
         {
@@ -309,6 +309,9 @@ RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
                 {
                     mr.amountOfQuestions = it->numOfQuestionsInGame;
                     mr.timePerQuestion = it->timePerQuestion;
+                    mr.roomName = it->name;
+                    _RHF.getRoomManager().getRoom(id).addUser(_user);
+                    _RHF.getRoomManager().getRoom(id).setRoomStatus(MATCHMAKE_ACTIVE_ROOM);
                     break;
                 }
             }

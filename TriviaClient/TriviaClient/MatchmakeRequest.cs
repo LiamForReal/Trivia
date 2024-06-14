@@ -34,12 +34,14 @@ namespace TriviaClient
             public uint status;
             public uint amountOfQuestions;
             public uint timePerQuestion;
+            public string roomName;
 
             public MatchmakeResponse(uint status)
             {
                 this.status = status;
                 this.amountOfQuestions = 0;
                 this.timePerQuestion = 0;
+                this.roomName = "";
             }
 
             public static MatchmakeResponse Deserialize(List<byte> list)

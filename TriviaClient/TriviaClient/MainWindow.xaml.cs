@@ -26,6 +26,7 @@ namespace TriviaClient
         public CreateRoom createRoom;
         public JoinRoom joinRoom;
         public AddNewQuestion addNewQuestion;
+        public ConnectedRoom connectedRoom;
 
         public bool isUserLogged;
         public string username;
@@ -92,6 +93,10 @@ namespace TriviaClient
                 this.addNewQuestion.Close();
             }
 
+            if(connectedRoom != null)
+            {
+                this.connectedRoom.Close();
+            }
             this.Close();
           
             if (this.isUserLogged)
@@ -201,8 +206,12 @@ namespace TriviaClient
             else if ((uint)(Cods.Status.MATCHMAKE_JOIN_STATUS) == matchmakeResponse.status)
             {
                 this.Hide();
-                ConnectedRoom connectedRoom = new ConnectedRoom(this, false, matchmakeResponse.amountOfQuestions, matchmakeResponse.timePerQuestion, true);
-                connectedRoom.Show();
+                this.connectedRoom = new ConnectedRoom(this, false, matchmakeResponse.amountOfQuestions, matchmakeResponse.timePerQuestion, true);
+                this.connectedRoom.ConnectedRoomNameLabel.Content = matchmakeResponse.roomName;
+                this.connectedRoom.MaxPlayersLabel.Content = "Max players: 2";
+                this.connectedRoom.AmountOfQuestionsLabel.Content = "Amount of questions: " + matchmakeResponse.amountOfQuestions;
+                this.connectedRoom.TimePerQuestionLabel.Content = "Timer per question: " + matchmakeResponse.timePerQuestion;
+                this.connectedRoom.Show();
             }
         }
     }

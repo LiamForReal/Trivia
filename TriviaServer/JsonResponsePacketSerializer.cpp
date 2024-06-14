@@ -522,7 +522,8 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	json mrJson = {
 		{"status", matchmakeResponse.status},
 		{"amountOfQuestions", matchmakeResponse.amountOfQuestions},
-		{"timePerQuestion", matchmakeResponse.timePerQuestion}
+		{"timePerQuestion", matchmakeResponse.timePerQuestion},
+		{"roomName", matchmakeResponse.roomName}
 	};
 
 	std::string mrJsonStr = mrJson.dump();

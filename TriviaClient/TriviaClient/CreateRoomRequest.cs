@@ -16,29 +16,21 @@ namespace TriviaClient
         public uint maxUsers;
         public uint questionsCount;
         public uint answerTimeout;
-
+        public bool isMatchMake;
         public CreateRoomRequest()
         {
             this.roomName = "";
             this.maxUsers = 0;
             this.questionsCount = 0;
             this.answerTimeout = 0;
-        }
-
-        public CreateRoomRequest(string roomName, uint maxUsers, uint questionsCount, uint answerTimeout)
-        {
-            this.roomName = roomName;
-            this.maxUsers = maxUsers;
-            this.questionsCount = questionsCount;
-            this.answerTimeout = answerTimeout;
+            this.isMatchMake = false;
         }
         private List<byte> Serialize()
         {
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
-            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers': '{this.maxUsers}', 'questionsCount': '{this.questionsCount}', 'answerTimeout': '{this.answerTimeout}'}}";
-
+            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers': {this.maxUsers}', 'questionsCount': {this.questionsCount}', 'answerTimeout': {this.answerTimeout}', 'isMatchMake': {this.isMatchMake}}}";
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
             jsonMsg = jsonMsg.Substring(1, jsonMsg.Length - 2);

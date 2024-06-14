@@ -30,6 +30,7 @@ typedef struct CreateRoomRequest
 	unsigned int maxUsers;
 	unsigned int questionsCount;
 	unsigned int answerTimeout;
+	bool isMatchMake;
 } CreateRoomRequest;
 
 typedef struct SubmitAnswerRequest
