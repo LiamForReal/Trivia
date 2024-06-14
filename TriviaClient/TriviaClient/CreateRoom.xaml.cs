@@ -23,11 +23,21 @@ namespace TriviaClient
         public MainWindow mainWindow;
         public ConnectedRoom connectedRoom;
         private uint amountOfRooms;
-        public CreateRoom(MainWindow main)
+
+        private bool isMatchmaking;
+
+        public CreateRoom(MainWindow main, bool isMatchmaking)
         {
+            this.isMatchmaking = isMatchmaking;
             mainWindow = main;
             InitializeComponent();
             amountOfRooms = 0;
+
+            if (isMatchmaking)
+            {
+                this.NumberOfPlayersTextBox.Text = "2";
+                this.NumberOfPlayersTextBox.IsEnabled = false;
+            }
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -68,7 +78,7 @@ namespace TriviaClient
                     }
 
                     this.Close();
-                    this.connectedRoom = new ConnectedRoom(mainWindow, true, createRoomRequest.questionsCount, createRoomRequest.answerTimeout);
+                    this.connectedRoom = new ConnectedRoom(mainWindow, true, createRoomRequest.questionsCount, createRoomRequest.answerTimeout, false);
                     this.connectedRoom.room = this;
                     this.connectedRoom.mainWindow = this.mainWindow;
                     this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;

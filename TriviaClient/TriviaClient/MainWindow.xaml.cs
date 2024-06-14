@@ -126,7 +126,7 @@ namespace TriviaClient
                 this.isUserLogged = false;
                 this.username = "";
                 this.HelloLabel.Content = "";
-
+                this.HelloLabel.Visibility = Visibility.Collapsed;
                 this.LogInButton.Visibility = Visibility.Visible;
                 this.SignUpButton.Visibility = Visibility.Visible;
                 this.CreateRoomButton.IsEnabled = false;
@@ -135,6 +135,7 @@ namespace TriviaClient
                 this.LogOutButton.Visibility = Visibility.Collapsed;
                 this.StatsMenuButton.IsEnabled = false;
                 this.AddNewQuestionButton.IsEnabled = false;
+                this.JoinMatchmakingButton.IsEnabled = false;
             }
             else MessageBox.Show("[LogOut] error!");
         }
@@ -156,7 +157,7 @@ namespace TriviaClient
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            this.createRoom = new CreateRoom(this);
+            this.createRoom = new CreateRoom(this, false);
             this.createRoom.Show();
         }
 
@@ -182,6 +183,11 @@ namespace TriviaClient
             this.Hide();
             this.addNewQuestion = new AddNewQuestion(this);
             this.addNewQuestion.Show();
+        }
+
+        private void JoinMatchmakingButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

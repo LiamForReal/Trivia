@@ -73,6 +73,7 @@ namespace TriviaClient
                 this.mainWindow.username = this.UsernameTextBox.Text;
                 this.mainWindow.isUserLogged = true;
                 this.mainWindow.HelloLabel.Content = "Hello, " + this.mainWindow.username;
+                this.mainWindow.HelloLabel.Visibility = Visibility.Visible;
                 this.mainWindow.CreateRoomButton.IsEnabled = true;
                 this.mainWindow.JoinRoomButton.IsEnabled = true;
                 this.mainWindow.LogOutButton.Visibility = Visibility.Visible;
@@ -80,6 +81,7 @@ namespace TriviaClient
                 this.mainWindow.StatsMenuButton.IsEnabled = true;
                 this.mainWindow.LogInButton.Visibility = Visibility.Collapsed;
                 this.mainWindow.AddNewQuestionButton.IsEnabled = true;
+                this.mainWindow.JoinMatchmakingButton.IsEnabled = true;
                 this.Close();
                 this.mainWindow.Show();
 
