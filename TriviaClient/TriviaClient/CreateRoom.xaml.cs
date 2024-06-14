@@ -23,7 +23,6 @@ namespace TriviaClient
         public MainWindow mainWindow;
         public ConnectedRoom connectedRoom;
         private uint amountOfRooms;
-
         private bool isMatchmaking;
 
         public CreateRoom(MainWindow main, bool isMatchmaking)

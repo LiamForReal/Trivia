@@ -13,6 +13,7 @@ typedef enum ResponseCode
 	GET_PLAYERS_IN_ROOM_RC = 50,
 	JOIN_ROOM_RC = 60,
 	CREATE_ROOM_RC = 70,
+	MATCHMAKE_ROOM_RC = 78,
 	GET_HIGH_SCORE_RC = 80,
 	GET_PERSONAL_STATS_RC = 90,
 	CLOSE_ROOM_RC = 100,
@@ -189,5 +190,6 @@ typedef struct AddNewQuestionResponse
 typedef struct MatchmakeResponse
 {
 	unsigned int status;
-	unsigned int id;
+	unsigned int amountOfQuestions;
+	unsigned int timePerQuestion;
 } MatchmakeResponse;
