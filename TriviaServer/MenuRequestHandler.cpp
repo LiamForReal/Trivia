@@ -85,7 +85,11 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo ri) {
     }
 
     std::vector<RoomData> rd = _RHF.getRoomManager().getRooms();
-
+    for (auto it = rd.begin(); it != rd.end(); ++it)
+    {
+        if (it->isActive == MATCHMAKE_ACTIVE_ROOM || it->isActive == MATCHMAKE_INACTIVE_ROOM)
+            rd.erase(it);
+    }
     std::cout << "START COPYING PROCESS" << std::endl;
 
     grr.rooms = rd; // Direct assignment of the vector
@@ -263,6 +267,8 @@ RequestResult MenuRequestHandler::addNewQuestion(RequestInfo ri)
 RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
 {
     MatchmakeResponse mr = MatchmakeResponse();
+    mr.amountOfQuestions = 0;
+    mr.timePerQuestion = 0;
     unsigned int id = 0;
     try
     {
@@ -281,9 +287,18 @@ RequestResult MenuRequestHandler::matchMake(RequestInfo ri)
         else
         {
             mr.status = MATCHMAKE_JOIN_STATUS;
+            vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
+            for (auto it = rooms.begin(); it != rooms.end(); ++it)
+            {
+                if (it->isActive == MATCHMAKE_INACTIVE_ROOM)
+                {
+                    mr.amountOfQuestions = it->numOfQuestionsInGame;
+                    mr.timePerQuestion = it->timePerQuestion;
+                    break;
+                }
+            }
             rr.newHandler = _RHF.createRoomMemberRequestHandler(id, _user);
         }
-        mr.id = id;
     }
     catch (std::runtime_error& e)
     {

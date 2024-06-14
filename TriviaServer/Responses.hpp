@@ -190,5 +190,6 @@ typedef struct AddNewQuestionResponse
 typedef struct MatchmakeResponse
 {
 	unsigned int status;
-	unsigned int id;
+	unsigned int amountOfQuestions;
+	unsigned int timePerQuestion;
 } MatchmakeResponse;
