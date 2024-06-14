@@ -17,6 +17,7 @@ namespace TriviaClient
             GET_PLAYERS_IN_ROOM_RC = 50,
             JOIN_ROOM_RC = 60,
             CREATE_ROOM_RC = 70,
+            MATCHMAKE_ROOM_RC = 78,
             GET_HIGH_SCORE_RC = 80,
             GET_PERSONAL_STATS_RC = 90,
             CLOSE_ROOM_RC = 100,
