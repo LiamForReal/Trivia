@@ -10,9 +10,21 @@ void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room = Room(roomData);
 	room.addUser(user);
+	bool result = false;
+	unsigned int active1 = room.getMetadata().isActive, active2 = 0;
+	
+
 	for (auto it = m_rooms.begin(); it != m_rooms.end(); ++it)
 	{
-		if (room == it->second)
+		result = false;
+		active2 = it->second.getMetadata().isActive; 
+		if ((active1 == ACTIVE_ROOM || active1 == INACTIVE_ROOM) && (active2 == ACTIVE_ROOM || active2 == INACTIVE_ROOM)) {
+			result = true;
+		}
+		else if ((active1 == MATCHMAKE_ACTIVE_ROOM || active1 == MATCHMAKE_INACTIVE_ROOM) && (active2 == MATCHMAKE_ACTIVE_ROOM || active2 == MATCHMAKE_INACTIVE_ROOM)) {
+			result = true;
+		}
+		if (room == it->second && result)
 			throw std::runtime_error("room with this name already exist");
 	}
 	this->m_rooms[roomData.id] = room;

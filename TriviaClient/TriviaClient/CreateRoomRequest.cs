@@ -83,7 +83,6 @@ namespace TriviaClient
                 CreateRoomResponse response = new CreateRoomResponse((uint)list[0]);
                 return response;
             }
-
         }
     }
 }

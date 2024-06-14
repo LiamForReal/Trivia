@@ -218,22 +218,9 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
         std::cout << "active: " << roomData.isActive << std::endl;
         vector<RoomData> rooms = _RHF.getRoomManager().getRooms();
         crre.status = CREATE_ROOM_STATUS;
-        for (auto it = rooms.begin(); it != rooms.end(); ++it)
-        {
-            if ((it->id == roomData.id || it->name == roomData.name) && it->isActive == roomData.isActive)
-            {
-                crre.status = CREATE_ROOM_ERROR;
-                std::cout << "ROOM WITH SUCH NAME (" << it->name << ") ALREADY EXIST" << std::endl << std::endl;
-            }
-        }
-
-        if (crre.status == CREATE_ROOM_STATUS || crr.isMatchMake)
-        {
-            _RHF.getRoomManager().createRoom(_user, roomData);
-            rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);
-            std::cout << "CREATE ROOM ADMIN HANDLER\n\n";
-        }
-
+        _RHF.getRoomManager().createRoom(_user, roomData);
+        rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);
+        std::cout << "CREATE ROOM ADMIN HANDLER\n\n";
     }
     catch (std::runtime_error& e)
     {
