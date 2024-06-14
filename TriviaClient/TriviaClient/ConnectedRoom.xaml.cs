@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using static TriviaClient.CreateRoomRequest.RoomData;
 using static TriviaClient.GetRoomsRequest;
 using static TriviaClient.GetPlayersInRoomRequest;
+using System.Windows.Threading;
 
 namespace TriviaClient
 {
@@ -31,11 +32,16 @@ namespace TriviaClient
         private uint questionsAmount;
         private uint timePerQuestion;
 
+        private bool isMatchmaking;
+
         private BackgroundWorker getRoomStateBackgroundWorker;
 
-        public ConnectedRoom(MainWindow main, bool isOwner, uint questionsAmount, uint timePerQuestion)
+        public ConnectedRoom(MainWindow main, bool isOwner, uint questionsAmount, uint timePerQuestion, bool isMatchmaking)
         {
             this.mainWindow = main;
+
+            this.isMatchmaking = isMatchmaking;
+
             InitializeComponent();
 
             this.getRoomStateBackgroundWorker = new BackgroundWorker();
@@ -47,9 +53,19 @@ namespace TriviaClient
             this.getRoomStateBackgroundWorker.ProgressChanged += this.GetRoomStateLoop_ProgressChanged;
             this.getRoomStateBackgroundWorker.RunWorkerCompleted += this.GetRoomStateLoop_RunWorkerCompleted;
 
+            if (isMatchmaking)
+            {
+                this.LeaveRoomButton.IsEnabled = false;
+                this.LeaveRoomButton.Visibility = Visibility.Collapsed;
+                this.StartGameButton.IsEnabled = false;
+                this.StartGameButton.Visibility = Visibility.Collapsed;
+                this.CloseRoomButton.IsEnabled = false;
+                this.CloseRoomButton.Visibility = Visibility.Collapsed;
+            }
+
             this.isOwner = isOwner;
 
-            if (isOwner)
+            if (!isMatchmaking && isOwner)
             {
                 this.LeaveRoomButton.IsEnabled = false;
                 this.LeaveRoomButton.Visibility = Visibility.Collapsed;
@@ -109,6 +125,20 @@ namespace TriviaClient
                 foreach (string player in getRoomStateResponse.players)
                 {
                     this.PlayersListBox.Items.Add(player);
+                }
+
+                if (isMatchmaking && isOwner)
+                {
+                    if (this.PlayersListBox.Items.Count == 2)
+                    {
+                        DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+                        timer.Start();
+                        timer.Tick += (sender, args) =>
+                        {
+                            timer.Stop();
+                            this.StartGameButton_Click(null, new RoutedEventArgs());
+                        };
+                    }
                 }
             }
         }
