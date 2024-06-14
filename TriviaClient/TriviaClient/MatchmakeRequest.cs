@@ -32,12 +32,14 @@ namespace TriviaClient
         internal struct MatchmakeResponse
         {
             public uint status;
-            public uint id;
+            public uint amountOfQuestions;
+            public uint timePerQuestion;
 
             public MatchmakeResponse(uint status)
             {
                 this.status = status;
-                this.id = 0;
+                this.amountOfQuestions = 0;
+                this.timePerQuestion = 0;
             }
 
             public static MatchmakeResponse Deserialize(List<byte> list)
