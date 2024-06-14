@@ -19,6 +19,7 @@ public:
 	RequestResult joinRoom(RequestInfo ri);
 	RequestResult createRoom(RequestInfo ri);
 	RequestResult addNewQuestion(RequestInfo ri);
+	RequestResult matchMake(RequestInfo ri);
 private:
 	LoggedUser _user;
 	RequestHandlerFactory& _RHF;
