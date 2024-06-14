@@ -24,6 +24,7 @@ typedef enum ResponseCode
 	GET_QUESTION_RC = 160,
 	LEAVE_GAME_RC = 170,
 	ADD_NEW_QUESTION_RC = 180,
+	MATCHMAKE_RC = 190,
 	ERROR_RC = 255,
 } ResponseCode;
 
@@ -48,6 +49,8 @@ typedef enum Status
 	GET_QUESTION_STATUS = 161,
 	LEAVE_GAME_STATUS = 171,
 	ADD_NEW_QUESTION_STATUS = 181,
+	MATCHMAKE_CREATE_STATUS = 191,
+	MATCHMAKE_JOIN_STATUS = 192,
 } Status;
 
 typedef enum Errors
@@ -74,6 +77,7 @@ typedef enum Errors
 	GET_QUESTION_ALL_QUESTIONS_ALREADY_ASKED = 156,
 	LEAVE_GAME_ERROR = 175,
 	ADD_NEW_QUESTION_ERROR = 185,
+	MATCHMAKE_ERROR = 195,
 } Errors;
 
 typedef struct ErrorResponse
@@ -181,3 +185,8 @@ typedef struct AddNewQuestionResponse
 {
 	unsigned int status;
 } AddNewQuestionResponse;
+
+typedef struct MatchmakeResponse
+{
+	unsigned int status;
+} MatchmakeResponse;

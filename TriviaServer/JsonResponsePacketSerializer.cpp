@@ -510,3 +510,27 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 
 	return vec;
 }
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const MatchmakeResponse& matchmakeResponse)
+{
+	std::vector<unsigned char> vec(INIT_VEC_SIZE);
+	// Add Response Code
+	vec[0] = ((unsigned char)(matchmakeResponse.status));
+
+	unsigned int len = 0;
+
+	json mrJson = {
+		{"status", matchmakeResponse.status},
+	};
+
+	std::string mrJsonStr = mrJson.dump();
+
+	// Insert Message Length Into Vector
+	len = (unsigned int)(mrJsonStr.size()); // possible lose of data for 64 bits.
+	std::memcpy(vec.data() + INC, &len, BYTES_TO_COPY);
+
+	// Insert Message Into Vector
+	vec.insert(vec.end(), mrJsonStr.begin(), mrJsonStr.end());
+
+	return vec;
+}

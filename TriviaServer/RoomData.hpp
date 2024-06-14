@@ -7,6 +7,8 @@ typedef enum RoomDataActivityStates
 {
 	ACTIVE_ROOM = 1,
 	INACTIVE_ROOM = 0,
+	MATCHMAKE_ACTIVE_ROOM = 2,
+	MATCHMAKE_INACTIVE_ROOM = 3,
 } RoomDataActivityStates;
 
 typedef struct RoomData
@@ -25,7 +27,7 @@ typedef struct RoomData
 		this->maxPlayers = 0;
 		this->numOfQuestionsInGame = 0;
 		this->timePerQuestion = 0;
-		this->isActive = false;
+		this->isActive = INACTIVE_ROOM;
 	}
 
 	RoomData(unsigned int _id, std::string _name, unsigned int _maxPlayers, unsigned int _questionCount, unsigned int _avrageTime, unsigned int _active) 
