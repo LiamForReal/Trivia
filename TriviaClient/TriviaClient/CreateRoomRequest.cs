@@ -30,7 +30,8 @@ namespace TriviaClient
 
             List<byte> list = new List<byte>();
             list.Add((byte)Cods.ResponseCode.CREATE_ROOM_RC);
-            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers': {this.maxUsers}', 'questionsCount': {this.questionsCount}', 'answerTimeout': {this.answerTimeout}', 'isMatchMake': {this.isMatchMake}}}";
+            int isMM = isMatchMake ? 1 : 0;
+            string jsonMsg = $@"{{'roomName': '{this.roomName}', 'maxUsers' : '{this.maxUsers}', 'questionsCount' : '{this.questionsCount}', 'answerTimeout' : '{this.answerTimeout}', 'isMatchMake' : '{isMM}'}}";
             jsonMsg = JsonConvert.SerializeObject(jsonMsg, Formatting.Indented);
             jsonMsg = jsonMsg.Replace("'", "\"");
             jsonMsg = jsonMsg.Substring(1, jsonMsg.Length - 2);
