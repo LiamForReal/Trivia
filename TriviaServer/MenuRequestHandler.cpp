@@ -205,6 +205,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
     {
         if (crr.questionsCount > _RHF.getGameManager().getTriviaQuestions().size() || crr.questionsCount <= 0)
             throw std::runtime_error("the question amount its less then espected!");
+        else if (crr.answerTimeout <= 3)
+            throw std::runtime_error("the answertimeout is too short");
         roomData = RoomData(_RHF.getRoomManager().getRooms().size() + 1, crr.roomName, crr.maxUsers, crr.questionsCount, crr.answerTimeout, INACTIVE_ROOM);
         if (ri.id == MATCHMAKE_ROOM_RC)
             roomData.isActive = MATCHMAKE_INACTIVE_ROOM;
@@ -219,7 +221,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo ri)
             }
         }
 
-        if (crre.status == CREATE_ROOM_STATUS)
+        if (crre.status == CREATE_ROOM_STATUS || ri.id == MATCHMAKE_ROOM_RC)
         {
             _RHF.getRoomManager().createRoom(_user, roomData);
             rr.newHandler = _RHF.createRoomAdminRequestHandler(roomData.id, _user);

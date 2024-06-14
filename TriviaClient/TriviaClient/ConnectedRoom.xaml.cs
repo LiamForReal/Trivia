@@ -57,7 +57,7 @@ namespace TriviaClient
             {
                 this.LeaveRoomButton.IsEnabled = false;
                 this.LeaveRoomButton.Visibility = Visibility.Collapsed;
-                this.StartGameButton.IsEnabled = false;
+                //this.StartGameButton.IsEnabled = false;
                 this.StartGameButton.Visibility = Visibility.Collapsed;
                 this.CloseRoomButton.IsEnabled = false;
                 this.CloseRoomButton.Visibility = Visibility.Collapsed;
@@ -131,13 +131,14 @@ namespace TriviaClient
                 {
                     if (this.PlayersListBox.Items.Count == 2)
                     {
-                        DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
-                        timer.Start();
-                        timer.Tick += (sender, args) =>
-                        {
-                            timer.Stop();
-                            this.StartGameButton_Click(null, new RoutedEventArgs());
-                        };
+                        //DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+                        //timer.Start();
+                        //timer.Tick += (sender, args) =>
+                        //{
+                        //    timer.Stop();
+                        //    this.StartGameButton_Click(null, new RoutedEventArgs());
+                        //};
+                        this.StartGameButton_Click(null, new RoutedEventArgs());
                     }
                 }
             }
