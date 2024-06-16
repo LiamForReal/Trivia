@@ -148,6 +148,8 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(co
 		crr.questionsCount = static_cast<unsigned int>(std::stoi(tmp));
 		tmp = jsonData["answerTimeout"];
 		crr.answerTimeout = static_cast<unsigned int>(std::stoi(tmp));
+		tmp = jsonData["isMatchMake"];
+		crr.isMatchMake = std::stoi(tmp) == 1 ? true : false;
 	}
 	catch (...)
 	{

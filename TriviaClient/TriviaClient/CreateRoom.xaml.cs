@@ -23,11 +23,20 @@ namespace TriviaClient
         public MainWindow mainWindow;
         public ConnectedRoom connectedRoom;
         private uint amountOfRooms;
-        public CreateRoom(MainWindow main)
+        private bool isMatchmaking;
+
+        public CreateRoom(MainWindow main, bool isMatchmaking)
         {
+            this.isMatchmaking = isMatchmaking;
             mainWindow = main;
             InitializeComponent();
             amountOfRooms = 0;
+
+            if (isMatchmaking)
+            {
+                this.NumberOfPlayersTextBox.Text = "2";
+                this.NumberOfPlayersTextBox.IsEnabled = false;
+            }
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -51,6 +60,7 @@ namespace TriviaClient
                 createRoomRequest.maxUsers = uint.Parse(this.NumberOfPlayersTextBox.Text);
                 createRoomRequest.answerTimeout = uint.Parse(this.TimeForQuestionTextBox.Text);
                 createRoomRequest.questionsCount = uint.Parse(this.NumberOfQuestionsTextBox.Text);
+                createRoomRequest.isMatchMake = this.isMatchmaking;
                 createRoomRequest.SendToServer(this.mainWindow.clientStream);
 
                 CreateRoomRequest.CreateRoomResponse createRoomResponse = createRoomRequest.GetFromServer(this.mainWindow.clientStream);
@@ -58,7 +68,14 @@ namespace TriviaClient
                 {
                     try
                     {
-                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, 0, amountOfRooms);
+                        uint isActive = 0; // inactive regular room
+
+                        if (isMatchmaking)
+                        {
+                            isActive = 3; // inactive matchmaking
+                        }
+
+                        CreateRoomRequest.RoomData roomData = new CreateRoomRequest.RoomData(createRoomRequest, isActive, amountOfRooms);
                         amountOfRooms++;
                     }
                     catch (Exception ex)
@@ -68,7 +85,7 @@ namespace TriviaClient
                     }
 
                     this.Close();
-                    this.connectedRoom = new ConnectedRoom(mainWindow, true, createRoomRequest.questionsCount, createRoomRequest.answerTimeout);
+                    this.connectedRoom = new ConnectedRoom(mainWindow, true, createRoomRequest.questionsCount, createRoomRequest.answerTimeout, this.isMatchmaking);
                     this.connectedRoom.room = this;
                     this.connectedRoom.mainWindow = this.mainWindow;
                     this.connectedRoom.ConnectedRoomNameLabel.Content = this.RoomNameTextBox.Text;

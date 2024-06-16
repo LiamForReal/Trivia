@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using System.Windows.Interop;
+using static TriviaClient.CreateRoomRequest;
 
 namespace TriviaClient
 {
@@ -25,6 +26,7 @@ namespace TriviaClient
         public CreateRoom createRoom;
         public JoinRoom joinRoom;
         public AddNewQuestion addNewQuestion;
+        public ConnectedRoom connectedRoom;
 
         public bool isUserLogged;
         public string username;
@@ -91,6 +93,10 @@ namespace TriviaClient
                 this.addNewQuestion.Close();
             }
 
+            if(connectedRoom != null)
+            {
+                this.connectedRoom.Close();
+            }
             this.Close();
           
             if (this.isUserLogged)
@@ -126,7 +132,7 @@ namespace TriviaClient
                 this.isUserLogged = false;
                 this.username = "";
                 this.HelloLabel.Content = "";
-
+                this.HelloLabel.Visibility = Visibility.Collapsed;
                 this.LogInButton.Visibility = Visibility.Visible;
                 this.SignUpButton.Visibility = Visibility.Visible;
                 this.CreateRoomButton.IsEnabled = false;
@@ -135,6 +141,7 @@ namespace TriviaClient
                 this.LogOutButton.Visibility = Visibility.Collapsed;
                 this.StatsMenuButton.IsEnabled = false;
                 this.AddNewQuestionButton.IsEnabled = false;
+                this.JoinMatchmakingButton.IsEnabled = false;
             }
             else MessageBox.Show("[LogOut] error!");
         }
@@ -156,7 +163,7 @@ namespace TriviaClient
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            this.createRoom = new CreateRoom(this);
+            this.createRoom = new CreateRoom(this, false);
             this.createRoom.Show();
         }
 
@@ -182,6 +189,30 @@ namespace TriviaClient
             this.Hide();
             this.addNewQuestion = new AddNewQuestion(this);
             this.addNewQuestion.Show();
+        }
+
+        private void JoinMatchmakingButton_Click(object sender, RoutedEventArgs e)
+        {
+            MatchmakeRequest matchmakeRequest = new MatchmakeRequest();
+            matchmakeRequest.SendToServer(this.clientStream);
+            MatchmakeRequest.MatchmakeResponse matchmakeResponse = matchmakeRequest.GetFromServer(this.clientStream);
+
+            if ((uint)(Cods.Status.MATCHMAKE_CREATE_STATUS) == matchmakeResponse.status)
+            {
+                this.Hide();
+                this.createRoom = new CreateRoom(this, true);
+                this.createRoom.Show();
+            }
+            else if ((uint)(Cods.Status.MATCHMAKE_JOIN_STATUS) == matchmakeResponse.status)
+            {
+                this.Hide();
+                this.connectedRoom = new ConnectedRoom(this, false, matchmakeResponse.amountOfQuestions, matchmakeResponse.timePerQuestion, true);
+                this.connectedRoom.ConnectedRoomNameLabel.Content = matchmakeResponse.roomName;
+                this.connectedRoom.MaxPlayersLabel.Content = "Max players: 2";
+                this.connectedRoom.AmountOfQuestionsLabel.Content = "Amount of questions: " + matchmakeResponse.amountOfQuestions;
+                this.connectedRoom.TimePerQuestionLabel.Content = "Timer per question: " + matchmakeResponse.timePerQuestion;
+                this.connectedRoom.Show();
+            }
         }
     }
 }

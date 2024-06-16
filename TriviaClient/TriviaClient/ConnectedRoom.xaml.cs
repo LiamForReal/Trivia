@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using static TriviaClient.CreateRoomRequest.RoomData;
 using static TriviaClient.GetRoomsRequest;
 using static TriviaClient.GetPlayersInRoomRequest;
+using System.Windows.Threading;
 
 namespace TriviaClient
 {
@@ -31,11 +32,16 @@ namespace TriviaClient
         private uint questionsAmount;
         private uint timePerQuestion;
 
+        private bool isMatchmaking;
+
         private BackgroundWorker getRoomStateBackgroundWorker;
 
-        public ConnectedRoom(MainWindow main, bool isOwner, uint questionsAmount, uint timePerQuestion)
+        public ConnectedRoom(MainWindow main, bool isOwner, uint questionsAmount, uint timePerQuestion, bool isMatchmaking)
         {
             this.mainWindow = main;
+
+            this.isMatchmaking = isMatchmaking;
+
             InitializeComponent();
 
             this.getRoomStateBackgroundWorker = new BackgroundWorker();
@@ -47,9 +53,19 @@ namespace TriviaClient
             this.getRoomStateBackgroundWorker.ProgressChanged += this.GetRoomStateLoop_ProgressChanged;
             this.getRoomStateBackgroundWorker.RunWorkerCompleted += this.GetRoomStateLoop_RunWorkerCompleted;
 
+            if (isMatchmaking)
+            {
+                this.LeaveRoomButton.IsEnabled = false;
+                this.LeaveRoomButton.Visibility = Visibility.Collapsed;
+                //this.StartGameButton.IsEnabled = false;
+                this.StartGameButton.Visibility = Visibility.Collapsed;
+                this.CloseRoomButton.IsEnabled = false;
+                this.CloseRoomButton.Visibility = Visibility.Collapsed;
+            }
+
             this.isOwner = isOwner;
 
-            if (isOwner)
+            if (!isMatchmaking && isOwner)
             {
                 this.LeaveRoomButton.IsEnabled = false;
                 this.LeaveRoomButton.Visibility = Visibility.Collapsed;
@@ -110,6 +126,14 @@ namespace TriviaClient
                 {
                     this.PlayersListBox.Items.Add(player);
                 }
+
+                if (isMatchmaking && isOwner)
+                {
+                    if (this.PlayersListBox.Items.Count == 2)
+                    {
+                        this.StartGameLogic();
+                    }
+                }
             }
         }
 
@@ -145,7 +169,7 @@ namespace TriviaClient
             }
         }
 
-        private void StartGameButton_Click(object sender, RoutedEventArgs e)
+        private void StartGameLogic()
         {
             this.getRoomStateBackgroundWorker.CancelAsync();
             StartGameRequest sgr = new StartGameRequest();
@@ -158,6 +182,11 @@ namespace TriviaClient
                 this.gameScreen.Show();
             }
             else this.getRoomStateBackgroundWorker.RunWorkerAsync();
+        }
+
+        private void StartGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.StartGameLogic();
         }
 
         private void CloseRoomButton_Click(object sender, RoutedEventArgs e)

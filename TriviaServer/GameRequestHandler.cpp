@@ -71,7 +71,7 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 	int currentQuestion = this->roomsQuestions[_roomId].second[_user];
 	if (requestInfo.id == GET_GAME_RESULTS_RC)
 	{
-		if (getStatsRoom[_roomId].first.getAllUsers().size() == 0)
+		if (getStatsRoom[_roomId].first.getAllUsers().size() == 0 && !getStatsRoom[_roomId].second)
 		{
 			getStatsRoom[_roomId].second = 0;
 		}
@@ -105,9 +105,12 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			{
 				this->roomsQuestions.erase(_roomId);
 				getStatsRoom[_roomId].second++;
+				std::cout << "all users: " << _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size() << ", current finished: "
+					<< getStatsRoom[_roomId].second << std::endl;
 				if (getStatsRoom[_roomId].second == _rhf.getRoomManager().getRoom(_roomId).getAllUsers().size())
 				{
 					_rhf.getRoomManager().deleteRoom(_roomId);
+					getStatsRoom.erase(_roomId);
 				}
 			}
 		}
